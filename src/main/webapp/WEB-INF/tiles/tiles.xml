@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+	<!-- Start of Base Login definition -->
+	<definition name="base.loginDefinitio" template="/layout/loginLayout/loginLayout.jsp">
+		<put-attribute name="title" value="Wanted Note Loan Application Login Defination" />
+		<put-attribute name="loginHeader" value="/layout/loginLayout/loginHeader.jsp" />
+		<put-attribute name="loginBody" value="" />
+		<put-attribute name="loginFooter" value="/layout/loginLayout/loginFooter.jsp" />
+	</definition>
+	<!-- End of Base Login definition -->
+    
+	<!-- Start of Login Pages -->
+	<definition name="login" extends="base.loginDefinitio">
+		<put-attribute name="loginHeader" value="" />
+		<put-attribute name="loginBody" value="/WEB-INF/view/login/login.jsp" />
+		<put-attribute name="loginFooter" value="" />
+	</definition>
+    <!-- End of Login Pages -->
+    
+    <!-- Start of Registration Pages -->
+	<definition name="registration" extends="base.loginDefinitio">
+		<put-attribute name="loginHeader" value="" />
+		<put-attribute name="loginBody" value="/WEB-INF/view/registration/registration.jsp" />
+		<put-attribute name="loginFooter" value="" />
+	</definition>
+    <!-- End of Registration Pages -->
+    
+    
+    
+    <!-- Start of Base Home definition -->
+	<definition name="base.homeDefinitio" template="/layout/homeLayout/homeLayout.jsp">
+		<put-attribute name="title" value="Wanted Note Loan Application Home Page Defination" />
+		<put-attribute name="homeHeader" value="/layout/homeLayout/homeHeader.jsp" />
+		<put-attribute name="homeBody" value="" />
+		<put-attribute name="homeFooter" value="/layout/homeLayout/homeFooter.jsp" />
+	</definition>
+	<!-- End of Base Home definition -->
+	
+	<!-- Start of Home Pages -->
+	<definition name="home" extends="base.homeDefinitio">
+		<!-- <put-attribute name="loginHeader" value="" /> -->
+		<put-attribute name="homeBody" value="/WEB-INF/view/home/home.jsp" />
+		<!-- <put-attribute name="loginFooter" value="" /> -->
+	</definition>
+    <!-- End of Home Pages -->
+    
+    <!-- Start of Error Pages -->
+	<definition name="errorPage" extends="base.homeDefinitio">
+		<!-- <put-attribute name="loginHeader" value="" /> -->
+		<put-attribute name="homeBody" value="/WEB-INF/view/error/error.jsp" />
+		<!-- <put-attribute name="loginFooter" value="" /> -->
+	</definition>
+    <!-- End of Error Pages -->
+    
+    
+	
+    <!-- Start of Base Admin Dashboard definition -->
+	<definition name="base.adminDefinitio" template="/layout/adminLayout/adminLayout.jsp">
+		<put-attribute name="title" value="Wanted Note Loan Application Admin Dashboard Defination" />
+		<put-attribute name="adminHeader" value="/layout/adminLayout/adminHeader.jsp" />
+		<put-attribute name="adminSideMenu" value="/layout/adminLayout/adminSideMenu.jsp" />
+		<put-attribute name="adminBody" value="" />
+		<put-attribute name="adminFooter" value="/layout/adminLayout/adminFooter.jsp" />
+	</definition>
+	<!-- End of Base Admin Dashboard definition -->
+	
+	<!-- Start of Admin Dashboard Pages -->
+	<definition name="adminDashboard" extends="base.adminDefinitio">
+		<put-attribute name="adminBody" value="/WEB-INF/view/admin/adminDashboard.jsp" />
+	</definition>
+    <!-- End of Admin Dashboard Pages -->
+    
+    
+    
+    <!-- Start of Base Partner Dashboard definition -->
+	<definition name="base.partnerDefinitio" template="/layout/partnerLayout/partnerLayout.jsp">
+		<put-attribute name="title" value="Wanted Note Loan Application Partner Dashboard Defination" />
+		<put-attribute name="partnerHeader" value="/layout/partnerLayout/partnerHeader.jsp" />
+		<put-attribute name="partnerSideMenu" value="/layout/partnerLayout/partnerSideMenu.jsp" />
+		<put-attribute name="partnerBody" value="" />
+		<put-attribute name="partnerFooter" value="/layout/partnerLayout/partnerFooter.jsp" />
+	</definition>
+	<!-- End of Base Partner Dashboard definition -->
+	
+	<!-- Start of Partner Dashboard Pages -->
+	<definition name="partnerDashboard" extends="base.partnerDefinitio">
+		<put-attribute name="partnerBody" value="/WEB-INF/view/partner/partnerDashboard.jsp" />
+	</definition>
+    <!-- End of Partner Dashboard Pages -->
+    
+</tiles-definitions>
