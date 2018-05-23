@@ -30,13 +30,16 @@ import com.wn.loanapp.util.Format;
 @Component
 public class PartnerAuthenticationProvider implements AuthenticationProvider{
 
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
 	/**
 	 * Instantiated Logger
 	 */
 	private Log log = LogFactory.getLog(this.getClass());
+	
+	/**
+	 * Autowired bCryptPasswordEncoder
+	 */
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	/**
 	 * Autowired partnerLoginService
@@ -60,10 +63,11 @@ public class PartnerAuthenticationProvider implements AuthenticationProvider{
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		log.debug("inside  authenticate in PartnerCustomAuthenticationProvider");
 	
-		PartnerForm partnerForm = new PartnerForm();
+		/*PartnerForm partnerForm = new PartnerForm();
 		partnerForm.setEmailAddress(authentication.getPrincipal().toString());
 		partnerForm.setAccountStatus(AccountStatusEnum.Active.toString());
-		Partner partner = partnerLoginService.findPartnerByEmail(partnerForm);
+		Partner partner = partnerLoginService.findPartnerByEmail(partnerForm);*/
+		Partner partner = partnerLoginService.findPartnerByEmailAndAccountStatus(authentication.getPrincipal().toString(), AccountStatusEnum.Active);
 		if(partner == null){	
 			throw new BadCredentialsException("User does not exists!");
 		} else {

@@ -5,12 +5,15 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.wn.loanapp.enums.AccountStatusEnum;
 import com.wn.loanapp.model.User;
 
 @Repository("userRepository")
 public interface UserRepository extends CrudRepository<User, Long>{
 
-	User findByEmail(String email);
+	public User findByEmail(String email);
+	
+	public User findByEmailAndAccountStatus(String email, AccountStatusEnum accountStatus);
 	
 	//select email, password, active from user where email=?
 	

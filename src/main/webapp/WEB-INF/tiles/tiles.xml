@@ -63,6 +63,7 @@
 		<put-attribute name="title" value="Wanted Note Loan Application Admin Dashboard Defination" />
 		<put-attribute name="adminHeader" value="/layout/adminLayout/adminHeader.jsp" />
 		<put-attribute name="adminSideMenu" value="/layout/adminLayout/adminSideMenu.jsp" />
+		<put-attribute name="adminQuickLinks" value="/layout/adminLayout/adminQuickLinks.jsp" />
 		<put-attribute name="adminBody" value="" />
 		<put-attribute name="adminFooter" value="/layout/adminLayout/adminFooter.jsp" />
 	</definition>
@@ -81,6 +82,7 @@
 		<put-attribute name="title" value="Wanted Note Loan Application Partner Dashboard Defination" />
 		<put-attribute name="partnerHeader" value="/layout/partnerLayout/partnerHeader.jsp" />
 		<put-attribute name="partnerSideMenu" value="/layout/partnerLayout/partnerSideMenu.jsp" />
+		<put-attribute name="partnerQuickLinks" value="/layout/partnerLayout/partnerQuickLinks.jsp" />
 		<put-attribute name="partnerBody" value="" />
 		<put-attribute name="partnerFooter" value="/layout/partnerLayout/partnerFooter.jsp" />
 	</definition>

@@ -28,6 +28,7 @@ import com.wn.loanapp.model.Partner;
 import com.wn.loanapp.model.User;
 import com.wn.loanapp.service.PartnerLoginService;
 import com.wn.loanapp.service.UserLoginService;
+import com.wn.loanapp.util.ActorRoleFormater;
 import com.wn.loanapp.util.StringGeneratorUtil;
 
 public class CustomAuthenticationSuccessHandler extends
@@ -63,9 +64,7 @@ public class CustomAuthenticationSuccessHandler extends
 			userDetailsSessionForm = new UserDetailsSessionForm();
 		}
 		if(roleName.equals(Constants.PARTNER)){
-			PartnerForm partnerForm = new PartnerForm();
-			partnerForm.setEmailAddress(currentUser);
-			Partner partner = partnerLoginService.findPartnerByEmail(partnerForm);
+			Partner partner = partnerLoginService.findPartnerByEmail(currentUser);
 			partner.setSessionID(request.getSession(false).getId());
 			if(com.wn.loanapp.util.Format.isObjectNotEmptyAndNotNull(partner)){
 				String loginToken = null;
@@ -75,14 +74,13 @@ public class CustomAuthenticationSuccessHandler extends
 				}else{
 					loginToken = partner.getLoginToken();
 				}
+				//Updating partner login token and session id
 				partnerLoginService.updatePartner(partner);
 				userDetailsSessionForm.setName(partner.getName());
 				userDetailsSessionForm.setLoginToken(loginToken);
 			}
 		}else if(roleName.equals(Constants.ADMIN)){
-			UserForm userForm = new UserForm();
-			userForm.setEmailAddress(currentUser);
-			User user = userLoginService.findUserByEmail(userForm);
+			User user = userLoginService.findUserByEmail(currentUser);
 			user.setSessionID(request.getSession(false).getId());
 			if(com.wn.loanapp.util.Format.isObjectNotEmptyAndNotNull(user)){
 				String loginToken = null;
@@ -92,6 +90,7 @@ public class CustomAuthenticationSuccessHandler extends
 				}else{
 					loginToken = user.getLoginToken();
 				}
+				//Updating user login token and session id
 				userLoginService.updateUser(user);
 				userDetailsSessionForm.setName(user.getName());
 				userDetailsSessionForm.setLoginToken(loginToken);
@@ -103,6 +102,7 @@ public class CustomAuthenticationSuccessHandler extends
 		}
 		userDetailsSessionForm.setEmailAddress(currentUser);
 		userDetailsSessionForm.setUserRole(roleName);
+		userDetailsSessionForm.setUserRoleName(ActorRoleFormater.getFormatedActorRole(roleName));
 		/*userDetailsSessionForm.setUserRoleName(ConverterUtil.covertRoleToString(roleName));
 		userDetailsSessionForm.setEmployeeBaseUrl(ConverterUtil.setEmploueeBaseUrl(roleName));
 		List<InsuranceType> insuranceTypes = insuranceTypeService.getAllInsuranceType();

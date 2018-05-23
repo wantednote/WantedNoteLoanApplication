@@ -65,10 +65,11 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		log.debug("inside  authenticate in CustomAuthenticationProvider");
 		
-		UserForm userForm = new UserForm();
+		/*UserForm userForm = new UserForm();
 		userForm.setEmailAddress(authentication.getPrincipal().toString());
 		userForm.setAccountStatus(AccountStatusEnum.Active.toString());
-		User user = userLoginService.findUserByEmail(userForm);
+		User user = userLoginService.findUserByEmail(userForm);*/
+		User user = userLoginService.findUserByEmailAndAccountStatus(authentication.getPrincipal().toString(), AccountStatusEnum.Active);
 		if(user == null){	
 			throw new BadCredentialsException("User does not exists!");
 		} else {

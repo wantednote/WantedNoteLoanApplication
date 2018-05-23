@@ -1,6 +1,7 @@
 package com.wn.loanapp.controller;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +27,8 @@ import com.wn.loanapp.constants.Constants;
 import com.wn.loanapp.exception.EmailAddressAlreadyExitsException;
 import com.wn.loanapp.form.UserDetailsSessionForm;
 import com.wn.loanapp.form.UserForm;
+import com.wn.loanapp.model.Partner;
+import com.wn.loanapp.model.User;
 import com.wn.loanapp.service.PartnerLoginService;
 import com.wn.loanapp.service.UserLoginService;
 import com.wn.loanapp.util.Format;
@@ -138,8 +141,22 @@ public class LoginController extends BaseController{
 		String url  = "";
 		if(Format.isNotNull(userDetailsSessionForm) && Format.isStringNotEmptyAndNotNull(userDetailsSessionForm.getUserRole())){
 			if(userDetailsSessionForm.getUserRole().equals(Constants.PARTNER)){
+				Partner partner = partnerLoginService.findPartnerByEmail(userDetailsSessionForm.getEmailAddress());
+				if(Format.isObjectNotEmptyAndNotNull(partner)) {
+					partner.setLastLogin(new Date());
+					partner.setModifiedOn(new Date());
+					partner.setModifiedBy(userDetailsSessionForm.getEmailAddress());
+					partnerLoginService.updatePartner(partner);
+				}
 				url = Constants.SELECTED_BASE_LINK_PARTNER_DASHBOARD;
 			}else if (userDetailsSessionForm.getUserRole().equals(Constants.ADMIN)){
+				User user = userLoginService.findUserByEmail(userDetailsSessionForm.getEmailAddress());
+				if(Format.isObjectNotEmptyAndNotNull(user)) {
+					user.setLastLogin(new Date());
+					user.setModifiedOn(new Date());
+					user.setModifiedBy(userDetailsSessionForm.getEmailAddress());
+					userLoginService.updateUser(user); 
+				}
 				url = Constants.SELECTED_BASE_LINK_ADMIN_DASHBOARD;
 			}
 		}

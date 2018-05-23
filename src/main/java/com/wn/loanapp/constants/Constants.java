@@ -100,12 +100,13 @@ public class Constants {
 	public static final String SORTING_DIRECTION_DESC = "DESC";
 	
 	/**
-	 * Selected sub link for admin dashboard
+	 * Selected base link for admin dashboard
 	 */
 	public static final String SELECTED_BASE_LINK_ADMIN_DASHBOARD= "admin";
 	
+	
 	/**
-	 * Selected sub link for partner dashboard
+	 * Selected base link for partner dashboard
 	 */
 	public static final String SELECTED_BASE_LINK_PARTNER_DASHBOARD= "partner";
 }

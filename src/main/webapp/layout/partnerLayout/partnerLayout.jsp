@@ -22,6 +22,7 @@
 	<!-- Header -->
 	<tiles:insertAttribute name="partnerHeader" />
 	<tiles:insertAttribute name="partnerSideMenu" />
+	<tiles:insertAttribute name="partnerQuickLinks" />
 	<!-- Body -->
 	<tiles:insertAttribute name="partnerBody" />
 	<!-- Footer -->

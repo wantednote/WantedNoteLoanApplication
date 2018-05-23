@@ -39,12 +39,17 @@ public class UserLoginServiceImpl implements UserLoginService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@Override
-	public User findUserByEmail(UserForm userForm) {
-		return userRepository.findByEmail(userForm.getEmailAddress());
+	public User findUserByEmail(String emailAddress) {
+		return userRepository.findByEmail(emailAddress);
 		//List<User> users = (List<User>) userRepository.findByEmail(userForm.getEmailAddress());
 		//return users.get(Constants.GET_ZERO_INDEX_OBJECT);
 	}
 
+    @Override
+	public User findUserByEmailAndAccountStatus(String emailAddress, AccountStatusEnum accountStatus) {
+		return userRepository.findByEmailAndAccountStatus(emailAddress, accountStatus);
+	}
+    
 	@Override
 	public void saveUser(UserForm userForm) throws EmailAddressAlreadyExitsException{
 		User user = userRepository.findByEmail(userForm.getEmailAddress());
@@ -75,6 +80,7 @@ public class UserLoginServiceImpl implements UserLoginService {
 	@Override
 	public void updateUser(User user) {
 		userRepository.save(user);
+		user = null;
 	}
 	
 	/*@Override

@@ -33,6 +33,8 @@ public class AdminController extends BaseController{
 				//modelAndView = dashboad(request , userDetailsSessionForm);
 				modelAndView = new ModelAndView("adminDashboard");
 				modelAndView.addObject("url", Constants.USER_TYPE_ADMIN);
+				userDetailsSessionForm.setSelectedBaseLink(Constants.SELECTED_BASE_LINK_ADMIN_DASHBOARD);
+				userDetailsSessionForm.setSelectedSubLink(Constants.SELECTED_BASE_LINK_ADMIN_DASHBOARD);
 			}else{
 				modelAndView = redirectToLoginPage(request.getServletPath());
 			}

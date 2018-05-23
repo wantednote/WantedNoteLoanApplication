@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.wn.loanapp.constants.Constants;
 import com.wn.loanapp.enums.AccountStatusEnum;
 import com.wn.loanapp.exception.EmailAddressAlreadyExitsException;
-import com.wn.loanapp.form.PartnerForm;
 import com.wn.loanapp.form.UserForm;
 import com.wn.loanapp.model.Partner;
 import com.wn.loanapp.model.Role;
@@ -40,10 +39,15 @@ public class PartnerLoginServiceImpl implements PartnerLoginService{
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@Override
-	public Partner findPartnerByEmail(PartnerForm partnerForm) {
-		return partnerRepository.findByEmail(partnerForm.getEmailAddress());
+	public Partner findPartnerByEmail(String emailAddress) {
+		return partnerRepository.findByEmail(emailAddress);
 	}
-
+	
+	@Override
+	public Partner findPartnerByEmailAndAccountStatus(String emailAddress, AccountStatusEnum accountStatus) {
+		return partnerRepository.findByEmailAndAccountStatus(emailAddress, accountStatus);
+	}
+	
 	@Override
 	public void addPartner(UserForm userForm) throws EmailAddressAlreadyExitsException{
 		Partner partner = partnerRepository.findByEmail(userForm.getEmailAddress());
@@ -74,5 +78,6 @@ public class PartnerLoginServiceImpl implements PartnerLoginService{
 	@Override
 	public void updatePartner(Partner partner) {
 		partnerRepository.save(partner);
+		partner = null;
 	}
 }
