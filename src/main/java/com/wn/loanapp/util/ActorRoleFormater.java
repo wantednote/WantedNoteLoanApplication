@@ -13,6 +13,9 @@ public class ActorRoleFormater {
 		case Constants.PARTNER:
 			roleName = "Business Partner";
 			break;
+		case Constants.USER:
+			roleName = "Business Partner";
+			break;
 		default:
 			roleName = "Guest User";
 			break;

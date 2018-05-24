@@ -1,4 +1,7 @@
 <%@ include file="/common/taglibs.jsp"%>
+<script src="assets/js/jquery-2.1.1.js"></script>
+<title>Wantednote | Admin Dashboard</title>
+
 <div class="row">
     <div class="col-lg-12">
         <div class="wrapper wrapper-content">
@@ -13,3 +16,17 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	setTimeout(function() {
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            showMethod: 'slideDown',
+            timeOut: 4000
+        };
+        toastr.success('This is landing page', 'Welcome to Wantednote');
+    }, 1300);
+});
+</script>

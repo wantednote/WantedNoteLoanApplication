@@ -19,6 +19,8 @@ public class Constants {
 	
 	public static final String FALSE="Flase" ;
 	
+	public static final String STRING_NULL="null" ;
+	
 	/**
 	 * @Declared ZERO
 	 */
@@ -64,6 +66,10 @@ public class Constants {
 	
 	public static final String PARTNER = "PARTNER";
 	
+	public static final String USER = "USER";
+	
+	public static final String MANAGER = "MANAGER";
+	
 	/**
 	 * Declared PIN_MIN_LENGTH_ADMIN
 	 */
@@ -104,9 +110,22 @@ public class Constants {
 	 */
 	public static final String SELECTED_BASE_LINK_ADMIN_DASHBOARD= "admin";
 	
+	/**
+	 * Selected base link for admin view actor
+	 */
+	public static final String SELECTED_BASE_LINK_ADMIN_VIEW_ACTOR= "actors";
+	
 	
 	/**
 	 * Selected base link for partner dashboard
 	 */
 	public static final String SELECTED_BASE_LINK_PARTNER_DASHBOARD= "partner";
+	
+	/*Start Page Header Title*/
+	
+	public static final String ADMIN_DASHBOARD_HEADER_TITLE = "Administrator Dashboard";
+	
+	public static final String ADMIN_VIEW_ACTOR_HEADER_TITLE = "View Actors";
+	
+	/*End Page Header Title*/
 }

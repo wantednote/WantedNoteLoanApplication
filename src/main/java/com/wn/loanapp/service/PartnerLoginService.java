@@ -1,5 +1,9 @@
 package com.wn.loanapp.service;
 
+import java.text.ParseException;
+import java.util.List;
+
+import com.wn.loanapp.dto.UserDTO;
 import com.wn.loanapp.enums.AccountStatusEnum;
 import com.wn.loanapp.exception.EmailAddressAlreadyExitsException;
 import com.wn.loanapp.form.UserForm;
@@ -15,4 +19,5 @@ public interface PartnerLoginService {
 	
 	public void updatePartner(Partner Partner);
 	
+	public List<UserDTO> findAllByRoleId(int roleId) throws ParseException;
 }

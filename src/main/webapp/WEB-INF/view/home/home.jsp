@@ -1,17 +1,13 @@
 <%@ include file="/common/taglibs.jsp"%>
 
     <div class="middle-box text-center animated fadeInDown">
-        <h2>Opps!</h2>
-        <h3 class="font-bold">under construction</h3>
+        <h2>Welcome to WantedNote</h2>
+        <h3 class="font-bold">Loan Application is Under Construction</h3>
 
         <div class="error-desc">
-            Sorry, but the page you are looking for has note been found. Try checking the URL for error, then hit the refresh button on your browser or try found something else in our app.
-            <form class="form-inline m-t" role="form">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search for page">
-                </div>
-                <button type="submit" class="btn btn-primary">Search</button>
-            </form>
+            <a href="registration" class="btn btn-primary">Registration</a>
+            <a href="admin" type="submit" class="btn btn-primary">Admin Login</a>
+            <a href="partner" type="submit" class="btn btn-primary">Partner Login</a>
         </div>
     </div>
 

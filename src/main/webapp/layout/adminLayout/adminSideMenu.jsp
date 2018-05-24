@@ -18,7 +18,7 @@
 	                        <li><a href="#">Mailbox</a></li>
 	                        <li class="divider"></li>
 	                        <%-- <li><a href="<%=request.getContextPath()%>/logout.note">Logout</a></li> --%>
-	                        <li><a href="<%=request.getContextPath()%>/logout">Logout</a></li>
+	                        <li><a href="logout">Logout</a></li>
 	                    </ul>
 	                </div>
 	                <div class="logo-element">
@@ -50,6 +50,9 @@
             
             <li id="leftMenu_admin">
                 <a href="admin"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
+            </li>
+            <li id="leftMenu_actors">
+                <a href="actors"><i class="fa fa-th-large"></i> <span class="nav-label">Actors</span></a>
             </li>
             <!-- <li id="leftMenu_items">
                 <a href="items.note"><i class="fa fa-diamond"></i> <span class="nav-label">Items</span></a>

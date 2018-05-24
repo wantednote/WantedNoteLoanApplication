@@ -1,13 +1,13 @@
 <%@ include file="/common/taglibs.jsp"%>
-<div class="row wrapper border-bottom white-bg page-heading">
+<div class="row wrapper border-bottom white-bg page-heading" id="quickLinksDiv">
     <div class="col-sm-4">
-        <h2>Administrator Dashboard</h2>
+        <h2>${userDetailsSessionForm.pageHeaderTitle}</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="${userDetailsSessionForm.selectedBaseLink}">This is</a>
             </li>
             <li class="active">
-                <strong><a href="${userDetailsSessionForm.selectedSubLink}"> Dashboard</a></strong>
+                <strong><a href="${userDetailsSessionForm.selectedSubLink}"> ${userDetailsSessionForm.pageHeaderTitle}</a></strong>
             </li>
         </ol>
     </div>

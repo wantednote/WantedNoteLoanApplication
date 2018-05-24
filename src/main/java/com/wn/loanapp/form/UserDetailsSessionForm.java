@@ -10,7 +10,7 @@ public class UserDetailsSessionForm {
 	
 	private String userRoleName;
 	
-	private String employeeBaseUrl;
+	private String pageHeaderTitle;
 	
 	private String selectedBaseLink;
 	
@@ -73,19 +73,19 @@ public class UserDetailsSessionForm {
 	public void setUserRoleName(String userRoleName) {
 		this.userRoleName = userRoleName;
 	}
-
+	
 	/**
-	 * @return the employeeBaseUrl
+	 * @return the pageHeaderTitle
 	 */
-	public String getEmployeeBaseUrl() {
-		return employeeBaseUrl;
+	public String getPageHeaderTitle() {
+		return pageHeaderTitle;
 	}
 
 	/**
-	 * @param employeeBaseUrl the employeeBaseUrl to set
+	 * @param pageHeaderTitle the pageHeaderTitle to set
 	 */
-	public void setEmployeeBaseUrl(String employeeBaseUrl) {
-		this.employeeBaseUrl = employeeBaseUrl;
+	public void setPageHeaderTitle(String pageHeaderTitle) {
+		this.pageHeaderTitle = pageHeaderTitle;
 	}
 
 	/**

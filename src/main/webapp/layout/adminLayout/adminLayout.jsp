@@ -7,6 +7,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Wantednote | Administrator</title>
+    
     <link rel="icon" href="assets/img/logo/WantedNote1.png">
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -25,7 +28,7 @@
     	<tiles:insertAttribute name="adminSideMenu" />
     	<div id="page-wrapper" class="gray-bg dashbard-1">
         	<div class="row border-bottom">
-		        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0;">
+		        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0;" id="pageHeaderNav">
 		        <!-- <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0;box-shadow: 0 1px 1px 0 #ccc;"> -->
 		        	<tiles:insertAttribute name="adminHeader" />
 		        </nav>

@@ -24,7 +24,7 @@ public class AdminController extends BaseController{
 
    //@RequestMapping(value={"/dashboard" , "/" ,"/home", "/index"})
    @RequestMapping(value="/admin" , method = RequestMethod.GET)
-   public ModelAndView adminHome(HttpServletRequest request , UserDetailsSessionForm userDetailsSessionForm){
+   public ModelAndView adminHome(HttpServletRequest request, UserDetailsSessionForm userDetailsSessionForm){
 		log.debug("Start of method adminHome");
 		ModelAndView modelAndView = null;
 		try {
@@ -33,6 +33,7 @@ public class AdminController extends BaseController{
 				//modelAndView = dashboad(request , userDetailsSessionForm);
 				modelAndView = new ModelAndView("adminDashboard");
 				modelAndView.addObject("url", Constants.USER_TYPE_ADMIN);
+				userDetailsSessionForm.setPageHeaderTitle(Constants.ADMIN_DASHBOARD_HEADER_TITLE);
 				userDetailsSessionForm.setSelectedBaseLink(Constants.SELECTED_BASE_LINK_ADMIN_DASHBOARD);
 				userDetailsSessionForm.setSelectedSubLink(Constants.SELECTED_BASE_LINK_ADMIN_DASHBOARD);
 			}else{
