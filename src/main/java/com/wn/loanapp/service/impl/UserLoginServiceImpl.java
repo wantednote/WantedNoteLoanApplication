@@ -10,6 +10,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +23,7 @@ import com.wn.loanapp.constants.Constants;
 import com.wn.loanapp.dto.UserDTO;
 import com.wn.loanapp.enums.AccountStatusEnum;
 import com.wn.loanapp.exception.EmailAddressAlreadyExitsException;
+import com.wn.loanapp.exception.UserOrPartnerNotFoundException;
 import com.wn.loanapp.form.UserForm;
 import com.wn.loanapp.model.Partner;
 import com.wn.loanapp.model.Role;
@@ -33,16 +40,39 @@ public class UserLoginServiceImpl implements UserLoginService {
 
 	public static final String SERVICE_NAME = "userLoginService";
 
+	/**
+	 * @Autowired userRepository
+	 */
 	@Autowired
 	private UserRepository userRepository;
 	
+	/**
+	 * @Autowired partnerRepository
+	 */
 	@Autowired PartnerRepository partnerRepository;
 	
+	/**
+	 * @Autowired roleRepository
+	 */
 	@Autowired
     private RoleRepository roleRepository;
 	
+	/**
+	 * @Autowired sessionRegistry
+	 */
+	@Autowired
+	private SessionRegistry sessionRegistry;
+	
+	/**
+	 * @Autowired bCryptPasswordEncoder
+	 */
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    
+    @Override
+	public User findUserById(Integer userId) {
+		return userRepository.findById(userId);
+	}
 	
 	@Override
 	public User findUserByEmail(String emailAddress) {
@@ -56,10 +86,33 @@ public class UserLoginServiceImpl implements UserLoginService {
 		return userRepository.findByEmailAndAccountStatus(emailAddress, accountStatus);
 	}
     
-    @Override
-	public List<UserDTO> findAllByRoleId(int roleId) throws ParseException {
+    @SuppressWarnings("deprecation")
+	@Override
+	public List<UserDTO> findAllByRoleId(UserForm userForm) throws ParseException {
     	List<UserDTO> userDTOs = null;
-    	List<Object> users = userRepository.findAllByRoleId(roleId);
+    	
+    	Sort sort = null;
+    	Pageable pageable = null;
+    	if(userForm.getStart() !=null && userForm.getLength() !=null ) {
+    		if(Format.isStringNotEmptyAndNotNull(userForm.getFieldForSorting()) && Format.isStringNotEmptyAndNotNull(userForm.getSortDirection())) {
+    			sort = new Sort(new Sort.Order(Direction.valueOf(userForm.getSortDirection().toUpperCase()), userForm.getFieldForSorting()));
+    		}else {
+    			sort = new Sort(new Sort.Order(Direction.ASC, "email"));
+    		}
+    		pageable = new PageRequest(userForm.getStart(), userForm.getLength(), sort);
+    	}else {
+    		sort = new Sort(new Sort.Order(Direction.ASC, "email"));
+    		pageable = new PageRequest(0, 10, sort);
+    	}
+    	
+    	String email = null;
+    	if(Format.isStringNotEmptyAndNotNull(userForm.getEmailAddress())) {
+    		email = userForm.getEmailAddress().toLowerCase();
+    	}else {
+    		email = "";
+    	}
+    	List<Object> users = userRepository.findAllByRoleId(Integer.parseInt(userForm.getRoleId()), email, pageable);
+    	
     	if(Format.isCollectionNotEmtyAndNotNull(users)) {
     		userDTOs = new ArrayList<>();
     		Iterator<Object> itr = users.iterator();
@@ -110,7 +163,7 @@ public class UserLoginServiceImpl implements UserLoginService {
 				user.setName(userForm.getName());
 				user.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
 		        user.setAccountStatus(AccountStatusEnum.Active);
-		        Role userRole = roleRepository.findByRole(Constants.ADMIN);
+		        Role userRole = roleRepository.findByRole(userForm.getRoleName());
 		        user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
 		        user.setCreatedBy(userForm.getEmailAddress());
 		        user.setCreatedOn(new Date());
@@ -125,7 +178,49 @@ public class UserLoginServiceImpl implements UserLoginService {
 		userRepository.save(user);
 		user = null;
 	}
+
+	@Override
+	public void updateAccountStatus(UserForm userForm) throws UserOrPartnerNotFoundException {
+		// TODO Auto-generated method stub
+		User user = userRepository.findByEmail(userForm.getEmailAddress());
+		if(Format.isObjectNotEmptyAndNotNull(user)) {
+			if(userForm.getAccountStatus().equals(AccountStatusEnum.Active.toString())) {
+				user.setAccountStatus(AccountStatusEnum.Active);
+			}else if(userForm.getAccountStatus().equals(AccountStatusEnum.Pending.toString())) {
+				user.setAccountStatus(AccountStatusEnum.Pending);
+			}else if(userForm.getAccountStatus().equals(AccountStatusEnum.Blocked.toString())) {
+				user.setAccountStatus(AccountStatusEnum.Blocked);
+			}else if(userForm.getAccountStatus().equals(AccountStatusEnum.Deleted.toString())) {
+				user.setAccountStatus(AccountStatusEnum.Deleted);
+			}
+			user.setModifiedOn(new Date());
+			if(Format.isStringNotEmptyAndNotNull(userForm.getEmailAddress())) {
+				user.setModifiedBy(userForm.getEmailAddress());
+			}else {
+				user.setModifiedBy("System");
+			}
+			userRepository.save(user);
+			if(!userForm.getAccountStatus().equals(AccountStatusEnum.Active.toString())) {
+				expireSession(user.getSessionID());
+			}
+			user = null;
+		}else {
+			throw new UserOrPartnerNotFoundException();
+		}
+	}
 	
+	/**This method marks the session for expiration
+	 * @author mithun Mondal
+	 * @param sessionId
+	  */
+	private void  expireSession(String sessionId){
+		if(sessionId!=null){
+			SessionInformation sessionInformation=sessionRegistry.getSessionInformation(sessionId);
+			if(sessionInformation!=null) {
+				sessionInformation.expireNow(); // marks the session for expiration
+			}
+		}
+	}
 	/*@Override
 	public User findUserByEmail(UserForm userForm) {
 		User user = new User();
@@ -136,4 +231,22 @@ public class UserLoginServiceImpl implements UserLoginService {
 	public void userRegistration(UserForm userForm) {
 		
 	}*/
+
+	@Override
+	public Boolean isValidUser(UserForm userForm) {
+		if(Format.isStringNotEmptyAndNotNull(userForm.getEmailAddress())  && Format.isStringNotEmptyAndNotNull(userForm.getPassword())) {
+			User user = userRepository.findByEmail(userForm.getEmailAddress());
+			if(Format.isObjectNotEmptyAndNotNull(user)) {
+				if (bCryptPasswordEncoder.matches(userForm.getPassword(), user.getPassword())) {
+					return true;
+				}else {
+					return false;
+				}
+			}else {
+				return false;
+			}
+		}else {
+			return false;
+		}
+	}
 }

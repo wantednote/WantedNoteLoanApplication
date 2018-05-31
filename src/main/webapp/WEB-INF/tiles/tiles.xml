@@ -81,6 +81,12 @@
 	</definition>
     <!-- End of Admin Actor Pages -->
     
+    <!-- Start of Admin Actor Details Pages -->
+	<definition name="viewActorDetails" extends="base.adminDefinitio">
+		<put-attribute name="adminBody" value="/WEB-INF/view/admin/actors/viewActorDetails.jsp" />
+	</definition>
+    <!-- End of Admin Actor Details Pages -->
+    
     
     
     <!-- Start of Base Partner Dashboard definition -->

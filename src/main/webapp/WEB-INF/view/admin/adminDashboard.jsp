@@ -1,5 +1,6 @@
 <%@ include file="/common/taglibs.jsp"%>
-<script src="assets/js/jquery-2.1.1.js"></script>
+<!-- <script src="assets/js/jquery-2.1.1.js"></script> -->
+<script src="<c:url value="/assets/js/jquery-2.1.1.js" />"></script>
 <title>Wantednote | Admin Dashboard</title>
 
 <div class="row">

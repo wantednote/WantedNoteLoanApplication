@@ -19,6 +19,10 @@ public class Constants {
 	
 	public static final String FALSE="Flase" ;
 	
+	public static final String SUCCESS="Success";
+	
+	public static final String FAILURE="Failure" ;
+	
 	public static final String STRING_NULL="null" ;
 	
 	/**
@@ -68,7 +72,7 @@ public class Constants {
 	
 	public static final String USER = "USER";
 	
-	public static final String MANAGER = "MANAGER";
+	public static final String REGINAL_MANAGER = "REGINALMANAGER";
 	
 	/**
 	 * Declared PIN_MIN_LENGTH_ADMIN

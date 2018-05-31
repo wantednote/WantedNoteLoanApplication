@@ -61,10 +61,13 @@ public class LoginController extends BaseController{
         ModelAndView modelAndView = new ModelAndView("login");
         if(Format.isStringNotEmptyAndNotNull(userForm.getUserType())) {
         	try {
-        		if(userForm.getUserType().equals(Constants.USER_TYPE_ADMIN))
-            		userLoginService.saveUser(userForm);
-            	else if (userForm.getUserType().equals(Constants.USER_TYPE_PARTNER));
+        		if(userForm.getUserType().equals(Constants.USER_TYPE_ADMIN)) {
+        			userForm.setRoleName(Constants.ADMIN);
+            		//userLoginService.saveUser(userForm);
+        		}else if (userForm.getUserType().equals(Constants.USER_TYPE_PARTNER)) {
+        			userForm.setRoleName(Constants.PARTNER);
             		partnerLoginService.addPartner(userForm);
+        		}
         	}catch (EmailAddressAlreadyExitsException e) {
 				// TODO: handle exception
 			}

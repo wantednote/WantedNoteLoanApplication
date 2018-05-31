@@ -109,7 +109,7 @@
 	        </li> -->
 	
 	        <li>
-	            <a href="logout">
+	            <a href="<c:url value="/logout" />">
 	                <i class="fa fa-sign-out"></i> Log out
 	            </a>
 	        </li>

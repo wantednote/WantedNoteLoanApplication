@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import com.wn.loanapp.constants.Constants;
 import com.wn.loanapp.dto.UserDTO;
 import com.wn.loanapp.enums.AccountStatusEnum;
 import com.wn.loanapp.exception.EmailAddressAlreadyExitsException;
+import com.wn.loanapp.exception.UserOrPartnerNotFoundException;
 import com.wn.loanapp.form.UserForm;
 import com.wn.loanapp.model.Partner;
 import com.wn.loanapp.model.Role;
@@ -33,17 +36,41 @@ public class PartnerLoginServiceImpl implements PartnerLoginService{
 
 	public static final String SERVICE_NAME = "partnerLoginService";
 
+	/**
+	 * @Autowired partnerRepository
+	 */
 	@Autowired
 	private PartnerRepository partnerRepository;
 	
+	/**
+	 * @Autowired userRepository
+	 */
 	@Autowired
 	private UserRepository userRepository;
 	
+	/**
+	 * @Autowired roleRepository
+	 */
 	@Autowired
     private RoleRepository roleRepository;
 	
+	/**
+	 * @Autowired sessionRegistry
+	 */
+	@Autowired
+	private SessionRegistry sessionRegistry;
+	
+	/**
+	 * @Autowired bCryptPasswordEncoder
+	 */
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    
+
+	@Override
+	public Partner findPartnerById(Integer partnerId) {
+		return partnerRepository.findById(partnerId);
+	}
 	
 	@Override
 	public Partner findPartnerByEmail(String emailAddress) {
@@ -109,7 +136,7 @@ public class PartnerLoginServiceImpl implements PartnerLoginService{
 				partner.setName(userForm.getName());
 				partner.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
 		        partner.setAccountStatus(AccountStatusEnum.Active);
-		        Role userRole = roleRepository.findByRole(Constants.PARTNER);
+		        Role userRole = roleRepository.findByRole(userForm.getRoleName());
 		        partner.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
 		        partner.setCreatedBy(userForm.getEmailAddress());
 		        partner.setCreatedOn(new Date());
@@ -124,4 +151,47 @@ public class PartnerLoginServiceImpl implements PartnerLoginService{
 		partnerRepository.save(partner);
 		partner = null;
 	}
+
+	@Override
+	public void updateAccountStatus(UserForm userForm) throws UserOrPartnerNotFoundException {
+		Partner partner = partnerRepository.findByEmail(userForm.getEmailAddress());
+		if(Format.isObjectNotEmptyAndNotNull(partner)) {
+			if(userForm.getAccountStatus().equals(AccountStatusEnum.Active.toString())) {
+				partner.setAccountStatus(AccountStatusEnum.Active);
+			}else if(userForm.getAccountStatus().equals(AccountStatusEnum.Pending.toString())) {
+				partner.setAccountStatus(AccountStatusEnum.Pending);
+			}else if(userForm.getAccountStatus().equals(AccountStatusEnum.Blocked.toString())) {
+				partner.setAccountStatus(AccountStatusEnum.Blocked);
+			}else if(userForm.getAccountStatus().equals(AccountStatusEnum.Deleted.toString())) {
+				partner.setAccountStatus(AccountStatusEnum.Deleted);
+			}
+			partner.setModifiedOn(new Date());
+			if(Format.isStringNotEmptyAndNotNull(userForm.getEmailAddress())) {
+				partner.setModifiedBy(userForm.getEmailAddress());
+			}else {
+				partner.setModifiedBy("System");
+			}
+			partnerRepository.save(partner);
+			if(!userForm.getAccountStatus().equals(AccountStatusEnum.Active.toString())) {
+				expireSession(partner.getSessionID());
+			}
+			partner = null;
+		}else {
+			throw new UserOrPartnerNotFoundException();
+		}
+	}
+	
+	/**This method marks the session for expiration
+	 * @author mithun Mondal
+	 * @param sessionId
+	  */
+	private void  expireSession(String sessionId){
+		if(sessionId!=null){
+			SessionInformation sessionInformation=sessionRegistry.getSessionInformation(sessionId);
+			if(sessionInformation!=null) {
+				sessionInformation.expireNow(); // marks the session for expiration
+			}
+		}
+	}
+	
 }

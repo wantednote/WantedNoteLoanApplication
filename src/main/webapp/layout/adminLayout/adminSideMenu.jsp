@@ -1,5 +1,7 @@
 <%@ include file="/common/taglibs.jsp"%>
-<script src="assets/js/jquery-2.1.1.js"></script>
+<!-- <script src="assets/js/jquery-2.1.1.js"></script> -->
+<script src="<c:url value="/assets/js/jquery-2.1.1.js" />"></script>
+
 <nav class="navbar-default navbar-static-side" role="navigation">
     <div class="sidebar-collapse">
         <ul class="nav" id="side-menu">
@@ -7,7 +9,7 @@
 	            <li class="nav-header">
 	                <div class="dropdown profile-element"> <span>
 	                    <!-- <img alt="image" class="img-circle" src="assets/img/myname.jpg" style="height: 50px; width: 50px;"/> -->
-	                    <img alt="image" src="assets/img/logo/WantedNote1.png" style="height: 50px; width: 50px;"/>
+	                    <img alt="image" src="<c:url value= "/assets/img/logo/WantedNote1.png"/>" style="height: 50px; width: 50px;"/>
 	                    </span>
 	                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
 	                    <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">${userDetailsSessionForm.name}</strong>
@@ -18,13 +20,13 @@
 	                        <li><a href="#">Mailbox</a></li>
 	                        <li class="divider"></li>
 	                        <%-- <li><a href="<%=request.getContextPath()%>/logout.note">Logout</a></li> --%>
-	                        <li><a href="logout">Logout</a></li>
+	                        <li><a href="<c:url value="/logout" />">Logout</a></li>
 	                    </ul>
 	                </div>
 	                <div class="logo-element">
 	                    <!-- WN -->
 	                    <!-- <img alt="image" class="img-circle" src="assets/img/logo/WantedNote1.png" style="height: 40px; width: 40px;"/> -->
-	                    <img alt="image" src="assets/img/logo/WantedNote1.png" style="height: 40px; width: 40px;"/>
+	                    <img alt="image" src="<c:url value= "/assets/img/logo/WantedNote1.png"/>" style="height: 40px; width: 40px;"/>
 	                </div>
 	            </li>
             </c:if>
@@ -49,10 +51,10 @@
             </c:if> --%>
             
             <li id="leftMenu_admin">
-                <a href="admin"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
+                <a href="<c:url value="/admin" />"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
             </li>
             <li id="leftMenu_actors">
-                <a href="actors"><i class="fa fa-th-large"></i> <span class="nav-label">Actors</span></a>
+                <a href="<c:url value="/actors" />"><i class="fa fa-th-large"></i> <span class="nav-label">Actors</span></a>
             </li>
             <!-- <li id="leftMenu_items">
                 <a href="items.note"><i class="fa fa-diamond"></i> <span class="nav-label">Items</span></a>

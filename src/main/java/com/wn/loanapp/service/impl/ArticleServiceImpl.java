@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.wn.loanapp. model.Article;
@@ -45,4 +47,12 @@ public class ArticleServiceImpl implements ArticleService {
 	public void deleteArticle(int articleId) {
 		articleRepository.delete(getArticleById(articleId));
 	}
+	
+	/*@SuppressWarnings("deprecation")
+	@Override
+	public List<Article> getPage(int pageNumber) {
+		PageRequest request = new PageRequest(pageNumber - 1, 5, Sort.Direction.ASC, "articleId");
+		
+		return articleRepository.findAll(request).getContent();
+	}*/
 }

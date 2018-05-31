@@ -22,6 +22,7 @@
 	<!-- Header -->
 	<tiles:insertAttribute name="homeHeader" />
 	<!-- Body -->
+	<jsp:include page="/common/messages.jsp" flush="true" />
 	<tiles:insertAttribute name="homeBody" />
 	<!-- Footer -->
 	<tiles:insertAttribute name="homeFooter" />

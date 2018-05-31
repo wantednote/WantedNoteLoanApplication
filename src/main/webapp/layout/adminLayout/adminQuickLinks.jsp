@@ -4,10 +4,12 @@
         <h2>${userDetailsSessionForm.pageHeaderTitle}</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="${userDetailsSessionForm.selectedBaseLink}">This is</a>
+            	<a href="<c:url value="/${userDetailsSessionForm.selectedBaseLink}" />">This is</a>
+                <%-- <a href="${userDetailsSessionForm.selectedBaseLink}">This is</a> --%>
             </li>
             <li class="active">
-                <strong><a href="${userDetailsSessionForm.selectedSubLink}"> ${userDetailsSessionForm.pageHeaderTitle}</a></strong>
+                <%-- <strong><a href="${userDetailsSessionForm.selectedSubLink}"> ${userDetailsSessionForm.pageHeaderTitle}</a></strong> --%>
+                <strong><a href="<c:url value="/${userDetailsSessionForm.selectedSubLink}" />"> ${userDetailsSessionForm.pageHeaderTitle}</a></strong>
             </li>
         </ol>
     </div>

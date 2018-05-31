@@ -10,6 +10,8 @@ import com.wn.loanapp.enums.AccountStatusEnum;
 import com.wn.loanapp.model.Partner;
 
 public interface PartnerRepository extends CrudRepository<Partner, Long>{
+	
+	public Partner findById(int id);
 
 	public Partner findByEmail(String email);
 	

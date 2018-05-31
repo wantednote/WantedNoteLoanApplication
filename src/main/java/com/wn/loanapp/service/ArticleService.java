@@ -10,4 +10,6 @@ public interface ArticleService {
      boolean addArticle(Article article);
      void updateArticle(Article article);
      void deleteArticle(int articleId);
+     
+     //List<Article> getPage(int pageNumber);
 }

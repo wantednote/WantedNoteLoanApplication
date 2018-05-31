@@ -31,9 +31,10 @@ public class ArticleController {
 		return new ResponseEntity<Article>(article, HttpStatus.OK);
 	}
 	
-	@GetMapping("articles")
-	public ResponseEntity<List<Article>> getAllArticles() {
+	@GetMapping("articles/{id}")
+	public ResponseEntity<List<Article>> getAllArticles(@PathVariable("id") Integer pageNumber) {
 		List<Article> list = articleService.getAllArticles();
+		//List<Article> list = articleService.getPage(pageNumber);
 		return new ResponseEntity<List<Article>>(list, HttpStatus.OK);
 	}
 	
