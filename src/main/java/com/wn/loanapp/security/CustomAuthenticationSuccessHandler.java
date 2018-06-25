@@ -64,7 +64,9 @@ public class CustomAuthenticationSuccessHandler extends
 			userDetailsSessionForm = new UserDetailsSessionForm();
 		}
 		if(roleName.equals(Constants.PARTNER)){
-			Partner partner = partnerLoginService.findPartnerByEmail(currentUser);
+			PartnerForm partnerForm = new PartnerForm();
+			partnerForm.setEmailAddress(currentUser);
+			Partner partner = partnerLoginService.getPartner(partnerForm);
 			partner.setSessionID(request.getSession(false).getId());
 			if(com.wn.loanapp.util.Format.isObjectNotEmptyAndNotNull(partner)){
 				String loginToken = null;
@@ -80,7 +82,9 @@ public class CustomAuthenticationSuccessHandler extends
 				userDetailsSessionForm.setLoginToken(loginToken);
 			}
 		}else if(roleName.equals(Constants.ADMIN)){
-			User user = userLoginService.findUserByEmail(currentUser);
+			UserForm userForm = new UserForm();
+			userForm.setEmailAddress(currentUser);
+			User user = userLoginService.getUser(userForm);
 			user.setSessionID(request.getSession(false).getId());
 			if(com.wn.loanapp.util.Format.isObjectNotEmptyAndNotNull(user)){
 				String loginToken = null;

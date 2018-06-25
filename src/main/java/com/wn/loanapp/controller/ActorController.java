@@ -25,6 +25,7 @@ import com.wn.loanapp.dto.RoleDTO;
 import com.wn.loanapp.dto.UserDTO;
 import com.wn.loanapp.exception.EmailAddressAlreadyExitsException;
 import com.wn.loanapp.exception.UserOrPartnerNotFoundException;
+import com.wn.loanapp.form.PartnerForm;
 import com.wn.loanapp.form.RoleForm;
 import com.wn.loanapp.form.UserDetailsSessionForm;
 import com.wn.loanapp.form.UserForm;
@@ -60,9 +61,9 @@ public class ActorController extends BaseController{
 			userDetailsSessionForm.setSelectedBaseLink(Constants.SELECTED_BASE_LINK_ADMIN_VIEW_ACTOR);
 			userDetailsSessionForm.setSelectedSubLink(Constants.SELECTED_BASE_LINK_ADMIN_VIEW_ACTOR);
 			try {
-				//createModelAndView(modelAndView, id);
 				List<RoleDTO> roleDTOs = null;
-				List<Role> roles = roleService.findAll();
+				RoleForm roleForm = new RoleForm();
+				List<Role> roles = roleService.getRoles(roleForm);
 				if(Format.isCollectionEmtyOrNull(roles)) {
 					roleDTOs = new ArrayList<>();
 				}else {
@@ -88,81 +89,7 @@ public class ActorController extends BaseController{
         return modelAndView;
     }
 	
-	private void createModelAndView(ModelAndView modelAndView, String roleId) throws ParseException {
-		modelAndView.addObject("url", Constants.USER_TYPE_ADMIN);
-		String currentRole = null;
-		Boolean flag = true;
-		List<RoleDTO> roles = null;
-		List<Role> rolesList = roleService.findAll();
-		if(Format.isCollectionNotEmtyAndNotNull(rolesList)) {
-			roles = new ArrayList<>();
-			for(int i=0; i<rolesList.size(); i++) {
-				Role role = rolesList.get(i);
-				if(Format.isStringEmptyOrNull(roleId)) {
-					currentRole = rolesList.get(Constants.GET_ZERO_INDEX_OBJECT).getRole();
-					flag = false;
-				}else {
-					if(role.getId() == Integer.parseInt(roleId)) {
-						currentRole = role.getRole();
-						flag = true;
-					}
-				}
-				String roleString = ActorRoleFormater.getFormatedActorRole(role.getRole());
-				//role.setRole(roleString);
-				RoleDTO roleDTO = new RoleDTO();
-				roleDTO.setId(role.getId());
-				roleDTO.setRole(role.getRole());
-				roleDTO.setRoleName(roleString);
-				roles.add(roleDTO);
-			}
-		}else {
-			roles = new ArrayList<>();
-			currentRole = "";
-		}
-		
-		List<UserDTO> users = null;
-		Integer userCount = null;
-		if(Format.isCollectionNotEmtyAndNotNull(roles)) {
-			if(flag) {
-				if(currentRole.equals(Constants.PARTNER)) {
-					users = partnerLoginService.findAllByRoleId(Integer.parseInt(roleId));
-				}else {
-					UserForm userForm = new UserForm();
-					userForm.setId(roleId);
-					users = userLoginService.findAllByRoleId(userForm);
-				}
-			}else {
-				if(currentRole.equals(ActorRoleFormater.getFormatedActorRole(Constants.PARTNER))) {
-					users = partnerLoginService.findAllByRoleId(roles.get(Constants.GET_ZERO_INDEX_OBJECT).getId());
-				}else {
-					UserForm userForm = new UserForm();
-					userForm.setId(roles.get(Constants.GET_ZERO_INDEX_OBJECT).getId()+"");
-					users = userLoginService.findAllByRoleId(userForm);
-				}
-			}
-			if(Format.isCollectionEmtyOrNull(users)) {
-				users = new ArrayList<>();
-				userCount = Constants.GET_ZERO_INDEX_OBJECT;
-			}else {
-				userCount = users.size();
-			}
-		}else {
-			users = new ArrayList<>();
-			userCount = Constants.GET_ZERO_INDEX_OBJECT;
-		}
-		
-		modelAndView.addObject("roles", roles);
-		/*if(flag) {
-			modelAndView.addObject("currentRole", ActorRoleFormater.getFormatedActorRole(currentRole));
-		}else {
-			modelAndView.addObject("currentRole", currentRole);
-		}*/
-		String currentRoleString = currentRole;
-		modelAndView.addObject("currentRole", ActorRoleFormater.getFormatedActorRole(currentRole));
-		modelAndView.addObject("users", users);
-		modelAndView.addObject("roleCaps", currentRoleString.toUpperCase());
-		modelAndView.addObject("userCount", userCount);
-	}
+	
 	
 	@RequestMapping(value="actors", method=RequestMethod.POST)
 	public ModelAndView addActors(UserDetailsSessionForm userDetailsSessionForm, UserForm userForm, RedirectAttributes redirectAttributes) {
@@ -200,7 +127,9 @@ public class ActorController extends BaseController{
 		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
 		if(Format.isStringNotEmptyAndNotNull(userForm.getRoleId())) {
 			try {
-				Role role = roleService.findById(Long.parseLong(userForm.getRoleId()));
+				RoleForm roleForm = new RoleForm();
+				roleForm.setId(Long.parseLong(userForm.getRoleId()));
+				Role role = roleService.getRole(roleForm);
 				if(role.getRole().equals(Constants.PARTNER)) {
 					userDTOs = partnerLoginService.findAllByRoleId(role.getId());
 				}else {
@@ -224,18 +153,22 @@ public class ActorController extends BaseController{
 	}
 	
 	@RequestMapping(value="/actors/{id}" , method = RequestMethod.GET)
-    public ModelAndView getActorDetails(HttpServletRequest request, UserDetailsSessionForm userDetailsSessionForm, @PathVariable("id") Integer id) {
+    public ModelAndView getActorDetails(HttpServletRequest request, UserDetailsSessionForm userDetailsSessionForm, @PathVariable("id") long id) {
 		ModelAndView modelAndView = null;
 		Boolean flag = false;
 		User user = null;
 		Partner partner = null;
 		if(Format.isStringNotEmptyAndNotNull(userDetailsSessionForm.getEmailAddress())) {
-			if(Format.isIntegerNotEmtyAndNotZero(id)) {
-				user = userLoginService.findUserById(id);
+			if(Format.isNotNull(id)) {
+				UserForm userForm = new UserForm();
+				userForm.setId(id);
+				user = userLoginService.getUser(userForm);
 				if(Format.isObjectNotEmptyAndNotNull(user)) {
 					flag = true;
 				}else {
-					partner = partnerLoginService.findPartnerById(id);
+					PartnerForm partnerForm = new PartnerForm();
+					partnerForm.setId(id);
+					partner = partnerLoginService.getPartner(partnerForm);
 					if(Format.isObjectNotEmptyAndNotNull(partner)) {
 						flag = true;
 					}
@@ -291,7 +224,7 @@ public class ActorController extends BaseController{
 		}
 		userForm.setSuccessOrErrorMessage(successOrErrorMessage);
 		userForm.setMessageType(messageType);
-		userForm.setId(null);
+		userForm.setId(0);
 		userForm.setEmailAddress(null);
 		userForm.setRoleName(null);
 		userForm.setAccountStatus(null);

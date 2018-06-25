@@ -20,11 +20,16 @@ import com.wn.loanapp.dto.UserDTO;
 import com.wn.loanapp.enums.AccountStatusEnum;
 import com.wn.loanapp.exception.EmailAddressAlreadyExitsException;
 import com.wn.loanapp.exception.UserOrPartnerNotFoundException;
+import com.wn.loanapp.form.PartnerForm;
+import com.wn.loanapp.form.RoleForm;
 import com.wn.loanapp.form.UserForm;
 import com.wn.loanapp.model.Partner;
+import com.wn.loanapp.model.PartnerRole;
 import com.wn.loanapp.model.Role;
 import com.wn.loanapp.model.User;
+import com.wn.loanapp.model.UserRole;
 import com.wn.loanapp.repository.PartnerRepository;
+import com.wn.loanapp.repository.PartnerRoleRepository;
 import com.wn.loanapp.repository.RoleRepository;
 import com.wn.loanapp.repository.UserRepository;
 import com.wn.loanapp.service.PartnerLoginService;
@@ -55,6 +60,11 @@ public class PartnerLoginServiceImpl implements PartnerLoginService{
     private RoleRepository roleRepository;
 	
 	/**
+	 * @Autowired partnerRoleRepository
+	 */
+	@Autowired
+	private PartnerRoleRepository partnerRoleRepository;
+	/**
 	 * @Autowired sessionRegistry
 	 */
 	@Autowired
@@ -67,25 +77,15 @@ public class PartnerLoginServiceImpl implements PartnerLoginService{
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     
 
-	@Override
-	public Partner findPartnerById(Integer partnerId) {
-		return partnerRepository.findById(partnerId);
+    @Override
+	public Partner getPartner(PartnerForm partnerForm) {
+		return partnerRepository.getPartner(partnerForm);
 	}
 	
 	@Override
-	public Partner findPartnerByEmail(String emailAddress) {
-		return partnerRepository.findByEmail(emailAddress);
-	}
-	
-	@Override
-	public Partner findPartnerByEmailAndAccountStatus(String emailAddress, AccountStatusEnum accountStatus) {
-		return partnerRepository.findByEmailAndAccountStatus(emailAddress, accountStatus);
-	}
-	
-	@Override
-	public List<UserDTO> findAllByRoleId(int roleId) throws ParseException {
+	public List<UserDTO> findAllByRoleId(long roleId) throws ParseException {
 		List<UserDTO> userDTOs = null;
-    	List<Object> partners = partnerRepository.findAllByRoleId(roleId);
+    	/*List<Object> partners = partnerRepository.findAllByRoleId(roleId);
     	if(Format.isCollectionNotEmtyAndNotNull(partners)) {
     		userDTOs = new ArrayList<>();
     		Iterator<Object> itr = partners.iterator();
@@ -115,18 +115,20 @@ public class PartnerLoginServiceImpl implements PartnerLoginService{
         	   userDTO.setModifiedBy(String.valueOf(obj[6]));
         	   userDTOs.add(userDTO);
         	}
-    	}
+    	}*/
     	return userDTOs;
 	}
 	
 	@Override
 	public void addPartner(UserForm userForm) throws EmailAddressAlreadyExitsException{
-		Partner partner = partnerRepository.findByEmail(userForm.getEmailAddress());
+		PartnerForm partnerForm = new PartnerForm();
+		partnerForm.setEmailAddress(userForm.getEmailAddress());
+		Partner partner = partnerRepository.getPartner(partnerForm);
 		if(Format.isObjectNotEmptyAndNotNull(partner)) {
 			partner = null;
 			throw new EmailAddressAlreadyExitsException();
 		}else {
-			User user = userRepository.findByEmail(userForm.getEmailAddress());
+			User user = userRepository.getUser(userForm);
 			if(Format.isObjectNotEmptyAndNotNull(user)) {
 				user = null;
 				throw new EmailAddressAlreadyExitsException();
@@ -136,11 +138,13 @@ public class PartnerLoginServiceImpl implements PartnerLoginService{
 				partner.setName(userForm.getName());
 				partner.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
 		        partner.setAccountStatus(AccountStatusEnum.Active);
-		        Role userRole = roleRepository.findByRole(userForm.getRoleName());
-		        partner.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+		        RoleForm roleForm = new RoleForm();
+		        roleForm.setRoleName(userForm.getRoleName());
+		        Role role = roleRepository.getRole(roleForm);
+		        partner.setRoles(new HashSet<Role>(Arrays.asList(role)));
 		        partner.setCreatedBy(userForm.getEmailAddress());
-		        partner.setCreatedOn(new Date());
-				partnerRepository.save(partner);
+		        partner.setCreatedOn(Format.getCurrentSqlDateTimeStamp());
+				partnerRepository.saveOrUpdate(partner);
 				partner = null;
 			}
 		}
@@ -148,31 +152,33 @@ public class PartnerLoginServiceImpl implements PartnerLoginService{
 
 	@Override
 	public void updatePartner(Partner partner) {
-		partnerRepository.save(partner);
+		partnerRepository.update(partner);
 		partner = null;
 	}
 
 	@Override
 	public void updateAccountStatus(UserForm userForm) throws UserOrPartnerNotFoundException {
-		Partner partner = partnerRepository.findByEmail(userForm.getEmailAddress());
+		PartnerForm partnerForm = new PartnerForm();
+		partnerForm.setEmailAddress(userForm.getEmailAddress());
+		Partner partner = partnerRepository.getPartner(partnerForm);
 		if(Format.isObjectNotEmptyAndNotNull(partner)) {
-			if(userForm.getAccountStatus().equals(AccountStatusEnum.Active.toString())) {
+			if(userForm.getAccountStatus().toString().equals(AccountStatusEnum.Active.toString())) {
 				partner.setAccountStatus(AccountStatusEnum.Active);
-			}else if(userForm.getAccountStatus().equals(AccountStatusEnum.Pending.toString())) {
+			}else if(userForm.getAccountStatus().toString().equals(AccountStatusEnum.Pending.toString())) {
 				partner.setAccountStatus(AccountStatusEnum.Pending);
-			}else if(userForm.getAccountStatus().equals(AccountStatusEnum.Blocked.toString())) {
+			}else if(userForm.getAccountStatus().toString().equals(AccountStatusEnum.Blocked.toString())) {
 				partner.setAccountStatus(AccountStatusEnum.Blocked);
-			}else if(userForm.getAccountStatus().equals(AccountStatusEnum.Deleted.toString())) {
+			}else if(userForm.getAccountStatus().toString().equals(AccountStatusEnum.Deleted.toString())) {
 				partner.setAccountStatus(AccountStatusEnum.Deleted);
 			}
-			partner.setModifiedOn(new Date());
+			partner.setModifiedOn(Format.getCurrentSqlDateTimeStamp());
 			if(Format.isStringNotEmptyAndNotNull(userForm.getEmailAddress())) {
 				partner.setModifiedBy(userForm.getEmailAddress());
 			}else {
 				partner.setModifiedBy("System");
 			}
-			partnerRepository.save(partner);
-			if(!userForm.getAccountStatus().equals(AccountStatusEnum.Active.toString())) {
+			partnerRepository.update(partner);
+			if(!userForm.getAccountStatus().toString().equals(AccountStatusEnum.Active.toString())) {
 				expireSession(partner.getSessionID());
 			}
 			partner = null;

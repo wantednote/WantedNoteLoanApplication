@@ -11,37 +11,36 @@ public class PartnerRole {
 
 	@Id
     @Column(name="partner_id")
-	private int partnerId;
+	private long partnerId;
 	
 	@Column(name="role_id")
-	private String roleId;
-
+	private long roleId;
+	
 	/**
 	 * @return the partnerId
 	 */
-	public int getPartnerId() {
+	public long getPartnerId() {
 		return partnerId;
 	}
 
 	/**
 	 * @param partnerId the partnerId to set
 	 */
-	public void setPartnerId(int partnerId) {
+	public void setPartnerId(long partnerId) {
 		this.partnerId = partnerId;
 	}
 
 	/**
 	 * @return the roleId
 	 */
-	public String getRoleId() {
+	public long getRoleId() {
 		return roleId;
 	}
 
 	/**
 	 * @param roleId the roleId to set
 	 */
-	public void setRoleId(String roleId) {
+	public void setRoleId(long roleId) {
 		this.roleId = roleId;
 	}
-	
 }

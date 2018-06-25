@@ -12,11 +12,7 @@ import com.wn.loanapp.model.User;
 
 public interface UserLoginService {
 	
-	public User findUserById(Integer userId);
-	
-	public User findUserByEmail(String emailAddress);
-	
-	public User findUserByEmailAndAccountStatus(String emailAddress, AccountStatusEnum accountStatus);
+	public User getUser(UserForm userForm);
 	
 	public void saveUser(UserForm userForm) throws EmailAddressAlreadyExitsException;
 	

@@ -1,8 +1,10 @@
 package com.wn.loanapp.util;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 
@@ -455,5 +457,34 @@ public class Format {
 	}
 	public static void main(String[] args) {
 		System.out.println(formatDate(new Date()));
+	}
+	
+	public static Timestamp getCurrentSqlDateTimeStamp() {
+		Timestamp timestamp = null;
+		Date parsed2;
+		try {
+			Calendar currentDate = Calendar.getInstance();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+			String curdate = formatter.format(currentDate.getTime());
+			parsed2 = formatter.parse(curdate);
+			timestamp = new Timestamp(parsed2.getTime());
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return timestamp;
+	}
+	public static Timestamp converIntoSQLTimestamp(String date) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+	    Date parsedTimeStamp = null;
+		try {
+			parsedTimeStamp = dateFormat.parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
+	    return timestamp;
 	}
 }

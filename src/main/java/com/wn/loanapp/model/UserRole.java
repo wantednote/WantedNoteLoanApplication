@@ -11,38 +11,37 @@ public class UserRole {
 
 	@Id
     @Column(name="user_id")
-	private int userId;
+	private long userId;
 	
 	@Column(name="role_id")
-	private String roleId;
-
+	private long roleId;
+	
 	/**
 	 * @return the userId
 	 */
-	public int getUserId() {
+	public long getUserId() {
 		return userId;
 	}
 
 	/**
 	 * @param userId the userId to set
 	 */
-	public void setUserId(int userId) {
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
 
 	/**
 	 * @return the roleId
 	 */
-	public String getRoleId() {
+	public long getRoleId() {
 		return roleId;
 	}
 
 	/**
 	 * @param roleId the roleId to set
 	 */
-	public void setRoleId(String roleId) {
+	public void setRoleId(long roleId) {
 		this.roleId = roleId;
 	}
-	
 	
 }

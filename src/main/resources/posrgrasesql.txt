@@ -1,0 +1,86 @@
+//***********************************Role***************************************
+CREATE SEQUENCE wn_role_id_seq
+ INCREMENT 1
+ MINVALUE 1
+ MAXVALUE 9223372036854775807
+ START 1
+ CACHE 1;
+ 
+CREATE TABLE role_master
+(
+ role_id integer NOT NULL DEFAULT nextval('wn_role_id_seq'::regclass),
+ role character varying(40)
+ CONSTRAINT role_id_pk PRIMARY KEY (role_id)
+)
+ 
+ //***********************************User***************************************
+ CREATE SEQUENCE wn_user_id_seq
+ INCREMENT 1
+ MINVALUE 1
+ MAXVALUE 9223372036854775807
+ START 1
+ CACHE 1;
+ 
+CREATE TABLE user_login
+(
+ user_id integer NOT NULL DEFAULT nextval('wn_user_id_seq'::regclass),
+ active numeric(11),
+ email character varying(220),
+ name character varying(220),
+ password character varying(220),
+ logintoken character varying(220),
+ sessionid character varying(220),
+ lastlogin timestamp without time zone,
+ createdon timestamp without time zone,
+ createdby character varying(220),
+ modifiedon timestamp without time zone,
+ modifiedby character varying(220),
+ CONSTRAINT user_id_pk PRIMARY KEY (user_id)
+)
+
+CREATE TABLE user_role
+(
+ user_id integer NOT NULL,
+ role_id integer NOT NULL,
+ CONSTRAINT user_role_id_pk PRIMARY KEY (user_id, role_id),
+ CONSTRAINT FK859n2jvi8ivhui0rl0esws6o FOREIGN KEY (user_id)
+     REFERENCES user_login (user_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION,
+ CONSTRAINT FKa68196081fvovjhkek5m97n3y FOREIGN KEY (role_id)
+     REFERENCES role_master (`role_id`) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+
+//***********************************Partner***************************************
+ CREATE SEQUENCE wn_partner_id_seq
+ INCREMENT 1
+ MINVALUE 1
+ MAXVALUE 9223372036854775807
+ START 1
+ CACHE 1;
+ 
+CREATE TABLE partner_login
+(
+ partner_id integer NOT NULL DEFAULT nextval('wn_partner_id_seq'::regclass),
+ active numeric(11),
+ email character varying(220),
+ name character varying(220),
+ password character varying(220),
+ logintoken character varying(220),
+ sessionid character varying(220),
+ lastlogin timestamp without time zone,
+ createdon timestamp without time zone,
+ createdby character varying(220),
+ modifiedon timestamp without time zone,
+ modifiedby character varying(220),
+ CONSTRAINT partner_id_pk PRIMARY KEY (partner_id)
+)
+
+CREATE TABLE partner_role
+(
+ partner_id integer NOT NULL,
+ role_id integer NOT NULL,
+ CONSTRAINT partner_role_id_pk PRIMARY KEY (partner_id, role_id),
+ CONSTRAINT FK859n2jvi8ivhui0rl0esws6i FOREIGN KEY (partner_id)
+     REFERENCES partner_login (partner_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION,
+ CONSTRAINT FKa68196081fvovjhkek5m97n3u FOREIGN KEY (role_id)
+     REFERENCES role_master (role_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
+)

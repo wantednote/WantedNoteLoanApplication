@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.wn.loanapp.enums.AccountStatusEnum;
+import com.wn.loanapp.form.RoleForm;
 import com.wn.loanapp.form.UserForm;
 import com.wn.loanapp.model.Role;
 import com.wn.loanapp.model.User;
@@ -69,7 +70,10 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
 		userForm.setEmailAddress(authentication.getPrincipal().toString());
 		userForm.setAccountStatus(AccountStatusEnum.Active.toString());
 		User user = userLoginService.findUserByEmail(userForm);*/
-		User user = userLoginService.findUserByEmailAndAccountStatus(authentication.getPrincipal().toString(), AccountStatusEnum.Active);
+		UserForm userForm = new UserForm();
+		userForm.setEmailAddress(authentication.getPrincipal().toString());
+		userForm.setAccountStatus(AccountStatusEnum.Active);
+		User user = userLoginService.getUser(userForm);
 		if(user == null){	
 			throw new BadCredentialsException("User does not exists!");
 		} else {
@@ -91,7 +95,9 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
 			    //List<Role> roles = new ArrayList<Role>();
 				UserRole userRole = userRoleService.findByUserId(Long.valueOf(user.getId()));
 				if(Format.isObjectNotEmptyAndNotNull(userRole)) {
-					Role role = roleService.findById(Long.valueOf(userRole.getRoleId()));
+					RoleForm roleForm = new RoleForm();
+					roleForm.setId(Long.valueOf(userRole.getRoleId()));
+					Role role = roleService.getRole(roleForm);
 					if(Format.isObjectNotEmptyAndNotNull(role)) {
 						List<Role> roles = new ArrayList<>();
 						roles.add(role);

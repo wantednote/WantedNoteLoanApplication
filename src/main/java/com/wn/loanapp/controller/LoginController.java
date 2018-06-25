@@ -25,6 +25,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.wn.loanapp.common.BaseController;
 import com.wn.loanapp.constants.Constants;
 import com.wn.loanapp.exception.EmailAddressAlreadyExitsException;
+import com.wn.loanapp.form.PartnerForm;
 import com.wn.loanapp.form.UserDetailsSessionForm;
 import com.wn.loanapp.form.UserForm;
 import com.wn.loanapp.model.Partner;
@@ -63,7 +64,7 @@ public class LoginController extends BaseController{
         	try {
         		if(userForm.getUserType().equals(Constants.USER_TYPE_ADMIN)) {
         			userForm.setRoleName(Constants.ADMIN);
-            		//userLoginService.saveUser(userForm);
+            		userLoginService.saveUser(userForm);
         		}else if (userForm.getUserType().equals(Constants.USER_TYPE_PARTNER)) {
         			userForm.setRoleName(Constants.PARTNER);
             		partnerLoginService.addPartner(userForm);
@@ -144,19 +145,23 @@ public class LoginController extends BaseController{
 		String url  = "";
 		if(Format.isNotNull(userDetailsSessionForm) && Format.isStringNotEmptyAndNotNull(userDetailsSessionForm.getUserRole())){
 			if(userDetailsSessionForm.getUserRole().equals(Constants.PARTNER)){
-				Partner partner = partnerLoginService.findPartnerByEmail(userDetailsSessionForm.getEmailAddress());
+				PartnerForm partnerForm = new PartnerForm();
+				partnerForm.setEmailAddress(userDetailsSessionForm.getEmailAddress());
+				Partner partner = partnerLoginService.getPartner(partnerForm);
 				if(Format.isObjectNotEmptyAndNotNull(partner)) {
-					partner.setLastLogin(new Date());
-					partner.setModifiedOn(new Date());
+					partner.setLastLogin(Format.getCurrentSqlDateTimeStamp());
+					partner.setModifiedOn(Format.getCurrentSqlDateTimeStamp());
 					partner.setModifiedBy(userDetailsSessionForm.getEmailAddress());
 					partnerLoginService.updatePartner(partner);
 				}
 				url = Constants.SELECTED_BASE_LINK_PARTNER_DASHBOARD;
 			}else if (userDetailsSessionForm.getUserRole().equals(Constants.ADMIN)){
-				User user = userLoginService.findUserByEmail(userDetailsSessionForm.getEmailAddress());
+				UserForm userForm =  new UserForm();
+				userForm.setEmailAddress(userDetailsSessionForm.getEmailAddress());
+				User user = userLoginService.getUser(userForm);
 				if(Format.isObjectNotEmptyAndNotNull(user)) {
-					user.setLastLogin(new Date());
-					user.setModifiedOn(new Date());
+					user.setLastLogin(Format.getCurrentSqlDateTimeStamp());
+					user.setModifiedOn(Format.getCurrentSqlDateTimeStamp());
 					user.setModifiedBy(userDetailsSessionForm.getEmailAddress());
 					userLoginService.updateUser(user); 
 				}

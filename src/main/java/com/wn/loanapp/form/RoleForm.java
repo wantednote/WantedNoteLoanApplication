@@ -2,21 +2,21 @@ package com.wn.loanapp.form;
 
 public class RoleForm {
 
-	private String id;
+	private long id;
 	
 	private String roleName;
-
+	
 	/**
 	 * @return the id
 	 */
-	public String getId() {
+	public long getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

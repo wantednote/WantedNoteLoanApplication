@@ -17,6 +17,6 @@ public class PartnerRoleServiceImpl implements PartnerRoleService {
 	
 	@Override
 	public PartnerRole findByPartnerId(Long partnerId) {
-		return partnerRoleRepository.findByPartnerId(partnerId.intValue());
+		return partnerRoleRepository.findByPartnerId(partnerId);
 	}
 }

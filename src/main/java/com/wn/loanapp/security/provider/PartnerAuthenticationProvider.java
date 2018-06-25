@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import com.wn.loanapp.enums.AccountStatusEnum;
 import com.wn.loanapp.form.PartnerForm;
+import com.wn.loanapp.form.RoleForm;
 import com.wn.loanapp.model.Partner;
 import com.wn.loanapp.model.PartnerRole;
 import com.wn.loanapp.model.Role;
@@ -67,15 +68,20 @@ public class PartnerAuthenticationProvider implements AuthenticationProvider{
 		partnerForm.setEmailAddress(authentication.getPrincipal().toString());
 		partnerForm.setAccountStatus(AccountStatusEnum.Active.toString());
 		Partner partner = partnerLoginService.findPartnerByEmail(partnerForm);*/
-		Partner partner = partnerLoginService.findPartnerByEmailAndAccountStatus(authentication.getPrincipal().toString(), AccountStatusEnum.Active);
+		PartnerForm partnerForm = new PartnerForm();
+		partnerForm.setEmailAddress(authentication.getPrincipal().toString());
+		partnerForm.setAccountStatus(AccountStatusEnum.Active);
+		Partner partner = partnerLoginService.getPartner(partnerForm);
 		if(partner == null){	
 			throw new BadCredentialsException("User does not exists!");
 		} else {
 			if (bCryptPasswordEncoder.matches((String)authentication.getCredentials(), partner.getPassword())) {
 			    //List<Role> roles = new ArrayList<Role>();
-				PartnerRole partnerRole = partnerRoleService.findByPartnerId(Long.valueOf(partner.getId()));
+				PartnerRole partnerRole = partnerRoleService.findByPartnerId(partner.getId());
 				if(Format.isObjectNotEmptyAndNotNull(partnerRole)) {
-					Role role = roleService.findById(Long.valueOf(partnerRole.getRoleId()));
+					RoleForm roleForm = new RoleForm();
+					roleForm.setId(Long.valueOf(partnerRole.getRoleId()));
+					Role role = roleService.getRole(roleForm);
 					if(Format.isObjectNotEmptyAndNotNull(role)) {
 						List<Role> roles = new ArrayList<>();
 						roles.add(role);

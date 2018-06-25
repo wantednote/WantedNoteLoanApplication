@@ -7,7 +7,7 @@ public class Constants {
 	 */
 	public static final int  GET_ZERO_INDEX_OBJECT = 0;
 	/**
-	 * Declared adminDetailsSessionForm.
+	 * Declared userDetailsSessionForm.
 	 */
 	public static final String USERDETAILSFORMSESSION = "userDetailsSessionForm";
 	/**
@@ -119,6 +119,11 @@ public class Constants {
 	 */
 	public static final String SELECTED_BASE_LINK_ADMIN_VIEW_ACTOR= "actors";
 	
+	/**
+	 * Selected base link for admin view loan
+	 */
+	public static final String SELECTED_BASE_LINK_ADMIN_VIEW_LOAN= "loan";
+	
 	
 	/**
 	 * Selected base link for partner dashboard
@@ -130,6 +135,10 @@ public class Constants {
 	public static final String ADMIN_DASHBOARD_HEADER_TITLE = "Administrator Dashboard";
 	
 	public static final String ADMIN_VIEW_ACTOR_HEADER_TITLE = "View Actors";
+	
+	public static final String ADMIN_VIEW_LOAN_HEADER_TITLE = "Loan Dashboard";
+	
+	public static final int GET_FIRST_INDEX_OBJECT = 1;
 	
 	/*End Page Header Title*/
 }

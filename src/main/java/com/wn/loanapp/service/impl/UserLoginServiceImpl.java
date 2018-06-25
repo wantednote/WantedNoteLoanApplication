@@ -24,13 +24,17 @@ import com.wn.loanapp.dto.UserDTO;
 import com.wn.loanapp.enums.AccountStatusEnum;
 import com.wn.loanapp.exception.EmailAddressAlreadyExitsException;
 import com.wn.loanapp.exception.UserOrPartnerNotFoundException;
+import com.wn.loanapp.form.PartnerForm;
+import com.wn.loanapp.form.RoleForm;
 import com.wn.loanapp.form.UserForm;
 import com.wn.loanapp.model.Partner;
 import com.wn.loanapp.model.Role;
 import com.wn.loanapp.model.User;
+import com.wn.loanapp.model.UserRole;
 import com.wn.loanapp.repository.PartnerRepository;
 import com.wn.loanapp.repository.RoleRepository;
 import com.wn.loanapp.repository.UserRepository;
+import com.wn.loanapp.repository.UserRoleRepository;
 import com.wn.loanapp.service.UserLoginService;
 import com.wn.loanapp.util.DateDifference;
 import com.wn.loanapp.util.Format;
@@ -58,6 +62,12 @@ public class UserLoginServiceImpl implements UserLoginService {
     private RoleRepository roleRepository;
 	
 	/**
+	 * @Autowired userRoleRepository
+	 */
+	@Autowired
+    private UserRoleRepository userRoleRepository;
+	
+	/**
 	 * @Autowired sessionRegistry
 	 */
 	@Autowired
@@ -70,28 +80,16 @@ public class UserLoginServiceImpl implements UserLoginService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     
     @Override
-	public User findUserById(Integer userId) {
-		return userRepository.findById(userId);
-	}
-	
-	@Override
-	public User findUserByEmail(String emailAddress) {
-		return userRepository.findByEmail(emailAddress);
-		//List<User> users = (List<User>) userRepository.findByEmail(userForm.getEmailAddress());
-		//return users.get(Constants.GET_ZERO_INDEX_OBJECT);
-	}
-
-    @Override
-	public User findUserByEmailAndAccountStatus(String emailAddress, AccountStatusEnum accountStatus) {
-		return userRepository.findByEmailAndAccountStatus(emailAddress, accountStatus);
-	}
+	public User getUser(UserForm userForm) {
+    	return userRepository.getUser(userForm);
+    }
     
     @SuppressWarnings("deprecation")
 	@Override
 	public List<UserDTO> findAllByRoleId(UserForm userForm) throws ParseException {
     	List<UserDTO> userDTOs = null;
     	
-    	Sort sort = null;
+    	/*Sort sort = null;
     	Pageable pageable = null;
     	if(userForm.getStart() !=null && userForm.getLength() !=null ) {
     		if(Format.isStringNotEmptyAndNotNull(userForm.getFieldForSorting()) && Format.isStringNotEmptyAndNotNull(userForm.getSortDirection())) {
@@ -142,18 +140,20 @@ public class UserLoginServiceImpl implements UserLoginService {
         	   userDTO.setModifiedBy(String.valueOf(obj[6]));
         	   userDTOs.add(userDTO);
         	}
-    	}
+    	}*/
     	return userDTOs;
 	}
     
 	@Override
 	public void saveUser(UserForm userForm) throws EmailAddressAlreadyExitsException{
-		User user = userRepository.findByEmail(userForm.getEmailAddress());
+		User user = userRepository.getUser(userForm);
 		if(Format.isObjectNotEmptyAndNotNull(user)) {
 			user = null;
 			throw new EmailAddressAlreadyExitsException();
 		}else {
-			Partner partner = partnerRepository.findByEmail(userForm.getEmailAddress());
+			PartnerForm partnerForm = new PartnerForm();
+			partnerForm.setEmailAddress(userForm.getEmailAddress());
+			Partner partner = partnerRepository.getPartner(partnerForm);
 			if(Format.isObjectNotEmptyAndNotNull(partner)) {
 				partner = null;
 				throw new EmailAddressAlreadyExitsException();
@@ -163,11 +163,13 @@ public class UserLoginServiceImpl implements UserLoginService {
 				user.setName(userForm.getName());
 				user.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
 		        user.setAccountStatus(AccountStatusEnum.Active);
-		        Role userRole = roleRepository.findByRole(userForm.getRoleName());
-		        user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+		        RoleForm roleForm = new RoleForm();
+		        roleForm.setRoleName(userForm.getRoleName());
+		        Role role = roleRepository.getRole(roleForm);
+		        user.setRoles(new HashSet<Role>(Arrays.asList(role)));
 		        user.setCreatedBy(userForm.getEmailAddress());
-		        user.setCreatedOn(new Date());
-				userRepository.save(user);
+		        user.setCreatedOn(Format.getCurrentSqlDateTimeStamp());
+				userRepository.saveOrUpdate(user);
 				user = null;
 			}
 		}
@@ -175,32 +177,32 @@ public class UserLoginServiceImpl implements UserLoginService {
 
 	@Override
 	public void updateUser(User user) {
-		userRepository.save(user);
+		userRepository.update(user);
 		user = null;
 	}
 
 	@Override
 	public void updateAccountStatus(UserForm userForm) throws UserOrPartnerNotFoundException {
 		// TODO Auto-generated method stub
-		User user = userRepository.findByEmail(userForm.getEmailAddress());
+		User user = userRepository.getUser(userForm);
 		if(Format.isObjectNotEmptyAndNotNull(user)) {
-			if(userForm.getAccountStatus().equals(AccountStatusEnum.Active.toString())) {
+			if(userForm.getAccountStatus().toString().equals(AccountStatusEnum.Active.toString())) {
 				user.setAccountStatus(AccountStatusEnum.Active);
-			}else if(userForm.getAccountStatus().equals(AccountStatusEnum.Pending.toString())) {
+			}else if(userForm.getAccountStatus().toString().equals(AccountStatusEnum.Pending.toString())) {
 				user.setAccountStatus(AccountStatusEnum.Pending);
-			}else if(userForm.getAccountStatus().equals(AccountStatusEnum.Blocked.toString())) {
+			}else if(userForm.getAccountStatus().toString().equals(AccountStatusEnum.Blocked.toString())) {
 				user.setAccountStatus(AccountStatusEnum.Blocked);
-			}else if(userForm.getAccountStatus().equals(AccountStatusEnum.Deleted.toString())) {
+			}else if(userForm.getAccountStatus().toString().equals(AccountStatusEnum.Deleted.toString())) {
 				user.setAccountStatus(AccountStatusEnum.Deleted);
 			}
-			user.setModifiedOn(new Date());
+			user.setModifiedOn(Format.getCurrentSqlDateTimeStamp());
 			if(Format.isStringNotEmptyAndNotNull(userForm.getEmailAddress())) {
 				user.setModifiedBy(userForm.getEmailAddress());
 			}else {
 				user.setModifiedBy("System");
 			}
-			userRepository.save(user);
-			if(!userForm.getAccountStatus().equals(AccountStatusEnum.Active.toString())) {
+			userRepository.update(user);
+			if(!userForm.getAccountStatus().toString().equals(AccountStatusEnum.Active.toString())) {
 				expireSession(user.getSessionID());
 			}
 			user = null;
@@ -235,7 +237,7 @@ public class UserLoginServiceImpl implements UserLoginService {
 	@Override
 	public Boolean isValidUser(UserForm userForm) {
 		if(Format.isStringNotEmptyAndNotNull(userForm.getEmailAddress())  && Format.isStringNotEmptyAndNotNull(userForm.getPassword())) {
-			User user = userRepository.findByEmail(userForm.getEmailAddress());
+			User user = userRepository.getUser(userForm);
 			if(Format.isObjectNotEmptyAndNotNull(user)) {
 				if (bCryptPasswordEncoder.matches(userForm.getPassword(), user.getPassword())) {
 					return true;

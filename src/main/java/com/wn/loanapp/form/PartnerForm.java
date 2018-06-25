@@ -1,14 +1,36 @@
 package com.wn.loanapp.form;
 
+import com.wn.loanapp.enums.AccountStatusEnum;
+
 public class PartnerForm {
 
+	private long id;
+	
 	private String emailAddress;
 	
 	private String password;
 	
 	private String name;
 	
-	private String accountStatus;
+	private AccountStatusEnum accountStatus;
+	
+	private int start;
+	
+	private int length;
+
+	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	/**
 	 * @return the emailAddress
@@ -55,15 +77,43 @@ public class PartnerForm {
 	/**
 	 * @return the accountStatus
 	 */
-	public String getAccountStatus() {
+	public AccountStatusEnum getAccountStatus() {
 		return accountStatus;
 	}
 
 	/**
 	 * @param accountStatus the accountStatus to set
 	 */
-	public void setAccountStatus(String accountStatus) {
+	public void setAccountStatus(AccountStatusEnum accountStatus) {
 		this.accountStatus = accountStatus;
+	}
+
+	/**
+	 * @return the start
+	 */
+	public int getStart() {
+		return start;
+	}
+
+	/**
+	 * @param start the start to set
+	 */
+	public void setStart(int start) {
+		this.start = start;
+	}
+
+	/**
+	 * @return the length
+	 */
+	public int getLength() {
+		return length;
+	}
+
+	/**
+	 * @param length the length to set
+	 */
+	public void setLength(int length) {
+		this.length = length;
 	}
 	
 }

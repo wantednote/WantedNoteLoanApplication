@@ -1,8 +1,10 @@
 package com.wn.loanapp.form;
 
+import com.wn.loanapp.enums.AccountStatusEnum;
+
 public class UserForm {
 	
-	private String id;
+	private long id;
 	
 	private String emailAddress;
 	
@@ -10,7 +12,7 @@ public class UserForm {
 	
 	private String name;
 	
-	private String accountStatus;
+	private AccountStatusEnum accountStatus;
 	
 	private String userType;
 	
@@ -31,6 +33,20 @@ public class UserForm {
 	private Integer length;
 	
 	private Integer start;
+
+	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	/**
 	 * @return the emailAddress
@@ -77,14 +93,14 @@ public class UserForm {
 	/**
 	 * @return the accountStatus
 	 */
-	public String getAccountStatus() {
+	public AccountStatusEnum getAccountStatus() {
 		return accountStatus;
 	}
 
 	/**
 	 * @param accountStatus the accountStatus to set
 	 */
-	public void setAccountStatus(String accountStatus) {
+	public void setAccountStatus(AccountStatusEnum accountStatus) {
 		this.accountStatus = accountStatus;
 	}
 
@@ -101,7 +117,7 @@ public class UserForm {
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
-	
+
 	/**
 	 * @return the roleId
 	 */
@@ -128,20 +144,6 @@ public class UserForm {
 	 */
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	/**

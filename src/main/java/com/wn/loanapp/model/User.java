@@ -1,7 +1,7 @@
 package com.wn.loanapp.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.Transient;
@@ -20,15 +21,16 @@ import org.springframework.data.annotation.Transient;
 import com.wn.loanapp.enums.AccountStatusEnum;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user_login")
 public class User implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "user_id")
-	private int id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
+	@SequenceGenerator(name="user_id_generator", sequenceName = "wn_user_id_seq")
+	@Column(name = "user_id", updatable = false, nullable = false)
+	private long id;
 	
 	@Column(name = "email")
 	private String email;
@@ -54,13 +56,13 @@ public class User implements Serializable{
 	private String loginToken;
 	
 	@Column(name = "lastlogin")
-	private Date lastLogin;
+	private Timestamp lastLogin;
 	
 	@Column(name = "createdon")
-	private Date createdOn;
+	private Timestamp createdOn;
 	
 	@Column(name = "modifiedon")
-	private Date modifiedOn;
+	private Timestamp modifiedOn;
 	
 	@Column(name = "modifiedby")
 	private String modifiedBy;
@@ -71,14 +73,14 @@ public class User implements Serializable{
 	/**
 	 * @return the id
 	 */
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -183,42 +185,42 @@ public class User implements Serializable{
 	/**
 	 * @return the lastLogin
 	 */
-	public Date getLastLogin() {
+	public Timestamp getLastLogin() {
 		return lastLogin;
 	}
 
 	/**
 	 * @param lastLogin the lastLogin to set
 	 */
-	public void setLastLogin(Date lastLogin) {
+	public void setLastLogin(Timestamp lastLogin) {
 		this.lastLogin = lastLogin;
 	}
 
 	/**
 	 * @return the createdOn
 	 */
-	public Date getCreatedOn() {
+	public Timestamp getCreatedOn() {
 		return createdOn;
 	}
 
 	/**
 	 * @param createdOn the createdOn to set
 	 */
-	public void setCreatedOn(Date createdOn) {
+	public void setCreatedOn(Timestamp createdOn) {
 		this.createdOn = createdOn;
 	}
 
 	/**
 	 * @return the modifiedOn
 	 */
-	public Date getModifiedOn() {
+	public Timestamp getModifiedOn() {
 		return modifiedOn;
 	}
 
 	/**
 	 * @param modifiedOn the modifiedOn to set
 	 */
-	public void setModifiedOn(Date modifiedOn) {
+	public void setModifiedOn(Timestamp modifiedOn) {
 		this.modifiedOn = modifiedOn;
 	}
 
@@ -249,4 +251,5 @@ public class User implements Serializable{
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
+	
 }

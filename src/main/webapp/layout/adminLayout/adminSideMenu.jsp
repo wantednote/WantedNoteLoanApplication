@@ -56,6 +56,9 @@
             <li id="leftMenu_actors">
                 <a href="<c:url value="/actors" />"><i class="fa fa-th-large"></i> <span class="nav-label">Actors</span></a>
             </li>
+            <li id="leftMenu_loan">
+                <a href="<c:url value="/loan" />"><i class="fa fa-th-large"></i> <span class="nav-label">Loan</span></a>
+            </li>
             <!-- <li id="leftMenu_items">
                 <a href="items.note"><i class="fa fa-diamond"></i> <span class="nav-label">Items</span></a>
             </li>

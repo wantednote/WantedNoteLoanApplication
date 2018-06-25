@@ -9,11 +9,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.wn.loanapp.model.Article;
+//import com.wn.loanapp.model.Article;
 
 public class RestClientUtil {
 	
-    public void getArticleByIdDemo() {
+    /*public void getArticleByIdDemo() {
     	HttpHeaders headers = new HttpHeaders();
     	headers.setContentType(MediaType.APPLICATION_JSON);
         RestTemplate restTemplate = new RestTemplate();
@@ -72,14 +72,19 @@ public class RestClientUtil {
 	    String url = "http://localhost:8080/WantedNoteLoanApplication/user/article/{id}";
         HttpEntity<Article> requestEntity = new HttpEntity<Article>(headers);
         restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, Void.class, 4);        
-    }
+    }*/
     
     public static void main(String args[]) {
     	RestClientUtil util = new RestClientUtil();
         //util.getArticleByIdDemo();
-    	util.addArticleDemo();
     	//util.updateArticleDemo();
     	//util.deleteArticleDemo();
-    	util.getAllArticlesDemo();    	
+    	
+    	
+    	
+    	
+    	
+    	/*util.addArticleDemo();
+    	util.getAllArticlesDemo();   */ 	
     }    
 }

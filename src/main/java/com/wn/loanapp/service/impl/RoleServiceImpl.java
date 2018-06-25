@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wn.loanapp.exception.RoleAlreadyExistException;
+import com.wn.loanapp.form.RoleForm;
 import com.wn.loanapp.model.Role;
 import com.wn.loanapp.repository.RoleRepository;
 import com.wn.loanapp.service.RoleService;
@@ -18,32 +19,29 @@ public class RoleServiceImpl implements RoleService {
 
 	@Autowired
 	private RoleRepository roleRepository;
+
+	@Override
+	public Role getRole(RoleForm roleForm) {
+		return roleRepository.getRole(roleForm);
+	}
+
+	@Override
+	public List<Role> getRoles(RoleForm roleForm) {
+		return roleRepository.getRoles(roleForm);
+	}
 	
-	@Override
-	public Role findByRole(String role) {
-		return roleRepository.findByRole(role);
-	}
-
-	@Override
-	public Role findById(Long id) {
-		return roleRepository.findById(id.intValue());
-	}
-
-	@Override
-	public List<Role> findAll() {
-		return roleRepository.findAll();
-	}
-
 	@Override
 	public void addRole(String roleName) throws RoleAlreadyExistException {
 		String roleNameString = roleName.toUpperCase();
-		Role role = roleRepository.findByRole(roleNameString);
+		RoleForm roleForm = new RoleForm();
+		roleForm.setRoleName(roleNameString);
+		Role role = roleRepository.getRole(roleForm);
 		if(Format.isObjectNotEmptyAndNotNull(role)) {
 			throw new RoleAlreadyExistException();
 		}else {
 			role = new Role();
 			role.setRole(roleNameString);
-			roleRepository.save(role);
+			roleRepository.saveOrUpdate(role);
 		}
 	}
 }
