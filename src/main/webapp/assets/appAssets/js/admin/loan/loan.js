@@ -34,7 +34,7 @@ function getLoanDetails(currentRoleId){
 		"searching":false,
 		"sPaginationType" : "full_numbers",
 		"lengthChange" : false,
-		"iDisplayLength" : 10,
+		"iDisplayLength" : 50,
 		"bFilter" : true,
 		"aaSorting": [[3,"desc"]],
 		"ajax" : {
@@ -44,7 +44,7 @@ function getLoanDetails(currentRoleId){
 				d.start = d.start / d.length;
 				d.sortDirection = d.order[0].dir;
 				d.tnDateStart = "2018-06-14";
-				d.tnDateEnd = "2018-06-14";
+				d.tnDateEnd = "2018-06-24";
 				d.fieldForSorting = columns[d.order[0].column]
 			}
 		},

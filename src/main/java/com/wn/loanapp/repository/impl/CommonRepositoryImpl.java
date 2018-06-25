@@ -34,7 +34,7 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
 			    + " join api_request c on c.order_no=b.odr_no and c.distributor_id=b.distr_id where b.loan_flag='t' "
 			    + " and b.loan_accept_flg='f' and b.loan_decline_flg='f' " 
 			    + " and a.tn_date>='" + loanDetailsForm.getTnDateStart() + "' "
-			    + " and a.tn_date<='" + loanDetailsForm.getTnDateEnd()+ "' order by tn_date desc "
+			    + " and a.tn_date<='" + loanDetailsForm.getTnDateEnd()+ "' order by tnDate desc "
 			);
 			List<LoanDetailsDTO> dtos = getSession()
 			                .createSQLQuery(hql.toString())
