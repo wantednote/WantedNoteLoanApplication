@@ -1,4 +1,3 @@
-//***********************************Role***************************************
 CREATE SEQUENCE wn_role_id_seq
  INCREMENT 1
  MINVALUE 1
@@ -9,11 +8,10 @@ CREATE SEQUENCE wn_role_id_seq
 CREATE TABLE role_master
 (
  role_id integer NOT NULL DEFAULT nextval('wn_role_id_seq'::regclass),
- role character varying(40)
- CONSTRAINT role_id_pk PRIMARY KEY (role_id)
+ role character varying(40),
+ CONSTRAINT role_id_pk1 PRIMARY KEY (role_id)
 )
  
- //***********************************User***************************************
  CREATE SEQUENCE wn_user_id_seq
  INCREMENT 1
  MINVALUE 1
@@ -46,10 +44,9 @@ CREATE TABLE user_role
  CONSTRAINT FK859n2jvi8ivhui0rl0esws6o FOREIGN KEY (user_id)
      REFERENCES user_login (user_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION,
  CONSTRAINT FKa68196081fvovjhkek5m97n3y FOREIGN KEY (role_id)
-     REFERENCES role_master (`role_id`) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
+     REFERENCES role_master (role_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 
-//***********************************Partner***************************************
  CREATE SEQUENCE wn_partner_id_seq
  INCREMENT 1
  MINVALUE 1

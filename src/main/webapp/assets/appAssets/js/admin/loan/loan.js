@@ -2,6 +2,34 @@ $(document).ready(function() {
 	var currentRoleId = $("#currentRoleId").val();
 	getLoanDetails();
 	
+	
+	$(function() {
+
+	    var start = moment().subtract(29, 'days');
+	    var end = moment();
+
+	    function cb(start, end) {
+	        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+	    }
+
+	    $('#reportrange').daterangepicker({
+	        startDate: start,
+	        endDate: end,
+	        ranges: {
+	           'Today': [moment(), moment()],
+	           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+	           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+	           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+	           'This Month': [moment().startOf('month'), moment().endOf('month')],
+	           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+	        }
+	    }, cb);
+
+	    cb(start, end);
+
+	    //alert("start " + start + " end " + end)
+	});
+	
 	$("#pageHeaderNav").addClass('white-bg');
 	$("#quickLinksDiv").hide();
 	
@@ -17,8 +45,17 @@ $(document).ready(function() {
 	
 	
 });
-
+function getRefereshData(){
+	getLoanDetails();
+}
 function getLoanDetails(currentRoleId){
+	var date = $('#reportrange span').html();
+	var dates = date.split("-");
+	var startDate = dates[0];
+	var endDate = dates[1];
+	//alert(startDate);
+	//alert(endDate);
+	    
 	$('#loanDetails').dataTable().fnDestroy();
 	var rowCount = 0;
 	var columns = ["orderNo", "distributorName", "firstName", "tnDate", "amount" ];
@@ -43,8 +80,8 @@ function getLoanDetails(currentRoleId){
 			"data" : function(d) {
 				d.start = d.start / d.length;
 				d.sortDirection = d.order[0].dir;
-				d.tnDateStart = "2018-06-14";
-				d.tnDateEnd = "2018-06-24";
+				d.tnDateStart = startDate;
+				d.tnDateEnd = endDate;
 				d.fieldForSorting = columns[d.order[0].column]
 			}
 		},

@@ -2,6 +2,7 @@
 <link href="<c:url value="/assets/formvalidation/formValidation.min09a2.css?v2.1.0" />" rel="stylesheet">
 <link href="<c:url value="/assets/css/plugins/dataTables/dataTables.responsive.css" />" rel="stylesheet">
 <link href="<c:url value="/assets/css/plugins/dataTables/dataTables.tableTools.min.css" />" rel="stylesheet">
+<%-- <link href="<c:url value="/assets/css/plugins/datapicker/datepicker3.css" />" rel="stylesheet"> --%>
 
 <script src="<c:url value="/assets/js/jquery-2.1.1.js" />"></script>
 
@@ -12,6 +13,13 @@
 <script src="<c:url value="/assets/js/plugins/dataTables/dataTables.bootstrap.js" />"></script>
 <script src="<c:url value="/assets/js/plugins/dataTables/dataTables.responsive.js" />"></script>
 <script src="<c:url value="/assets/js/plugins/dataTables/dataTables.tableTools.min.js" />"></script>
+<%-- <script src="<c:url value="/assets/js/plugins/datapicker/bootstrap-datepicker.js" />"></script> --%>
+   
+   
+<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script> -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
 <script src="<c:url value="/assets/appAssets/js/admin/loan/loan.js" />"></script>
 
@@ -54,42 +62,17 @@
                 </div>
                 <!-- </div> -->
             </div>
-            <!-- <form action="csv/upload" method="post" enctype="multipart/form-data">
-	        	<input type="file" name="csvFile">
-	        	<button type="submit">Submit</button>
-	        </form> -->
             <div class="col-lg-10 animated fadeInRight" id ="viewUserDiv">
 	            <div class="mail-box-header">
-	
-	                <form method="get" action="index.html" class="pull-right mail-search">
-	                    <div class="input-group">
-	                        <input type="text" class="form-control input-sm" name="search" id="searchByEmailAddress"placeholder="Search by email address">
-	                        <div class="input-group-btn">
-	                            <button type="button" id="getByEmailAddressBtn"class="btn btn-sm btn-primary">
-	                                Search
-	                            </button>
-	                        </div>
-	                    </div>
-	                </form>
-	                <h2>
-	                    <span class="currentRoleSmallClass">${currentRoleSmall} </span><%-- (${userCount}) --%>
-	                    <input type="hidden" value="${currentRoleId}" id="currentRoleId">
-	                </h2>
-	                <div class="mail-tools tooltip-demo m-t-md">
-	                    <!-- <div class="btn-group pull-right">
-	                        <button class="btn btn-white btn-sm"><i class="fa fa-arrow-left"></i></button>
-	                        <button class="btn btn-white btn-sm"><i class="fa fa-arrow-right"></i></button>
-	                    </div> -->
-	                    
-	                    <%-- <a href="${userDetailsSessionForm.selectedBaseLink}" class="btn btn-white btn-sm"><i class="fa fa-refresh"></i> Refresh</a>
-	                    <button class="btn btn-primary btn-sm pull-right"><i class="fa fa-reply"></i> Add ${currentRole}</button> --%>
-	                    <a href="${userDetailsSessionForm.selectedBaseLink}" class="btn btn-primary btn-sm pull-right"><i class="fa fa-refresh"></i> Refresh</a>
-	                    <br/>
-	                    <!-- <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Mark as read"><i class="fa fa-eye"></i> </button>
-	                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Mark as important"><i class="fa fa-exclamation"></i> </button>
-	                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> </button> -->
-	
-	                </div>
+	            	<div class="mail-tools tooltip-demo m-t-md">
+		                <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 30%">
+						    <i class="fa fa-calendar"></i>&nbsp;
+						    <span></span> <i class="fa fa-caret-down"></i>
+						</div>
+					</div>
+					<div class="mail-tools tooltip-demo m-t-md">
+						<a href="#" onclick="getRefereshData();" class="btn btn-primary btn-sm pull-right" ><i class="fa fa-refresh"></i> Refresh</a>
+	           		</div>
 	            </div>
                 <div class="mail-box">
 	                <table class="table table-hover table-mail" id="loanDetails">
