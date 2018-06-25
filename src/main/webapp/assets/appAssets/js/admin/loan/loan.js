@@ -1,24 +1,9 @@
 $(document).ready(function() {
 	var currentRoleId = $("#currentRoleId").val();
-	//getActors(currentRoleId);
+	getLoanDetails();
 	
 	$("#pageHeaderNav").addClass('white-bg');
-	
 	$("#quickLinksDiv").hide();
-	$("#addUserDiv").hide();
-	
-	$( "#getByEmailAddressBtn" ).click(function() {
-		var currentRoleId = $("#currentRoleId").val();
-		getActors(currentRoleId);
-	});
-	$( "#addUserBtn" ).click(function() {
-	  	$("#viewUserDiv").hide();
-	  	$("#addUserDiv").show();
-	});
-	$( "#clacelAddUserBtn" ).click(function() {
-		$("#addUserDiv").hide();
-	  	$("#viewUserDiv").show();
-	});
 	
 	/* setTimeout(function() {
         toastr.options = {
@@ -29,74 +14,15 @@ $(document).ready(function() {
         };
         toastr.success('WantedNote', 'View Several Syatem Actors');
     }, 1300); */
-	$('#addActor').formValidation({
-        message: 'This value is not valid',
-        icon: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-        	name: {
-        		validators: {
-        			notEmpty: {
-                        message: 'The name is required'
-                    }
-                }
-            },
-            emailAddress: {
-        		validators: {
-                    notEmpty: {
-                        message: 'The email address is required and can\'t be empty'
-                    },
-                    emailAddress: {
-                        message: 'The input is not a valid email address'
-                    }
-                }
-            },
-            password: {
-                validators: {
-                    notEmpty: {
-                        message: 'The password is required and can\'t be empty'
-                    }
-                }
-            },
-            confirmPassword: {
-                validators: {
-                    notEmpty: {
-                        message: 'The confirm password is required and can\'t be empty'
-                    },
-                    identical: {
-                        field: 'password',
-                        message: 'The password and its confirm are not the same'
-                    }
-                }
-            },
-            role: {
-        		validators: {
-        			notEmpty: {
-                        message: 'The role is required'
-                    }
-                }
-            }
-        }
-    });
+	
 	
 });
-function changeRole(currentRoleId, currentRoleValue, currentRole){
-	//alert(currentRoleId + "    " + currentRoleValue + " " + currentRole);
-	$("#currentRoleId").val(currentRoleId);
-	$('.currentRoleSmallClass').html(currentRoleValue);
-	$("#currentRoleCaps").val(currentRole);
-	getActors(currentRoleId);
-}
-function getActors(currentRoleId){
-	$('#actors').dataTable().fnDestroy();
-	var emailAddress = $("#searchByEmailAddress").val();
-	var roleName = $("#roleCaps").val();
+
+function getLoanDetails(currentRoleId){
+	$('#loanDetails').dataTable().fnDestroy();
 	var rowCount = 0;
-	var columns = ["name", "accountStatus", "email", "modifiedOn", "lastLogin", "id" ];
-	var dt = $('#actors').DataTable({
+	var columns = ["orderNo", "distributorName", "firstName", "tnDate", "amount" ];
+	var dt = $('#loanDetails').DataTable({
         responsive: true,
         //"dom": 'T<"clear">lfrtip',
         /* "tableTools": {
@@ -110,15 +36,15 @@ function getActors(currentRoleId){
 		"lengthChange" : false,
 		"iDisplayLength" : 10,
 		"bFilter" : true,
-		"aaSorting": [[4,"desc"]],
+		"aaSorting": [[3,"desc"]],
 		"ajax" : {
-			"url" : $("#appLink").val() + "actorList",
+			"url" : $("#appLink").val() + "loanList",
 			"type" : 'POST',
 			"data" : function(d) {
 				d.start = d.start / d.length;
 				d.sortDirection = d.order[0].dir;
-				d.roleId = currentRoleId;
-				d.emailAddress = emailAddress;
+				d.tnDateStart = "2018-06-14";
+				d.tnDateEnd = "2018-06-14";
 				d.fieldForSorting = columns[d.order[0].column]
 			}
 		},
@@ -137,8 +63,8 @@ function getActors(currentRoleId){
 			"targets" :0,
 			"searchable" : false,
 			'bSortable' : true,
-			"data" : "name",
-			"width" : "20%",
+			"data" : "orderNo",
+			"width" : "10%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'
@@ -150,28 +76,20 @@ function getActors(currentRoleId){
 			"targets" :1,
 			"searchable" : false,
 			'bSortable' : true,
-			"data" : "accountStatus",
-			"width" : "10%",
+			"data" : "distributorName",
+			"width" : "30%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'
 				}else{
-					if(data == "Pending"){
-						return '<span class="label label-warning pull-left">'+ data +'</span> '
-					}else if(data == "Active"){
-						return '<span class="label label-primary pull-left">'+ data +'</span> '
-					}else if(data == "Blocked"){
-						return '<span class="label label-success pull-left">'+ data +'</span> '
-					}else if(data == "Deleted"){
-						return '<span class="label label-danger pull-left">'+ data +'</span> '
-					}
+					return data;
 				}
 			}
 		},{
 			"targets" : 2,
 			"searchable" : false,
 			'bSortable' : true,
-			"data" : "email",
+			"data" : "firstName",
 			"width" : "25%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
@@ -184,7 +102,7 @@ function getActors(currentRoleId){
 			"targets" : 3,
 			"searchable" : false,
 			'bSortable' : true,
-			"data" : "modifiedOn",
+			"data" : "tnDate",
 			"width" : "20%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
@@ -197,47 +115,13 @@ function getActors(currentRoleId){
 			"targets" : 4,
 			"searchable" : false,
 			'bSortable' : false,
-			"data" : "lastLogin",
+			"data" : "amount",
 			"width" : "15%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'
 				}else{
 					return data;
-				}
-			}
-		},{
-			"targets" : 5,
-			"searchable" : false,
-			'bSortable' : false,
-			"data" : "id",
-			"width" : "10%",
-			"render" : function (data, type, full) {
-				if (data == null || data == "") {
-					return '<span>-<span>'
-				}else{
-					//alert($('#actors').dataTable().fnGetData().length);
-					if(full.accountStatus == "Deleted"){
-						return '<div class="input-group-btn">'
-			                   + '<button data-toggle="dropdown" class="btn btn-white dropdown-toggle btn-sm" type="button" aria-expanded="true">Action <span class="caret"></span></button>'
-				                + '<ul class="dropdown-menu pull-right">'
-				                    //+ '<li class="divider"></li>'
-				                    + '<li><a href="javascript:void(0);" onclick="viewProfileDetails(\'' + data + '\', \'' + full.name + '\', \'' + full.email + '\');">View Details</a></li>'
-				                + '</ul>'
-				            + '</div>'
-					}else{
-						return '<div class="input-group-btn">'
-					            + '<button data-toggle="dropdown" class="btn btn-white dropdown-toggle btn-sm" type="button" aria-expanded="true">Action <span class="caret"></span></button>'
-					                + '<ul class="dropdown-menu pull-right">'
-					                    + '<li><a href="javascript:void(0);" onclick="updateAccountStatus(\'' + data + '\', \'Active\', \'' + full.email + '\');">Active</a></li>'
-					                    + '<li><a href="javascript:void(0);" onclick="updateAccountStatus(\'' + data + '\', \'Pending\', \'' + full.email + '\');">Pending</a></li>'
-					                    + '<li><a href="javascript:void(0);" onclick="updateAccountStatus(\'' + data + '\', \'Blocked\', \'' + full.email + '\');">Blocked</a></li>'
-					                    + '<li><a href="javascript:void(0);" onclick="updateAccountStatus(\'' + data + '\', \'Deleted\', \'' + full.email + '\');">Deleted</a></li>'
-					                    + '<li class="divider"></li>'
-					                    + '<li><a href="javascript:void(0);" onclick="viewProfileDetails(\'' + data + '\', \'' + full.name + '\', \'' + full.email + '\');">View Details</a></li>'
-					                + '</ul>'
-					            + '</div>'
-					}
 				}
 			}
 		}]

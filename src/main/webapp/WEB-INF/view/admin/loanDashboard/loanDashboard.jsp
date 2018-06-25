@@ -92,79 +92,17 @@
 	                </div>
 	            </div>
                 <div class="mail-box">
-	                <table class="table table-hover table-mail" id="actors">
+	                <table class="table table-hover table-mail" id="loanDetails">
 		                <thead style="background: #f3f3f4;">
 			                <tr class="unread">
-			                	<th>Name</th>
-			                	<th>Status</th>
-			                	<th>Email Address</th>
-			                	<th>Last Modification</th>
-			                	<th>Last Login</th>
-			                	<th>Action</th>
+			                	<th>Order No</th>
+			                	<th>Distributer Name</th>
+			                	<th>First Name</th>
+			                	<th>Date</th>
+			                	<th>Amount</th>
 			                </tr>
 		                </thead>
                 	</table>
-                </div>
-            </div>
-            
-            <div class="col-lg-9 animated fadeInRight" id="addUserDiv">
-	            <div class="mail-box-header">
-	                <!-- <div class="pull-right tooltip-demo">
-	                    <a href="mailbox.html" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="Move to draft folder"><i class="fa fa-pencil"></i> Draft</a>
-	                    <a href="mailbox.html" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard email"><i class="fa fa-times"></i> Discard</a>
-	                </div> -->
-	                <h2>
-	                    Add <span class="currentRoleSmallClass">${currentRoleSmall}</span>
-	                </h2>
-	            </div>
-                <div class="mail-box">
-                	<form action="actors" class="form-horizontal" method="post" id="addActor" role="form">
-		                	<div class="mail-body">
-		                    <!-- <form action="actors" class="form-horizontal" method="post" id="addActor" role="form"> -->
-		                    	<input type="hidden" name="roleName" value="${currentRoleCaps}" id="currentRoleCaps">
-		                        <div class="form-group"><label class="col-sm-3 control-label">Name:</label>
-		
-		                            <div class="col-sm-9"><input type="text" class="form-control" name="name"></div>
-		                        </div>
-		                        <div class="form-group"><label class="col-sm-3 control-label">Email Address:</label>
-		
-		                            <div class="col-sm-9"><input type="text" class="form-control" name="emailAddress"></div>
-		                        </div>
-		                        <div class="form-group"><label class="col-sm-3 control-label">Password:</label>
-		
-		                            <div class="col-sm-9"><input type="password" class="form-control" name="password"></div>
-		                        </div>
-		                        <div class="form-group"><label class="col-sm-3 control-label">Confirm Password:</label>
-		
-		                            <div class="col-sm-9"><input type="password" class="form-control" name="confirmPassword"></div>
-		                        </div>
-		                        
-		                        <div class="form-group"><label class="col-sm-3 control-label">Select Role:</label>
-		
-		                            <div class="col-sm-9">
-		                            	<select name="role" class="form-control m-b" name="account">
-	                                        <c:forEach var="role1" items="${roles}" varStatus="index">
-	                                        	<c:if test="${role1.role == currentRoleCaps}">
-	                                        		<option value="${role1.role}" selected="selected"> ${index.count} ${role1.roleName} </option>
-	                                        	</c:if>
-	                                        	<c:if test="${role1.role != roleCaps}">
-	                                        		<option value="${role1.role}"> ${index.count} ${role1.roleName} </option>
-	                                        	</c:if>
-	                                        </c:forEach>
-		                	
-	                                    </select>
-		                            </div>
-		                        </div>
-		                    <!-- </form> -->
-		                </div>
-	                    <div class="mail-body text-right tooltip-demo">
-	                        <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-	                        <button type="button" class="btn btn-danger btn-sm" id="clacelAddUserBtn"><i class="fa fa-times"></i>Cancel</button>
-	                        <!-- <a href="mailbox.html" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to draft folder"><i class="fa fa-pencil"></i> Draft</a> -->
-	                    </div>
-	                    
-	                </form>
-                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>
