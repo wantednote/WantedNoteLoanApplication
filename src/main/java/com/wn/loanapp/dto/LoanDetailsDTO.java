@@ -1,8 +1,13 @@
 package com.wn.loanapp.dto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class LoanDetailsDTO {
+	
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM D, YYYY");
 	
 	private String orderNo;
 	
@@ -13,7 +18,18 @@ public class LoanDetailsDTO {
 	private String tnDate;
 	
 	private Long amount;
-
+	
+	/*public Date getDateConverted(String timeZone)throws ParseException{
+		dateFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
+		return dateFormat.parse(this.tnDate);
+	}
+	
+	public void setDateConverted(Date date, String timeZone){
+		dateFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
+		this.tnDate= dateFormat.format(date);
+	}*/
+	
+	
 	/**
 	 * @return the orderNo
 	 */
