@@ -1,10 +1,15 @@
 package com.wn.loanapp.repository.impl;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import javax.persistence.Query;
 
 import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
@@ -67,7 +72,40 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
 	
 	@Override
 	public Long getLoanDetailsCount(LoanDetailsForm loanDetailsForm) {
-		StringBuilder hql =  new StringBuilder("select count(*) from wn_purchase_tbl a "
+		StringBuilder sql =  new StringBuilder("select count(*) from wn_purchase_tbl a "
+                + " join wn_order b on b.odr_no=a.txn_id "
+                + " join api_request c on c.order_no=b.odr_no "
+                + " and c.distributor_id=b.distr_id where b.loan_flag='t' "
+                + " and b.loan_accept_flg='f' and b.loan_decline_flg='f' " );
+        if(Format.isStringNotEmptyAndNotNull(loanDetailsForm.getTnDateStart())) {
+            sql.append(" and a.tn_date>='" + loanDetailsForm.getTnDateStart() + "'");
+        }
+        if(Format.isStringNotEmptyAndNotNull(loanDetailsForm.getTnDateEnd())) {
+            sql.append(" and a.tn_date<='" + loanDetailsForm.getTnDateEnd()+ "'");
+        }
+        
+        Session hibernateSession = (Session) getPrimaryEntityManager().unwrap(Session.class);
+        Connection con = ((SessionImpl) hibernateSession).connection();
+        Long loanCount = (long) 0;
+       
+        try {
+           try {
+               Statement st = con.createStatement();
+               ResultSet res = st.executeQuery(sql.toString());
+               while (res.next()){
+                   loanCount = (long) res.getInt(1);
+               }
+               System.out.println("Number of row:"+loanCount);
+           }
+           catch (SQLException s){
+               System.out.println("SQL statement is not executed!");
+           }
+        }
+        catch (Exception e){
+           e.printStackTrace();
+        }
+       
+		/*StringBuilder hql =  new StringBuilder("select count(*) from wn_purchase_tbl a "
 			    + " join wn_order b on b.odr_no=a.txn_id "
 			    + " join api_request c on c.order_no=b.odr_no "
 			    + " and c.distributor_id=b.distr_id where b.loan_flag='t' "
@@ -79,7 +117,7 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
 			hql.append(" and a.tn_date<='" + loanDetailsForm.getTnDateEnd()+ "'");
 		}
 		Query query = getPrimaryEntityManager().createQuery(hql.toString());
-		long  loanCount = (Long)query.getSingleResult();
+		long  loanCount = (Long)query.getSingleResult();*/
 		return loanCount;
 	}
 }
