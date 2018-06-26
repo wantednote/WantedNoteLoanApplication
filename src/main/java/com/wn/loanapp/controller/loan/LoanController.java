@@ -57,7 +57,7 @@ public class LoanController extends BaseController{
 			if(Format.isCollectionEmtyOrNull(detailsDTOs)){
 				detailsDTOs = new ArrayList<>();
 			}else{
-				count = detailsDTOs.size();
+				count = commonService.getLoanDetailsCount(loanDetailsForm).intValue();
 			}
 		}catch (ParseException e) {
 			detailsDTOs = new ArrayList<>();

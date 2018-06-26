@@ -2,6 +2,8 @@ package com.wn.loanapp.repository.impl;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
 import org.hibernate.Session;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
@@ -63,4 +65,21 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
         return (Session) getPrimaryEntityManager().unwrap(Session.class);
     }
 	
+	@Override
+	public Long getLoanDetailsCount(LoanDetailsForm loanDetailsForm) {
+		StringBuilder hql =  new StringBuilder("select count(*) from wn_purchase_tbl a "
+			    + " join wn_order b on b.odr_no=a.txn_id "
+			    + " join api_request c on c.order_no=b.odr_no "
+			    + " and c.distributor_id=b.distr_id where b.loan_flag='t' "
+			    + " and b.loan_accept_flg='f' and b.loan_decline_flg='f' " );
+		if(Format.isStringNotEmptyAndNotNull(loanDetailsForm.getTnDateStart())) {
+			hql.append(" and a.tn_date>='" + loanDetailsForm.getTnDateStart() + "'");
+		}
+		if(Format.isStringNotEmptyAndNotNull(loanDetailsForm.getTnDateEnd())) {
+			hql.append(" and a.tn_date<='" + loanDetailsForm.getTnDateEnd()+ "'");
+		}
+		Query query = getPrimaryEntityManager().createQuery(hql.toString());
+		long  loanCount = (Long)query.getSingleResult();
+		return loanCount;
+	}
 }
