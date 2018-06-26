@@ -2,6 +2,7 @@ package com.wn.loanapp.controller.loan;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.wn.loanapp.common.BaseController;
 import com.wn.loanapp.constants.Constants;
 import com.wn.loanapp.dto.DatatableJsonResponse;
+import com.wn.loanapp.dto.DistributerDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
 import com.wn.loanapp.dto.UserDTO;
 import com.wn.loanapp.form.LoanDetailsForm;
@@ -40,6 +42,22 @@ public class LoanController extends BaseController{
 			userDetailsSessionForm.setPageHeaderTitle(Constants.ADMIN_VIEW_LOAN_HEADER_TITLE);
 			userDetailsSessionForm.setSelectedBaseLink(Constants.SELECTED_BASE_LINK_ADMIN_VIEW_LOAN);
 			userDetailsSessionForm.setSelectedSubLink(Constants.SELECTED_BASE_LINK_ADMIN_VIEW_LOAN);
+			
+			List<DistributerDTO> distributers = new ArrayList<>();
+			List<Object> distributerDTOs = commonService.getDistributers();
+			if(Format.isCollectionNotEmtyAndNotNull(distributerDTOs)) {
+				Iterator<Object> itr = distributerDTOs.iterator();
+		    	while(itr.hasNext()){
+		    	   Object[] obj = (Object[]) itr.next();
+		    	   String distributerId = String.valueOf(obj[0]).trim();
+		    	   String distributerName = String.valueOf(obj[1]);
+		    	   DistributerDTO distributerDTO = new DistributerDTO();
+		    	   distributerDTO.setDistId(distributerId);
+		    	   distributerDTO.setDistName(distributerName);
+		    	   distributers.add(distributerDTO);
+		    	}
+			}
+			modelAndView.addObject("distributers", distributers);
 		}else {
 			modelAndView = redirectToLoginPage("/");
 		}

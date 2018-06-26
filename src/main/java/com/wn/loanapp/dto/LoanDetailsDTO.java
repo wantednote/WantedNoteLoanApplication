@@ -5,11 +5,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+
 public class LoanDetailsDTO {
 	
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM D, YYYY");
 	
 	private String orderNo;
+	
+	private String distributorId;
 	
 	private String distributorName;
 	
@@ -44,6 +47,20 @@ public class LoanDetailsDTO {
 		this.orderNo = orderNo;
 	}
 	
+	/**
+	 * @return the distributorId
+	 */
+	public String getDistributorId() {
+		return distributorId;
+	}
+
+	/**
+	 * @param distributorId the distributorId to set
+	 */
+	public void setDistributorId(String distributorId) {
+		this.distributorId = distributorId;
+	}
+
 	/**
 	 * @return the distributorName
 	 */

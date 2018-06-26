@@ -10,6 +10,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.ServletRequestDataBinder;
 
+import com.wn.loanapp.dto.DistributerDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
 import com.wn.loanapp.form.LoanDetailsForm;
 import com.wn.loanapp.repository.CommonRepository;
@@ -47,6 +48,11 @@ public class CommonServiceImpl implements CommonService{
 		return commonRepository.getLoanDetails(loanDetailsForm);
 	}
 
+	@Override
+	public List<Object> getDistributers() {
+		return commonRepository.getDistributers();
+	}
+	
 	@Override
 	public Long getLoanDetailsCount(LoanDetailsForm loanDetailsForm) {
 		return commonRepository.getLoanDetailsCount(loanDetailsForm);
