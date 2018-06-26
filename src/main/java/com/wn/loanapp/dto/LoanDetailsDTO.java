@@ -1,10 +1,10 @@
 package com.wn.loanapp.dto;
 
-import java.util.Date;
-
 public class LoanDetailsDTO {
 	
 	private String orderNo;
+	
+	private String distributorId;
 	
 	private String distributorName;
 	
@@ -28,6 +28,20 @@ public class LoanDetailsDTO {
 		this.orderNo = orderNo;
 	}
 	
+	/**
+	 * @return the distributorId
+	 */
+	public String getDistributorId() {
+		return distributorId;
+	}
+
+	/**
+	 * @param distributorId the distributorId to set
+	 */
+	public void setDistributorId(String distributorId) {
+		this.distributorId = distributorId;
+	}
+
 	/**
 	 * @return the distributorName
 	 */

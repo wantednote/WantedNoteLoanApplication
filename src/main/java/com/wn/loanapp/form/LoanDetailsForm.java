@@ -1,7 +1,5 @@
 package com.wn.loanapp.form;
 
-import java.util.Date;
-
 public class LoanDetailsForm {
 	
 	private String orderNo;
@@ -15,6 +13,8 @@ public class LoanDetailsForm {
 	private String tnDateEnd;
 	
 	private Long amount;
+	
+	private String distributer;
 	
 	private int start;
 	
@@ -102,6 +102,20 @@ public class LoanDetailsForm {
 	 */
 	public void setAmount(Long amount) {
 		this.amount = amount;
+	}
+	
+	/**
+	 * @return the distributer
+	 */
+	public String getDistributer() {
+		return distributer;
+	}
+
+	/**
+	 * @param distributer the distributer to set
+	 */
+	public void setDistributer(String distributer) {
+		this.distributer = distributer;
 	}
 
 	/**

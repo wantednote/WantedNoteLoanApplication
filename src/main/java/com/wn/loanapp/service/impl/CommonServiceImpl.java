@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wn.loanapp.dto.DistributerDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
 import com.wn.loanapp.form.LoanDetailsForm;
 import com.wn.loanapp.repository.CommonRepository;
@@ -45,6 +46,11 @@ public class CommonServiceImpl implements CommonService{
 		return commonRepository.getLoanDetails(loanDetailsForm);
 	}
 
+	@Override
+	public List<Object> getDistributers() {
+		return commonRepository.getDistributers();
+	}
+	
 	@Override
 	public Long getLoanDetailsCount(LoanDetailsForm loanDetailsForm) {
 		return commonRepository.getLoanDetailsCount(loanDetailsForm);

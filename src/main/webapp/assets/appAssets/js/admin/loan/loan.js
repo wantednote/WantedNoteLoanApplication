@@ -2,16 +2,20 @@ $(document).ready(function() {
 	var currentRoleId = $("#currentRoleId").val();
 	getLoanDetails();
 	
+	$('#distributerList').multiselect({
+	  nonSelectedText: 'Select Distributer',
+	  enableFiltering: true,
+	  enableCaseInsensitiveFiltering: true,
+	  includeSelectAllOption: true,
+	  buttonWidth:'300px'
+	 });
 	
 	$(function() {
-
 	    var start = moment().subtract(29, 'days');
 	    var end = moment();
-
 	    function cb(start, end) {
 	        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
 	    }
-
 	    $('#reportrange').daterangepicker({
 	        startDate: start,
 	        endDate: end,
@@ -24,9 +28,7 @@ $(document).ready(function() {
 	           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
 	        }
 	    }, cb);
-
 	    cb(start, end);
-
 	    //alert("start " + start + " end " + end)
 	});
 	
@@ -53,9 +55,23 @@ function getLoanDetails(currentRoleId){
 	var dates = date.split("-");
 	var startDate = dates[0];
 	var endDate = dates[1];
-	//alert(startDate);
-	//alert(endDate);
-	    
+	
+	var selectedDistributers = "";
+	var count = 0;
+    $('select#distributerList').children('option:selected').each( function() {
+         var $this = $(this);
+         //selectedDistributers.push("'" + $this.val() + "'");
+         //selectedDistributers.push($this.val());
+         if(count > 0){
+        	 selectedDistributers = selectedDistributers + ",";
+         }
+         selectedDistributers = selectedDistributers + "'" + $this.val() + "'";
+         count = count + 1;
+    });
+    if(selectedDistributers !=""){
+    	selectedDistributers = "(" + selectedDistributers + ")";
+    }
+    
 	$('#loanDetails').dataTable().fnDestroy();
 	var rowCount = 0;
 	var columns = ["orderNo", "distributorName", "firstName", "tnDate", "amount" ];
@@ -71,7 +87,7 @@ function getLoanDetails(currentRoleId){
 		"searching":false,
 		"sPaginationType" : "full_numbers",
 		"lengthChange" : false,
-		"iDisplayLength" : 10,
+		"iDisplayLength" : 25,
 		"bFilter" : true,
 		"aaSorting": [[3,"desc"]],
 		"ajax" : {
@@ -82,6 +98,7 @@ function getLoanDetails(currentRoleId){
 				d.sortDirection = d.order[0].dir;
 				d.tnDateStart = startDate;
 				d.tnDateEnd = endDate;
+				d.distributer = selectedDistributers;
 				d.fieldForSorting = columns[d.order[0].column]
 			}
 		},
@@ -158,7 +175,7 @@ function getLoanDetails(currentRoleId){
 				if (data == null || data == "") {
 					return '<span>-<span>'
 				}else{
-					return data;
+					return '<span>Rs. <span>'+ data +'<span>.00<span>';
 				}
 			}
 		}]
