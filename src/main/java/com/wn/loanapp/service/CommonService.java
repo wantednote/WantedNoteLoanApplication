@@ -9,4 +9,6 @@ import com.wn.loanapp.form.LoanDetailsForm;
 public interface CommonService {
 	
 	public List<LoanDetailsDTO> getLoanDetails(LoanDetailsForm loanDetailsForm) throws ParseException;
+	
+	public Long getLoanDetailsCount(LoanDetailsForm loanDetailsForm);
 }

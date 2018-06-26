@@ -9,4 +9,6 @@ import com.wn.loanapp.model.CommonEntity;
 public interface CommonRepository extends PrimaryGenericRepository<CommonEntity, String>{
 
 	public List<LoanDetailsDTO> getLoanDetails(LoanDetailsForm loanDetailsForm);
+	
+	public Long getLoanDetailsCount(LoanDetailsForm loanDetailsForm);
 }

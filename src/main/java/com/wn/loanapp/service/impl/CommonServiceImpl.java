@@ -45,4 +45,9 @@ public class CommonServiceImpl implements CommonService{
 		return commonRepository.getLoanDetails(loanDetailsForm);
 	}
 
+	@Override
+	public Long getLoanDetailsCount(LoanDetailsForm loanDetailsForm) {
+		return commonRepository.getLoanDetailsCount(loanDetailsForm);
+	}
+
 }
