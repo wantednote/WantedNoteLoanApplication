@@ -52,11 +52,15 @@ public class LoanController extends BaseController{
 		List<LoanDetailsDTO> detailsDTOs = null;
 		Integer count = 0;
 		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
-		detailsDTOs = commonService.getLoanDetails(loanDetailsForm);
-		if(Format.isCollectionEmtyOrNull(detailsDTOs)){
+		try {
+			detailsDTOs = commonService.getLoanDetails(loanDetailsForm);
+			if(Format.isCollectionEmtyOrNull(detailsDTOs)){
+				detailsDTOs = new ArrayList<>();
+			}else{
+				count = detailsDTOs.size();
+			}
+		}catch (ParseException e) {
 			detailsDTOs = new ArrayList<>();
-		}else{
-			count = detailsDTOs.size();
 		}
 		datatableJsonResponse.setData(detailsDTOs);
 		datatableJsonResponse.setRecordsTotal(count);

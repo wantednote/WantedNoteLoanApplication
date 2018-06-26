@@ -1,23 +1,23 @@
 package com.wn.loanapp.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Date;
 
 import com.wn.loanapp.enums.AccountStatusEnum;
 
 public class AppTest {
 
-	public static void main(String[] args) {
-		System.out.println("Val " + AccountStatusEnum.Active.getValue());
-		String SELECTED_BASE_LINK_ADMIN_DASHBOARD= "<a href="+"admin"+">Admin</a>";
-		System.out.println(SELECTED_BASE_LINK_ADMIN_DASHBOARD);
-	
-        LocalDate pdate = LocalDate.of(2011, 05, 24);
-        LocalDate now = LocalDate.now();
- 
-        Period diff = Period.between(pdate, now);
-	 
-	     System.out.printf("\nDifference is %d years, %d months and %d days old\n\n", 
-	                    diff.getYears(), diff.getMonths(), diff.getDays());
+	public static void main(String[] args) throws ParseException {
+		String str = " June 25, 2018".trim();
+		System.out.println("Str " + str);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");
+		Date d = sdf.parse(str);
+		sdf.applyPattern("yyyy-MM-dd");
+		String output = sdf.format(d);
+		System.out.println("output " + output);
 	}
 }
