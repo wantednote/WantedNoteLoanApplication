@@ -71,7 +71,7 @@ function getLoanDetails(currentRoleId){
 		"searching":false,
 		"sPaginationType" : "full_numbers",
 		"lengthChange" : false,
-		"iDisplayLength" : 50,
+		"iDisplayLength" : 100,
 		"bFilter" : true,
 		"aaSorting": [[3,"desc"]],
 		"ajax" : {
@@ -127,7 +127,7 @@ function getLoanDetails(currentRoleId){
 			"searchable" : false,
 			'bSortable' : true,
 			"data" : "firstName",
-			"width" : "25%",
+			"width" : "30%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'
@@ -153,7 +153,7 @@ function getLoanDetails(currentRoleId){
 			"searchable" : false,
 			'bSortable' : false,
 			"data" : "amount",
-			"width" : "15%",
+			"width" : "10%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'

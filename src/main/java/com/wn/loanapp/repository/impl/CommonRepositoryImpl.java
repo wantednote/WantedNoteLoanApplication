@@ -7,7 +7,6 @@ import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
-import com.wn.loanapp.constants.Constants;
 import com.wn.loanapp.dto.LoanDetailsDTO;
 import com.wn.loanapp.form.LoanDetailsForm;
 import com.wn.loanapp.model.CommonEntity;
@@ -63,4 +62,5 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
 	private Session getSession() {
         return (Session) getPrimaryEntityManager().unwrap(Session.class);
     }
+	
 }
