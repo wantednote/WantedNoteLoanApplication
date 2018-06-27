@@ -19,5 +19,10 @@ public class AppTest {
 		sdf.applyPattern("yyyy-MM-dd");
 		String output = sdf.format(d);
 		System.out.println("output " + output);
+		
+		SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy_MM_dd,HH_mm_ss");
+	    Date now = new Date();
+	    String strTime = sdfTime.format(now);
+	    System.out.println("strTime " + strTime);
 	}
 }

@@ -104,7 +104,7 @@
                                 	<!-- <button type="button" class="btn btn-primary btn-sm" ><i class="fa fa-refresh"></i> Search</button> -->
                                 </div>
                                 <div class="form-group pull-right">
-                                	<button style="border-radius: 0px;" type="button" class="btn btn-white"><i class="fa fa-download"></i> Download CSV</button>
+                                	<button style="border-radius: 0px;" type="button" class="btn btn-white" onclick="getCSVData();"><i class="fa fa-download"></i> Download CSV</button>
                                 </div>
                             </form>
                         </div>

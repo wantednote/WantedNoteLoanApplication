@@ -49,7 +49,7 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
 			hql.append(" and a.tn_date<='" + loanDetailsForm.getTnDateEnd()+ "'");
 		}
 		hql.append(" order by tnDate desc");
-		if(Format.isNotNull(loanDetailsForm.getLength())) {
+		if(Format.isIntegerNotEmtyAndNotZero(loanDetailsForm.getLength())) {
 			hql.append(" limit " + loanDetailsForm.getLength());
 		}
 		if(Format.isNotNull(loanDetailsForm.getStart())) {
@@ -84,7 +84,7 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
 
 	@Override
 	public Long getLoanDetailsCount(LoanDetailsForm loanDetailsForm) {
-		StringBuilder sql =  new StringBuilder("select count(*) from wn_purchase_tbl a "
+		StringBuilder sql =  new StringBuilder("select count(distinct b.odr_no) from wn_purchase_tbl a "
 			    + " join wn_order b on b.odr_no=a.txn_id "
 			    + " join api_request c on c.order_no=b.odr_no "
 			    + " and c.distributor_id=b.distr_id where b.loan_flag='t' "
