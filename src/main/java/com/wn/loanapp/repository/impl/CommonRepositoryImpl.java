@@ -12,7 +12,6 @@ import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
-import com.wn.loanapp.dto.DistributerDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
 import com.wn.loanapp.form.LoanDetailsForm;
 import com.wn.loanapp.model.CommonEntity;
@@ -68,47 +67,8 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
         return dtos;
 	}
 	
-<<<<<<< HEAD
-	private Session getSession() {
-        return (Session) getPrimaryEntityManager().unwrap(Session.class);
-    }
 	
-	@Override
-	public Long getLoanDetailsCount(LoanDetailsForm loanDetailsForm) {
-		StringBuilder sql =  new StringBuilder("select count(*) from wn_purchase_tbl a "
-                + " join wn_order b on b.odr_no=a.txn_id "
-                + " join api_request c on c.order_no=b.odr_no "
-                + " and c.distributor_id=b.distr_id where b.loan_flag='t' "
-                + " and b.loan_accept_flg='f' and b.loan_decline_flg='f' " );
-        if(Format.isStringNotEmptyAndNotNull(loanDetailsForm.getTnDateStart())) {
-            sql.append(" and a.tn_date>='" + loanDetailsForm.getTnDateStart() + "'");
-        }
-        if(Format.isStringNotEmptyAndNotNull(loanDetailsForm.getTnDateEnd())) {
-            sql.append(" and a.tn_date<='" + loanDetailsForm.getTnDateEnd()+ "'");
-        }
-        
-        Session hibernateSession = (Session) getPrimaryEntityManager().unwrap(Session.class);
-        Connection con = ((SessionImpl) hibernateSession).connection();
-        Long loanCount = (long) 0;
        
-        try {
-           try {
-               Statement st = con.createStatement();
-               ResultSet res = st.executeQuery(sql.toString());
-               while (res.next()){
-                   loanCount = (long) res.getInt(1);
-               }
-               System.out.println("Number of row:"+loanCount);
-           }
-           catch (SQLException s){
-               System.out.println("SQL statement is not executed!");
-           }
-        }
-        catch (Exception e){
-           e.printStackTrace();
-        }
-       
-=======
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public List<Object> getDistributers() {
@@ -161,8 +121,6 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
         catch (Exception e){
             e.printStackTrace();
         }
-        
->>>>>>> ef7ccc350fd5924ed53d0cf0d3184fc157262b4a
 		/*StringBuilder hql =  new StringBuilder("select count(*) from wn_purchase_tbl a "
 			    + " join wn_order b on b.odr_no=a.txn_id "
 			    + " join api_request c on c.order_no=b.odr_no "

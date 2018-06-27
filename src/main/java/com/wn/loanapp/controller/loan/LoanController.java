@@ -19,12 +19,8 @@ import com.wn.loanapp.constants.Constants;
 import com.wn.loanapp.dto.DatatableJsonResponse;
 import com.wn.loanapp.dto.DistributerDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
-import com.wn.loanapp.dto.UserDTO;
 import com.wn.loanapp.form.LoanDetailsForm;
-import com.wn.loanapp.form.RoleForm;
 import com.wn.loanapp.form.UserDetailsSessionForm;
-import com.wn.loanapp.form.UserForm;
-import com.wn.loanapp.model.Role;
 import com.wn.loanapp.service.CommonService;
 import com.wn.loanapp.util.Format;
 

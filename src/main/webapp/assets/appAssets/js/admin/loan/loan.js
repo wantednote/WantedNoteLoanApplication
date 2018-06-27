@@ -86,11 +86,8 @@ function getLoanDetails(currentRoleId){
 		"sort" : "position",
 		"searching":false,
 		"sPaginationType" : "full_numbers",
-<<<<<<< HEAD
 		"lengthChange" : true,
-=======
 		"lengthChange" : false,
->>>>>>> ef7ccc350fd5924ed53d0cf0d3184fc157262b4a
 		"iDisplayLength" : 25,
 		"bFilter" : true,
 		"aaSorting": [[3,"desc"]],
