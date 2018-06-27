@@ -1,16 +1,23 @@
 package com.wn.loanapp.controller.loan;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -84,5 +91,72 @@ public class LoanController extends BaseController{
 		datatableJsonResponse.setRecordsTotal(count);
 		datatableJsonResponse.setRecordsFiltered(count);
 		return datatableJsonResponse;
+	}
+	
+	@RequestMapping(value = "/downloadloancsv", method = RequestMethod.GET)
+	@Transactional(readOnly = true)
+	public void downloadFile(HttpServletResponse response, 
+		@RequestParam(required=false) String startDate,
+		@RequestParam(required=false) String endDate,
+		@RequestParam(required=false) String distributers) {
+		
+		LoanDetailsForm loanDetailsForm = new LoanDetailsForm();
+		if(Format.isStringNotEmptyAndNotNull(startDate)) {
+			loanDetailsForm.setTnDateStart(startDate);
+		}
+		if(Format.isStringNotEmptyAndNotNull(endDate)) {
+			loanDetailsForm.setTnDateEnd(endDate);
+		}
+		if(Format.isStringNotEmptyAndNotNull(distributers)) {
+			loanDetailsForm.setDistributer(distributers);
+		}
+		/*SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy_MM_dd,HH_mm_ss");
+	    Date now = new Date();
+	    String strTime = sdfTime.format(now);*/
+	    
+		response.addHeader("Content-Type", "application/csv");
+		response.addHeader("Content-Disposition", "attachment; filename=loan_details.csv");
+		response.setCharacterEncoding("UTF-8");
+		
+		List<LoanDetailsDTO> detailsDTOs = null;
+        try {
+        	PrintWriter out = response.getWriter();
+        	
+        	StringBuilder sb = new StringBuilder();
+        	sb.append("Order No");
+            sb.append(',');
+            sb.append("Distributer Name");
+            sb.append(',');
+            sb.append("First Name");
+            sb.append(',');
+            sb.append("Date");
+            sb.append(',');
+            sb.append("Amount in Rs.");
+            sb.append('\n');
+            out.write(sb.toString());
+            
+        	detailsDTOs = commonService.getLoanDetails(loanDetailsForm);
+        	if(Format.isCollectionNotEmtyAndNotNull(detailsDTOs)) {
+        		detailsDTOs.forEach(detailsDTO -> {
+        			StringBuilder sb1 = new StringBuilder();
+                	sb1.append(detailsDTO.getOrderNo());
+                    sb1.append(',');
+                    sb1.append(detailsDTO.getDistributorName());
+                    sb1.append(',');
+                    sb1.append(detailsDTO.getFirstName());
+                    sb1.append(',');
+                    sb1.append(detailsDTO.getTnDate());
+                    sb1.append(',');
+                    sb1.append(detailsDTO.getAmount());
+                    sb1.append('\n');
+                    out.write(sb1.toString());
+        		});
+        	}
+            out.close();
+        }catch (IOException e) {
+        	throw new RuntimeException("There is an error while downloading csv", e);
+        } catch (ParseException e) {
+        	throw new RuntimeException("Parse exception while creating csv", e);
+		}
 	}
 }

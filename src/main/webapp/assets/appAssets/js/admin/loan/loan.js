@@ -182,109 +182,24 @@ function getLoanDetails(currentRoleId){
 	});
 	
 }
-function viewProfileDetails(id, name, email){
-	//alert(id + " " + name + " " + email)
-	$('#container').waitMe({
-		effect : 'win8',
-		text : 'Please Wait',
-		sizeW : '',
-		sizeH : '',
-		source : ''
-	});
-	location.href= $("#appLink").val() + $("#selectedBaseLink").val()+"/"+id;
-}
-function updateAccountStatus(id, status, email){
-	$.confirm({
-        title: 'Attention Please',
-        content: 'Are you sure you want to ' + status + " "+ email + "'s  account",
-        icon: 'fa fa-question-circle',
-        animation: 'scale',
-        closeAnimation: 'scale',
-        opacity: 0.5,
-        theme: 'supervan',
-        buttons: {
-            'confirm': {
-                text: 'Proceed',
-                btnClass: 'btn-blue',
-                action: function () {
-                	$('#viewUserDiv').waitMe({
-                		effect : 'win8',
-                		text : 'Please Wait',
-                		sizeW : '',
-                		sizeH : '',
-                		source : ''
-                	});
-                	doAccountStatusOperation(id, status, email);
-                }
-            },
-            cancel: function () {
-                //$.alert('you clicked on <strong>cancel</strong>');
-            },
-        }
-    });
-}
-function doAccountStatusOperation(id, status, email){
-	var roleName = $("#currentRoleCaps").val();
-	//alert(id + " " + status + " " + email + " " + roleName)
-	var data = {
-			id : id,
-			emailAddress : email,
-			accountStatus : status,
-			roleName : roleName
-	}
-	data["query"] = $("#query").val();
+function getCSVData(){
+	var date = $('#reportrange span').html();
+	var dates = date.split("-");
+	var startDate = dates[0];
+	var endDate = dates[1];
 	
-	$.ajax({
-		type : "POST",
-		contentType : "application/json",
-		url : $("#appLink").val() + "updateAccountStatus",
-		data : JSON.stringify(data),
-		dataType : 'json',
-		timeout : 100000,
-		success : function(data) {
-			//console.log("SUCCESS: ", data);
-			$('#viewUserDiv').waitMe('hide');
-			display(data);
-		},
-		error : function(e) {
-			$('#viewUserDiv').waitMe('hide');
-			//console.log("ERROR: ", e);
-			//display(e);
-			setTimeout(function() {
-		        toastr.options = {
-		            closeButton: true,
-		            progressBar: true,
-		            showMethod: 'slideDown',
-		            timeOut: 4000
-		        };
-		        toastr.error(e, "Error");
-		    }, 1300);
-		},
-		done : function(e) {
-			console.log("DONE");
-		}
-	});
-}
-function display(data){
-	if(data.messageType == "Success"){
-		setTimeout(function() {
-	        toastr.options = {
-	            closeButton: true,
-	            progressBar: true,
-	            showMethod: 'slideDown',
-	            timeOut: 4000
-	        };
-	        toastr.success(data.successOrErrorMessage, data.messageType);
-	    }, 1300);	
-	}else{
-		setTimeout(function() {
-	        toastr.options = {
-	            closeButton: true,
-	            progressBar: true,
-	            showMethod: 'slideDown',
-	            timeOut: 4000
-	        };
-	        toastr.error(data.successOrErrorMessage, data.messageType);
-	    }, 1300);
-	}
+	var selectedDistributers = "";
+	var count = 0;
+    $('select#distributerList').children('option:selected').each( function() {
+         var $this = $(this);
+         if(count > 0){
+        	 selectedDistributers = selectedDistributers + ",";
+         }
+         selectedDistributers = selectedDistributers + "'" + $this.val() + "'";
+         count = count + 1;
+    });
+    if(selectedDistributers !=""){
+    	selectedDistributers = "(" + selectedDistributers + ")";
+    }
+	location.href=$("#appLink").val() + "downloadloancsv?startDate="+startDate+"&endDate="+endDate+"&distributers="+selectedDistributers;
 }
