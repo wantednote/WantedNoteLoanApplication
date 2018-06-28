@@ -35,7 +35,7 @@
                            </form>
                        </div>
                        <div class="mail-box">
-		                <table class="table table-hover table-mail" id="loanDetails">
+		                <table class="table table-hover table-mail" id="loanDetails1">
 			                <thead style="background: #f3f3f4;">
 				                <tr class="unread">
 				                	<th>Order No</th>

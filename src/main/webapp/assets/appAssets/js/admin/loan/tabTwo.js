@@ -54,10 +54,10 @@ function tabTwoData(){
     	selectedDistributers1 = "(" + selectedDistributers1 + ")";
     }
     
-    $('#loanDetails1').dataTable().fnDestroy();
+    $('#loanDetails2').dataTable().fnDestroy();
 	var rowCount = 0;
 	var columns = ["txnId", "onlinePaymentId", "retailerName", "amount", "tnDate" ,"verify"];
-	var dt = $('#loanDetails1').DataTable({
+	var dt = $('#loanDetails2').DataTable({
         responsive: true,
         //"dom": 'T<"clear">lfrtip',
         /* "tableTools": {

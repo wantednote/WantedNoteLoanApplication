@@ -54,10 +54,10 @@ function tabOneData(){
     	selectedDistributers = "(" + selectedDistributers + ")";
     }
     
-	$('#loanDetails').dataTable().fnDestroy();
+	$('#loanDetails1').dataTable().fnDestroy();
 	var rowCount = 0;
 	var columns = ["orderNo", "distributorName", "firstName", "tnDate", "amount" ];
-	var dt = $('#loanDetails').DataTable({
+	var dt = $('#loanDetails1').DataTable({
         responsive: true,
         //"dom": 'T<"clear">lfrtip',
         /* "tableTools": {
