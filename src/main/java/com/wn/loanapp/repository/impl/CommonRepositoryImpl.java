@@ -153,7 +153,9 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
 				+" FROM api_request AS a INNER JOIN wn_purchase_tbl c ON a.order_no = c.txn_id "
 				+" WHERE c.block_status = '1' AND c.tranche_status = '1' AND c.b_settle_stat = 'f'"
 				+" AND pay_mode = 'CFS_LOAN'");
-		
+		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getDistributer())) {
+			sql.append(" and a.distributor_id in " + loanDispersedForm.getDistributer());
+		}
 		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getTnStartDate())){
 			sql.append(" AND Date(c.tn_date) >= '"+loanDispersedForm.getTnStartDate()+" '");
 		}
@@ -188,6 +190,9 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
 				+" wn_purchase_tbl c ON a.order_no = c.txn_id  WHERE c.block_status = '1' AND c.tranche_status = '1'"
 				+" AND c.b_settle_stat = 'f' AND pay_mode = 'CFS_LOAN'");
 		
+		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getDistributer())) {
+			sql.append(" and a.distributor_id in " + loanDispersedForm.getDistributer());
+		}
 		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getTnStartDate())){
 			sql.append(" AND Date(c.tn_date) >= '"+loanDispersedForm.getTnStartDate()+" '");
 		}
