@@ -252,7 +252,7 @@ public class LoanController extends BaseController{
 	}
 	
 	@RequestMapping(value = "/uploadBankStatement", method = RequestMethod.POST)
-	public ApiResponceForm uploadBankStatement(CSVForm csvForm) throws IOException {
+	public @ResponseBody ApiResponceForm uploadBankStatement(CSVForm csvForm) throws IOException {
 		ApiResponceForm apiResponceForm = new ApiResponceForm();
 		File file = convertMultiPartToFile(csvForm.getCsvFile());
 		/*List<RoleJson> mandatoryMissedList = new ArrayList<RoleJson>();

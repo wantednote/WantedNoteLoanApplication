@@ -4,7 +4,7 @@ $(document).ready(function() {
 		  enableFiltering: true,
 		  enableCaseInsensitiveFiltering: true,
 		  includeSelectAllOption: true,
-		  buttonWidth:'300px'
+		  buttonWidth:'248px'
 		 });
 		
 		$(function() {

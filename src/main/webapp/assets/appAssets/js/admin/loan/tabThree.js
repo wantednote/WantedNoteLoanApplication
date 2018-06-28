@@ -81,5 +81,5 @@ function uploadTabThreeCSVData(){
             console.log('ERRORS: ' + textStatus);
             // STOP LOADING SPINNER
         }
-    });
+    });formdata = new FormData();
 }
