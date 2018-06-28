@@ -1,5 +1,10 @@
 <%@ include file="/common/taglibs.jsp"%>
 <script src="<c:url value="/assets/appAssets/js/admin/loan/tabThree.js" />"></script>
+
+<script src="<c:url value="/assets/fileUpload/js/jquery.knob.js" />"></script>
+<script src="<c:url value="/assets/fileUpload/js/jquery.ui.widget.js" />"></script>
+<script src="<c:url value="/assets/fileUpload/js/jquery.iframe-transport.js" />"></script>
+<script src="<c:url value="/assets/fileUpload/js/jquery.fileupload.js" />"></script>
 <div class="ibox float-e-margins">
                        <div class="ibox-title">
                            <h5>Fund Received</h5>
@@ -59,7 +64,7 @@
 
                                                <p>Select .CSV file to upload.</p>
 
-                                               <form role="form" enctype="multipart/form-data" id="bankStatementForm" method="post">
+                                               <form action="uploadBankStatement" role="form" enctype="multipart/form-data" id="bankStatementForm" method="post">
                                                    <!-- <div class="form-group"><label>Email</label> <input type="email" placeholder="Enter email" class="form-control"></div> -->
                                                    <div class="form-group">
                                                    		<input id="default_file" type="file" name="csvFile" class="form-control">
