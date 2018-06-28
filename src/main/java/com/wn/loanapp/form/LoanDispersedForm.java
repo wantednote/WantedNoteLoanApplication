@@ -20,39 +20,11 @@ public class LoanDispersedForm {
 	
 	private String verify;
 	
+	private String distributer;
+	
 	private int length;
 	
 	private int start;
-	
-	
-
-	/**
-	 * @return the length
-	 */
-	public int getLength() {
-		return length;
-	}
-
-	/**
-	 * @param length the length to set
-	 */
-	public void setLength(int length) {
-		this.length = length;
-	}
-
-	/**
-	 * @return the start
-	 */
-	public int getStart() {
-		return start;
-	}
-
-	/**
-	 * @param start the start to set
-	 */
-	public void setStart(int start) {
-		this.start = start;
-	}
 
 	/**
 	 * @return the txnId
@@ -180,6 +152,45 @@ public class LoanDispersedForm {
 		this.verify = verify;
 	}
 	
-	
+	/**
+	 * @return the distributer
+	 */
+	public String getDistributer() {
+		return distributer;
+	}
 
+	/**
+	 * @param distributer the distributer to set
+	 */
+	public void setDistributer(String distributer) {
+		this.distributer = distributer;
+	}
+
+	/**
+	 * @return the length
+	 */
+	public int getLength() {
+		return length;
+	}
+
+	/**
+	 * @param length the length to set
+	 */
+	public void setLength(int length) {
+		this.length = length;
+	}
+
+	/**
+	 * @return the start
+	 */
+	public int getStart() {
+		return start;
+	}
+
+	/**
+	 * @param start the start to set
+	 */
+	public void setStart(int start) {
+		this.start = start;
+	}
 }

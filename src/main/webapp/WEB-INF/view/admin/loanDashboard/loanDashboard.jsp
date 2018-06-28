@@ -70,7 +70,7 @@
 	</div>
 </div>
 <script type="text/javascript">
- function changeSelection(li){
+ /* function changeSelection(li){
 	 //$("li").removeClass("folder-list-selected");
 	 //$("#" + li).addClass("folder-list-selected");
   	 for(var i=1; i<=4; i++){
@@ -82,5 +82,5 @@
   			$("#" + i).removeClass("folder-list-selected");
   		 }
   	 }
- }
+ } */
 </script>

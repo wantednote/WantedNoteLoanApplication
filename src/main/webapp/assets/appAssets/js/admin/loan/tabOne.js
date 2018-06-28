@@ -1,10 +1,10 @@
-$(document).ready(function() {
-	tab1();
-});
-function getRefereshData(){
-	tab1();
+/*$(document).ready(function() {
+	tabOneData();
+});*/
+function getTabOneRerereshData(){
+	tabOneData();
 }
-function tab1(){
+function tabOneData(){
 	var date = $('#reportrange span').html();
 	var dates = date.split("-");
 	var startDate = dates[0];
@@ -137,7 +137,7 @@ function tab1(){
 	});
 	
 }
-function getCSVData(){
+function getTabOneCSVData(){
 	var date = $('#reportrange span').html();
 	var dates = date.split("-");
 	var startDate = dates[0];

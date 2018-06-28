@@ -1,18 +1,16 @@
-$(document).ready(function() {
-	tab2();
-});
-function getRefereshData1(){
-	tab2();
+function getTabTwoRerereshData(){
+	tabTwoData();
 }
-function tab2(){
-	var date1 = $('#reportrange1 span').html();
+function tabTwoData(){
+	alert("Inside method tabTwoData");
+	var date1 = $('#reportrange span').html();
 	var dates1 = date1.split("-");
 	var startDate1 = dates1[0];
 	var endDate1 = dates1[1];
 	
 	var selectedDistributers1 = "";
 	var count1 = 0;
-    $('select#distributerList1').children('option:selected').each( function() {
+    $('select#distributerList').children('option:selected').each( function() {
          var $this = $(this);
          //selectedDistributers.push("'" + $this.val() + "'");
          //selectedDistributers.push($this.val());
@@ -26,9 +24,12 @@ function tab2(){
     	selectedDistributers1 = "(" + selectedDistributers1 + ")";
     }
     
+    alert("startDate1" + startDate1 + " endDate1 " + endDate1)
+    alert("selectedDistributers1 " + selectedDistributers1);
+    
     $('#loanDetails1').dataTable().fnDestroy();
 	var rowCount = 0;
-	var columns = ["txnId", "onlinePaymentId", "retailerName", "tnDate", "amount" ];
+	var columns = ["txnId", "onlinePaymentId", "retailerName", "amount", "tnDate" ,"repayTxnId"];
 	var dt = $('#loanDetails1').DataTable({
         responsive: true,
         //"dom": 'T<"clear">lfrtip',
@@ -53,7 +54,7 @@ function tab2(){
 				d.sortDirection = d.order[0].dir;
 				d.tnStartDate = startDate1;
 				d.tnEndDate = endDate1;
-				//d.distributer = selectedDistributers1;
+				d.distributer = selectedDistributers1;
 				d.fieldForSorting = columns[d.order[0].column]
 			}
 		},
