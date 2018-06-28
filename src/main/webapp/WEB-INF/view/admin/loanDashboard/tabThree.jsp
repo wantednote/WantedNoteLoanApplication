@@ -37,7 +37,7 @@
                            </form>
                        </div>
                        <div class="mail-box">
-			               <table class="table table-hover table-mail" id="loanDetails3">
+			               <!-- <table class="table table-hover table-mail" id="loanDetails3">
 				                <thead style="background: #f3f3f4;">
 					                <tr class="unread">
 					                	<th>TXN Id</th>
@@ -48,32 +48,33 @@
 					                	<th>Is Verify</th> 
 					                </tr>
 				                </thead>
-		                   </table>
+		                   </table> -->
 	                   </div>
 	                   <div id="upload_tab_three_model" class="modal fade" aria-hidden="true">
                            <div class="modal-dialog">
                                <div class="modal-content">
                                    <div class="modal-body">
                                        <div class="row">
-                                           <div class="col-sm-6 b-r"><h3 class="m-t-none m-b">Sign in</h3>
+                                           <div class="col-sm-6 b-r"><h3 class="m-t-none m-b">Upload Bank Statement</h3>
 
-                                               <p>Sign in today for more expirience.</p>
+                                               <p>Select .CSV file to upload.</p>
 
-                                               <form role="form">
-                                                   <div class="form-group"><label>Email</label> <input type="email" placeholder="Enter email" class="form-control"></div>
-                                                   <div class="form-group"><label>Password</label> <input type="password" placeholder="Password" class="form-control"></div>
+                                               <form role="form" enctype="multipart/form-data" id="bankStatementForm" method="post">
+                                                   <!-- <div class="form-group"><label>Email</label> <input type="email" placeholder="Enter email" class="form-control"></div> -->
+                                                   <div class="form-group">
+                                                   		<input id="default_file" type="file" name="csvFile" class="form-control">
+                                                   </div>
                                                    <div>
-                                                       <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>Log in</strong></button>
-                                                       <label> <input type="checkbox" class="i-checks"> Remember me </label>
+                                                       <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>Upload</strong></button>
                                                    </div>
                                                </form>
                                            </div>
-                                           <div class="col-sm-6"><h4>Not a member?</h4>
+                                           <!-- <div class="col-sm-6"><h4>Not a member?</h4>
                                                <p>You can create an account:</p>
                                                <p class="text-center">
                                                    <a href=""><i class="fa fa-sign-in big-icon"></i></a>
                                                </p>
-                                       </div>
+                                       	   </div> -->
                                    </div>
                                </div>
                                </div>

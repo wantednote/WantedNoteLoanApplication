@@ -1,7 +1,11 @@
 package com.wn.loanapp.controller.loan;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,14 +21,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 import com.wn.loanapp.common.BaseController;
 import com.wn.loanapp.constants.Constants;
 import com.wn.loanapp.dto.DatatableJsonResponse;
 import com.wn.loanapp.dto.DistributerDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
 import com.wn.loanapp.dto.LoanDispersedDTO;
+import com.wn.loanapp.dto.RoleJson;
+import com.wn.loanapp.form.ApiResponceForm;
+import com.wn.loanapp.form.CSVForm;
 import com.wn.loanapp.form.LoanDetailsForm;
 import com.wn.loanapp.form.LoanDispersedForm;
 import com.wn.loanapp.form.UserDetailsSessionForm;
@@ -239,5 +249,39 @@ public class LoanController extends BaseController{
         } catch (ParseException e) {
         	throw new RuntimeException("Parse exception while creating csv", e);
 		}
+	}
+	
+	@RequestMapping(value = "/uploadBankStatement", method = RequestMethod.POST)
+	public ApiResponceForm uploadBankStatement(CSVForm csvForm) throws IOException {
+		ApiResponceForm apiResponceForm = new ApiResponceForm();
+		File file = convertMultiPartToFile(csvForm.getCsvFile());
+		/*List<RoleJson> mandatoryMissedList = new ArrayList<RoleJson>();
+		try (Reader reader = new FileReader(file);) {
+			@SuppressWarnings("unchecked")
+			CsvToBean<RoleJson> csvToBean = new CsvToBeanBuilder<RoleJson>(reader).withType(RoleJson.class)
+					.withIgnoreLeadingWhiteSpace(true).build();
+			List<RoleJson> roleJsons = csvToBean.parse();
+			Iterator<RoleJson> studentListClone = roleJsons.iterator();
+			while (studentListClone.hasNext()) {
+				RoleJson roleJson = studentListClone.next();
+				if (roleJson.getRole() == null || roleJson.getRole().isEmpty()) {
+					mandatoryMissedList.add(roleJson);
+					studentListClone.remove();
+				}
+				mandatoryMissedList.add(roleJson);
+				studentListClone.remove();
+			}
+		}*/
+		apiResponceForm.setMessageType(Constants.SUCCESS);
+		apiResponceForm.setSuccessOrErrorMessage("Bank Statement Uploaded Successfully");
+		return apiResponceForm;
+	}
+	
+	private File convertMultiPartToFile(MultipartFile file) throws IOException {
+		File convFile = new File(file.getOriginalFilename());
+		FileOutputStream fos = new FileOutputStream(convFile);
+		fos.write(file.getBytes());
+		fos.close();
+		return convFile;
 	}
 }
