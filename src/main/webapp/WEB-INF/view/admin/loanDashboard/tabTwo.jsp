@@ -28,23 +28,23 @@
                                <div class="form-group pull-right">
                                	<button style="border-radius: 0px;" type="button" class="btn btn-primary" onclick="getTabTwoRerereshData();"><i class="fa fa-refresh"></i> Search</button>
                                </div>
-                               <!-- <div class="form-group pull-right">
-                               	<button style="border-radius: 0px;" type="button" class="btn btn-white" onclick="getCSVData();"><i class="fa fa-download"></i> Download CSV</button>
-                               </div> -->
+                               <div class="form-group pull-right">
+                               	<button style="border-radius: 0px;" type="button" class="btn btn-white" onclick="getTabTwoCSVData();"><i class="fa fa-download"></i> Download CSV</button>
+                               </div>
                            </form>
                        </div>
                        <div class="mail-box">
 		                <table class="table table-hover table-mail" id="loanDetails1">
 			                <thead style="background: #f3f3f4;">
 				                <tr class="unread">
-				                	<th>Txn Id</th>
-				                	<th>Online Payment Id</th>
-				                	<th>Retailer Name</th>
+				                	<th>TXN Id</th>
+				                	<th>Payment Id</th>
+				                	<th>Name</th>
 				                	<th>Amount</th>
 				                	<th>Date</th>
-				                	<th>Repay Txn Id</th> 
+				                	<th>Is Verify</th> 
 				                </tr>
 			                </thead>
 	                	</table>
 	                </div>
-                   </div>
+ 				 </div>

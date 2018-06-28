@@ -33,15 +33,14 @@ function getTabTwoRerereshData(){
 	tabTwoData();
 }
 function tabTwoData(){
-	alert("Inside method tabTwoData");
-	var date1 = $('#reportrange span').html();
+	var date1 = $('#reportrange2 span').html();
 	var dates1 = date1.split("-");
 	var startDate1 = dates1[0];
 	var endDate1 = dates1[1];
 	
 	var selectedDistributers1 = "";
 	var count1 = 0;
-    $('select#distributerList').children('option:selected').each( function() {
+    $('select#distributerList2').children('option:selected').each( function() {
          var $this = $(this);
          //selectedDistributers.push("'" + $this.val() + "'");
          //selectedDistributers.push($this.val());
@@ -55,12 +54,9 @@ function tabTwoData(){
     	selectedDistributers1 = "(" + selectedDistributers1 + ")";
     }
     
-    alert("startDate1" + startDate1 + " endDate1 " + endDate1)
-    alert("selectedDistributers1 " + selectedDistributers1);
-    
     $('#loanDetails1').dataTable().fnDestroy();
 	var rowCount = 0;
-	var columns = ["txnId", "onlinePaymentId", "retailerName", "amount", "tnDate" ,"repayTxnId"];
+	var columns = ["txnId", "onlinePaymentId", "retailerName", "amount", "tnDate" ,"verify"];
 	var dt = $('#loanDetails1').DataTable({
         responsive: true,
         //"dom": 'T<"clear">lfrtip',
@@ -131,7 +127,7 @@ function tabTwoData(){
 			"searchable" : false,
 			'bSortable' : true,
 			"data" : "retailerName",
-			"width" : "20%",
+			"width" : "25%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'
@@ -144,7 +140,7 @@ function tabTwoData(){
 			"searchable" : false,
 			'bSortable' : true,
 			"data" : "amount",
-			"width" : "20%",
+			"width" : "15%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'
@@ -169,7 +165,7 @@ function tabTwoData(){
 			"targets" : 5,
 			"searchable" : false,
 			'bSortable' : false,
-			"data" : "repayTxnId",
+			"data" : "verify",
 			"width" : "10%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
@@ -180,4 +176,25 @@ function tabTwoData(){
 			}
 		}]
 	});
+}
+function getTabTwoCSVData(){
+	var date = $('#reportrange2 span').html();
+	var dates = date.split("-");
+	var startDate = dates[0];
+	var endDate = dates[1];
+	
+	var selectedDistributers = "";
+	var count = 0;
+    $('select#distributerList2').children('option:selected').each( function() {
+         var $this = $(this);
+         if(count > 0){
+        	 selectedDistributers = selectedDistributers + ",";
+         }
+         selectedDistributers = selectedDistributers + "'" + $this.val() + "'";
+         count = count + 1;
+    });
+    if(selectedDistributers !=""){
+    	selectedDistributers = "(" + selectedDistributers + ")";
+    }
+	location.href=$("#appLink").val() + "downloadloandispersedcsv?startDate="+startDate+"&endDate="+endDate+"&distributers="+selectedDistributers;
 }

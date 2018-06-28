@@ -173,6 +173,7 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
                 .createSQLQuery(sql.toString())
                 .addScalar("txnId", StandardBasicTypes.STRING)
                 .addScalar("onlinePaymentId", StandardBasicTypes.STRING)
+                .addScalar("retailerName", StandardBasicTypes.STRING)
                 .addScalar("amount", StandardBasicTypes.STRING)
                 .addScalar("tnDate", StandardBasicTypes.STRING)
                 .addScalar("repayTxnId", StandardBasicTypes.STRING)

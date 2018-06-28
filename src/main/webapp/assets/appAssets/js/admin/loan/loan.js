@@ -22,7 +22,6 @@ $(document).ready(function() {
     }, 1300); */
 });
 function changeSelection(li){
-	 alert("Li " + li);
  	 for(var i=1; i<=4; i++){
  		 if(li == i){
  			 $("#tab" + i).show();

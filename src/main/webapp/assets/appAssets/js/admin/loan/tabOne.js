@@ -33,14 +33,14 @@ function getTabOneRerereshData(){
 	tabOneData();
 }
 function tabOneData(){
-	var date = $('#reportrange span').html();
+	var date = $('#reportrange1 span').html();
 	var dates = date.split("-");
 	var startDate = dates[0];
 	var endDate = dates[1];
 	
 	var selectedDistributers = "";
 	var count = 0;
-    $('select#distributerList').children('option:selected').each( function() {
+    $('select#distributerList1').children('option:selected').each( function() {
          var $this = $(this);
          //selectedDistributers.push("'" + $this.val() + "'");
          //selectedDistributers.push($this.val());
@@ -166,14 +166,14 @@ function tabOneData(){
 	
 }
 function getTabOneCSVData(){
-	var date = $('#reportrange span').html();
+	var date = $('#reportrange1 span').html();
 	var dates = date.split("-");
 	var startDate = dates[0];
 	var endDate = dates[1];
 	
 	var selectedDistributers = "";
 	var count = 0;
-    $('select#distributerList').children('option:selected').each( function() {
+    $('select#distributerList1').children('option:selected').each( function() {
          var $this = $(this);
          if(count > 0){
         	 selectedDistributers = selectedDistributers + ",";
