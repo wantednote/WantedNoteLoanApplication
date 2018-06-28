@@ -28,7 +28,7 @@ function tab2(){
     
     $('#loanDetails1').dataTable().fnDestroy();
 	var rowCount = 0;
-	var columns = ["txnId", "onlinePaymentId", "retailerName", "tnDate", "amount" ];
+	var columns = ["txnId", "onlinePaymentId", "retailerName", "tnDate", "amount", "repayTxnId", "settleAmt", "verify" ];
 	var dt = $('#loanDetails1').DataTable({
         responsive: true,
         //"dom": 'T<"clear">lfrtip',
@@ -53,7 +53,7 @@ function tab2(){
 				d.sortDirection = d.order[0].dir;
 				d.tnStartDate = startDate1;
 				d.tnEndDate = endDate1;
-				//d.distributer = selectedDistributers1;
+				d.distributer = selectedDistributers1;
 				d.fieldForSorting = columns[d.order[0].column]
 			}
 		},
@@ -86,7 +86,7 @@ function tab2(){
 			"searchable" : false,
 			'bSortable' : true,
 			"data" : "onlinePaymentId",
-			"width" : "20%",
+			"width" : "10%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'
@@ -99,7 +99,7 @@ function tab2(){
 			"searchable" : false,
 			'bSortable' : true,
 			"data" : "retailerName",
-			"width" : "20%",
+			"width" : "15%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'
@@ -112,7 +112,7 @@ function tab2(){
 			"searchable" : false,
 			'bSortable' : true,
 			"data" : "amount",
-			"width" : "20%",
+			"width" : "10%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'
@@ -125,7 +125,7 @@ function tab2(){
 			"searchable" : false,
 			'bSortable' : false,
 			"data" : "tnDate",
-			"width" : "20%",
+			"width" : "15%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'
@@ -139,6 +139,34 @@ function tab2(){
 			'bSortable' : false,
 			"data" : "repayTxnId",
 			"width" : "10%",
+			"render" : function (data, type, full) {
+				if (data == null || data == "") {
+					return '<span>-<span>'
+				}else{
+					return data;
+				}
+			}
+		}
+		{
+			"targets" : 6,
+			"searchable" : false,
+			'bSortable' : false,
+			"data" : "settleAmt",
+			"width" : "15%",
+			"render" : function (data, type, full) {
+				if (data == null || data == "") {
+					return '<span>-<span>'
+				}else{
+					return data;
+				}
+			}
+		}
+		{
+			"targets" : 7,
+			"searchable" : false,
+			'bSortable' : false,
+			"data" : "verify",
+			"width" : "15%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'

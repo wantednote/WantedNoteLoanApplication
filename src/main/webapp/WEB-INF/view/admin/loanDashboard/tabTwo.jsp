@@ -41,7 +41,9 @@
 				                	<th>RetailerName</th>
 				                	<th>Amount</th>
 				                	<th>Date</th>
-				                	<th>RepayTxnId</th> 
+				                	<th>RepayTxnId</th>
+				                	<th>SettleAmt</th>
+				                	<th>Verify</th> 
 				                </tr>
 			                </thead>
 	                	</table>

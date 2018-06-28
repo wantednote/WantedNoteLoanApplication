@@ -24,7 +24,21 @@ public class LoanDispersedForm {
 	
 	private int start;
 	
+	private String distributer;
 	
+	/**
+	 * @return the distributer
+	 */
+	public String getDistributer() {
+		return distributer;
+	}
+
+	/**
+	 * @param distributer the distributer to set
+	 */
+	public void setDistributer(String distributer) {
+		this.distributer = distributer;
+	}
 
 	/**
 	 * @return the length
