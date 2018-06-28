@@ -3,9 +3,7 @@ package com.wn.loanapp.controller.loan;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,7 +24,9 @@ import com.wn.loanapp.constants.Constants;
 import com.wn.loanapp.dto.DatatableJsonResponse;
 import com.wn.loanapp.dto.DistributerDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
+import com.wn.loanapp.dto.LoanDispersedDTO;
 import com.wn.loanapp.form.LoanDetailsForm;
+import com.wn.loanapp.form.LoanDispersedForm;
 import com.wn.loanapp.form.UserDetailsSessionForm;
 import com.wn.loanapp.service.CommonService;
 import com.wn.loanapp.util.Format;
@@ -74,11 +74,11 @@ public class LoanController extends BaseController{
 		Integer count = 0;
 		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
 		try {
-			detailsDTOs = commonService.getLoanDetails(loanDetailsForm);
+			detailsDTOs = commonService.getAppliedLoanDetails(loanDetailsForm);
 			if(Format.isCollectionEmtyOrNull(detailsDTOs)){
 				detailsDTOs = new ArrayList<>();
 			}else{
-				count = commonService.getLoanDetailsCount(loanDetailsForm).intValue();
+				count = commonService.getAppliedLoanDetailsCount(loanDetailsForm).intValue();
 			}
 		}catch (ParseException e) {
 			detailsDTOs = new ArrayList<>();
@@ -131,7 +131,7 @@ public class LoanController extends BaseController{
             sb.append('\n');
             out.write(sb.toString());
             
-        	detailsDTOs = commonService.getLoanDetails(loanDetailsForm);
+        	detailsDTOs = commonService.getAppliedLoanDetails(loanDetailsForm);
         	if(Format.isCollectionNotEmtyAndNotNull(detailsDTOs)) {
         		detailsDTOs.forEach(detailsDTO -> {
         			StringBuilder sb1 = new StringBuilder();
@@ -154,5 +154,25 @@ public class LoanController extends BaseController{
         } catch (ParseException e) {
         	throw new RuntimeException("Parse exception while creating csv", e);
 		}
+	}
+	@RequestMapping(value="dispersedList", method=RequestMethod.POST)
+	public @ResponseBody DatatableJsonResponse getDispersedList(LoanDispersedForm loanDispersedForm) {
+		List<LoanDispersedDTO> loanDispersedDTOs = null;
+		Integer count = 0;
+		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
+		try {
+			loanDispersedDTOs = commonService.getDispersedLoanDetails(loanDispersedForm);
+			if(Format.isCollectionEmtyOrNull(loanDispersedDTOs)){
+				loanDispersedDTOs = new ArrayList<>();
+			}else{
+				count = commonService.getDispersedLoanDetailsCount(loanDispersedForm).intValue();
+			}
+		}catch (ParseException e) {
+			loanDispersedDTOs = new ArrayList<>();
+		}
+		datatableJsonResponse.setData(loanDispersedDTOs);
+		datatableJsonResponse.setRecordsTotal(count);
+		datatableJsonResponse.setRecordsFiltered(count);
+		return datatableJsonResponse;
 	}
 }

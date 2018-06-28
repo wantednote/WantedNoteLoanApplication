@@ -53,115 +53,34 @@
 }
 </style>
 <div class="wrapper wrapper-content" id="container">		    
-        <div class="row">
-            <div class="col-lg-2">
-            	<!-- <div class="mail-box-header"> -->
-                <div class="ibox float-e-margins">
-                    <div class="ibox-content mailbox-content">
-                        <div class="file-manager">
-                            <%-- <button class="btn btn-block btn-primary compose-mail" id="addUserBtn">Add <span class="currentRoleSmallClass">${currentRoleSmall}</span></button>  --%>                           
-                            
-                            <div class="space-25"></div>
-                            <h5>Action</h5>
-                            <ul class="folder-list m-b-md" style="padding: 0">
-                            	<li><a href="#"></a></li>
-			                    <li id="1" onclick="changeSelection(1);"><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;Upload </a></li>
-			                    <li id="2" onclick="changeSelection(2);"><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;Download </a></li>
-                            </ul>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- </div> -->
-            </div>
-            <div class="col-lg-10">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Loan Details</h5>
-                        </div>
-                        <div class="ibox-content" style="display: block;">
-                            <form role="form" class="form-inline">
-                                <div class="form-group">
-                                    <div id="reportrange" style="background: #fff; cursor: pointer; padding: 7px 10px;margin-top: -5px; border: 1px solid #ccc; width: 100%">
-									    <i class="fa fa-calendar"></i>&nbsp;
-									    <span></span> <i class="fa fa-caret-down"></i>
-									</div>
-                                </div>
-                                <c:if test="${not empty distributers}">
-	                                <div class="form-group">
-	                                    <select id="distributerList" name="distributer[]" multiple class="form-control" >
-	                                    	<!-- <option value="">Select Distributer</option> -->
-		                                    <c:forEach var="distributer" items="${distributers}">
-		                                    	<c:if test="${not empty distributer.distName}">
-													<option value="${distributer.distId}"> ${distributer.distName}</option>
-												</c:if>
-											</c:forEach>
-									    </select>
-	                                </div>
-                                </c:if>
-                                <div class="form-group pull-right">
-                                	<button style="border-radius: 0px;" type="button" class="btn btn-primary" onclick="getRefereshData();"><i class="fa fa-refresh"></i> Search</button>
-                                	<!-- <button type="button" class="btn btn-primary btn-sm" ><i class="fa fa-refresh"></i> Search</button> -->
-                                </div>
-                                <div class="form-group pull-right">
-                                	<button style="border-radius: 0px;" type="button" class="btn btn-white" onclick="getCSVData();"><i class="fa fa-download"></i> Download CSV</button>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="mail-box">
-			                <table class="table table-hover table-mail" id="loanDetails">
-				                <thead style="background: #f3f3f4;">
-					                <tr class="unread">
-					                	<th>Order No</th>
-					                	<th>Distributer Name</th>
-					                	<th>First Name</th>
-					                	<th>Date</th>
-					                	<th>Amount</th>
-					                </tr>
-				                </thead>
-		                	</table>
-		                </div>
-                    </div>
-                </div>
-            <!-- <div class="col-lg-10 animated fadeInRight" id ="viewUserDiv">
-	            <div class="mail-box-header">
-	            	<div class="mail-tools tooltip-demo m-t-md">
-		                <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 30%">
-						    <i class="fa fa-calendar"></i>&nbsp;
-						    <span></span> <i class="fa fa-caret-down"></i>
-						</div>
-					</div>
-					<select id="lstFruits" multiple="multiple">
-				        <option value="1">Mango</option>
-				        <option value="2">Apple</option>
-				        <option value="3">Banana</option>
-				        <option value="4">Guava</option>
-				        <option value="5">Orange</option>
-				    </select>
-					<div class="mail-tools tooltip-demo m-t-md">
-						<a href="#" onclick="getRefereshData();" class="btn btn-primary btn-sm pull-right" ><i class="fa fa-refresh"></i> Refresh</a>
-	           		</div>
-	            </div>
-                <div class="mail-box">
-	                <table class="table table-hover table-mail" id="loanDetails">
-		                <thead style="background: #f3f3f4;">
-			                <tr class="unread">
-			                	<th>Order No</th>
-			                	<th>Distributer Name</th>
-			                	<th>First Name</th>
-			                	<th>Date</th>
-			                	<th>Amount</th>
-			                </tr>
-		                </thead>
-                	</table>
-                </div>
-            </div> -->
-        </div>
+	<div class="row">
+	    <jsp:include page="/WEB-INF/view/admin/loanDashboard/common/subMenu.jsp" flush="true" />
+	    <div class="col-lg-10" id="tab1">
+	    	<jsp:include page="/WEB-INF/view/admin/loanDashboard/tabOne.jsp" flush="true" /> 
+	    </div>
+	    <div class="col-lg-10" id="tab2">
+	    	<jsp:include page="/WEB-INF/view/admin/loanDashboard/tabTwo.jsp" flush="true" />
+	    </div>
+	    <div class="col-lg-10" id="tab3">
+	    	<jsp:include page="/WEB-INF/view/admin/loanDashboard/tabThree.jsp" flush="true" />
+	    </div>
+	    <div class="col-lg-10" id="tab4">
+	    	<jsp:include page="/WEB-INF/view/admin/loanDashboard/tabFour.jsp" flush="true" />
+	    </div>
+	</div>
 </div>
 <script type="text/javascript">
  function changeSelection(li){
-	 //$("li").removeClass("folder-list");
-	 $("li").removeClass("folder-list-selected");
-	 $("#" + li).addClass("folder-list-selected");
-  
+	 //$("li").removeClass("folder-list-selected");
+	 //$("#" + li).addClass("folder-list-selected");
+  	 for(var i=1; i<=4; i++){
+  		 if(li == i){
+  			 $("#tab" + i).show();
+  			$("#" + i).addClass("folder-list-selected");
+  		 }else{
+  			$("#tab" + i).hide();
+  			$("#" + i).removeClass("folder-list-selected");
+  		 }
+  	 }
+ }
 </script>

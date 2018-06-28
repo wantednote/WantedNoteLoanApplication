@@ -12,7 +12,9 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 
 import com.wn.loanapp.dto.DistributerDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
+import com.wn.loanapp.dto.LoanDispersedDTO;
 import com.wn.loanapp.form.LoanDetailsForm;
+import com.wn.loanapp.form.LoanDispersedForm;
 import com.wn.loanapp.repository.CommonRepository;
 import com.wn.loanapp.service.CommonService;
 import com.wn.loanapp.util.Format;
@@ -26,7 +28,7 @@ public class CommonServiceImpl implements CommonService{
 	private CommonRepository commonRepository;
 	
 	@Override
-	public List<LoanDetailsDTO> getLoanDetails(LoanDetailsForm loanDetailsForm) throws ParseException {
+	public List<LoanDetailsDTO> getAppliedLoanDetails(LoanDetailsForm loanDetailsForm) throws ParseException {
 		
 		if(Format.isStringNotEmptyAndNotNull(loanDetailsForm.getTnDateStart())) {
 			SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");
@@ -45,7 +47,7 @@ public class CommonServiceImpl implements CommonService{
 			String output1 = sdf1.format(d1);
 			loanDetailsForm.setTnDateEnd(output1);
 		}
-		return commonRepository.getLoanDetails(loanDetailsForm);
+		return commonRepository.getAppliedLoanDetails(loanDetailsForm);
 	}
 
 	@Override
@@ -54,8 +56,36 @@ public class CommonServiceImpl implements CommonService{
 	}
 	
 	@Override
-	public Long getLoanDetailsCount(LoanDetailsForm loanDetailsForm) {
-		return commonRepository.getLoanDetailsCount(loanDetailsForm);
+	public Long getAppliedLoanDetailsCount(LoanDetailsForm loanDetailsForm) {
+		return commonRepository.getAppliedLoanDetailsCount(loanDetailsForm);
+	}
+
+	@Override
+	public List<LoanDispersedDTO> getDispersedLoanDetails(LoanDispersedForm loanDispersedForm) throws ParseException{
+
+		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getTnStartDate())) {
+			SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");
+			String str = loanDispersedForm.getTnStartDate().trim();
+			Date d = sdf.parse(str);
+			sdf.applyPattern("yyyy-MM-dd");
+			String output = sdf.format(d);
+			loanDispersedForm.setTnStartDate(output);
+			
+		}
+		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getTnEndDate())) {
+			SimpleDateFormat sdf1 = new SimpleDateFormat("MMMM dd, yyyy");
+			String str1 = loanDispersedForm.getTnEndDate().trim();
+			Date d1 = sdf1.parse(str1);
+			sdf1.applyPattern("yyyy-MM-dd");
+			String output1 = sdf1.format(d1);
+			loanDispersedForm.setTnEndDate(output1);
+		}
+		return commonRepository.getDispersedLoanDetails(loanDispersedForm);
+	}
+
+	@Override
+	public Long getDispersedLoanDetailsCount(LoanDispersedForm loanDispersedForm) {
+		return commonRepository.getDispersedLoanDetailsCount(loanDispersedForm);
 	}
 
 }
