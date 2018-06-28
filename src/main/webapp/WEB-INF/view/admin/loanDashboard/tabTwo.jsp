@@ -6,7 +6,25 @@
                        </div>
                        <div class="ibox-content" style="display: block;">
                            <form role="form" class="form-inline">
-                               <jsp:include page="/WEB-INF/view/admin/loanDashboard/common/searchMenu.jsp" flush="true" />
+                               <%-- <jsp:include page="/WEB-INF/view/admin/loanDashboard/common/searchMenu.jsp" flush="true" /> --%>
+                               <div class="form-group">
+                                   <div id="reportrange2" style="background: #fff; cursor: pointer; padding: 7px 10px;margin-top: -5px; border: 1px solid #ccc; width: 100%">
+									   <i class="fa fa-calendar"></i>&nbsp;
+									   <span></span> <i class="fa fa-caret-down"></i>
+								   </div>
+                               </div>
+                               <c:if test="${not empty distributers}">
+	                               <div class="form-group">
+	                                    <select id="distributerList2" name="distributer[]" multiple class="form-control" >
+	                                    	<!-- <option value="">Select Distributer</option> -->
+		                                    <c:forEach var="distributer" items="${distributers}">
+		                                    	<c:if test="${not empty distributer.distName}">
+													<option value="${distributer.distId}"> ${distributer.distName}</option>
+												</c:if>
+											</c:forEach>
+									    </select>
+	                               </div>
+                               </c:if>
                                <div class="form-group pull-right">
                                	<button style="border-radius: 0px;" type="button" class="btn btn-primary" onclick="getTabTwoRerereshData();"><i class="fa fa-refresh"></i> Search</button>
                                </div>
