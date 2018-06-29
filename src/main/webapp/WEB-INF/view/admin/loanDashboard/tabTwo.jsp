@@ -4,7 +4,7 @@
                        <div class="ibox-title">
                            <h5>Loan Dispersed</h5>
                        </div>
-                       <div class="ibox-content" style="display: block;">
+                       <div class="ibox-content" style="display: block;background-color: #e7eaec; padding: 15px 20px 4px 20px;">
                            <form role="form" class="form-inline">
                                <%-- <jsp:include page="/WEB-INF/view/admin/loanDashboard/common/searchMenu.jsp" flush="true" /> --%>
                                <div class="form-group">

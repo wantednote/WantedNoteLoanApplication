@@ -2,6 +2,7 @@ package com.wn.loanapp.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.wn.loanapp.common.BaseController;
 import com.wn.loanapp.constants.Constants;
 import com.wn.loanapp.form.UserDetailsSessionForm;
+import com.wn.loanapp.service.UserLoginService;
 import com.wn.loanapp.util.Format;
 
 /**
@@ -22,6 +24,9 @@ import com.wn.loanapp.util.Format;
 //@RequestMapping(value = "/admin")
 public class AdminController extends BaseController{
 
+   @Autowired
+   private UserLoginService userLoginService;
+	
    //@RequestMapping(value={"/dashboard" , "/" ,"/home", "/index"})
    @RequestMapping(value="/admin" , method = RequestMethod.GET)
    public ModelAndView adminHome(HttpServletRequest request, UserDetailsSessionForm userDetailsSessionForm){
@@ -45,6 +50,30 @@ public class AdminController extends BaseController{
 			modelAndView = redirectToLoginPage(request.getServletPath());
 		}
 		log.debug("End of method adminHome()");
+		addSuccessOrErrorMessageToModel(modelAndView);
+		return modelAndView;
+   }
+   
+   @RequestMapping(value="/profile" , method = RequestMethod.GET)
+   public ModelAndView adminProfile(HttpServletRequest request, UserDetailsSessionForm userDetailsSessionForm){
+		log.debug("Start of method adminProfile");
+		ModelAndView modelAndView = null;
+		try {
+			if(Format.isStringNotEmptyAndNotNull(userDetailsSessionForm.getEmailAddress())){
+				modelAndView = new ModelAndView("profile");
+				modelAndView.addObject("url", Constants.USER_TYPE_ADMIN);
+				userDetailsSessionForm.setPageHeaderTitle(Constants.ADMIN_VIEW_PROFILE_HEADER_TITLE);
+				userDetailsSessionForm.setSelectedBaseLink(Constants.SELECTED_BASE_LINK_ADMIN_PROFILE);
+				userDetailsSessionForm.setSelectedSubLink(Constants.SELECTED_BASE_LINK_ADMIN_PROFILE);
+			}else{
+				modelAndView = redirectToLoginPage(request.getServletPath());
+			}
+		} catch (Exception e) {
+			log.error("exception occured : ",e);
+			saveErrorMessage("Some Exception occured! Please try again");
+			modelAndView = redirectToLoginPage(request.getServletPath());
+		}
+		log.debug("End of method adminProfile()");
 		addSuccessOrErrorMessageToModel(modelAndView);
 		return modelAndView;
 	}

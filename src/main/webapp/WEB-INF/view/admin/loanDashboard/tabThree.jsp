@@ -9,7 +9,7 @@
                        <div class="ibox-title">
                            <h5>Fund Received</h5>
                        </div>
-                       <div class="ibox-content" style="display: block;">
+                       <div class="ibox-content" style="display: block;background-color: #e7eaec; padding: 15px 20px 4px 20px;">
                            <form role="form" class="form-inline">
                                <%-- <jsp:include page="/WEB-INF/view/admin/loanDashboard/common/searchMenu.jsp" flush="true" /> --%>
                                <div class="form-group">
@@ -64,13 +64,13 @@
 
                                                <p>Select .CSV file to upload.</p>
 
-                                               <form action="uploadBankStatement" role="form" enctype="multipart/form-data" id="bankStatementForm" method="post">
+                                               <form role="form" enctype="multipart/form-data" id="bankStatementForm" method="post">
                                                    <!-- <div class="form-group"><label>Email</label> <input type="email" placeholder="Enter email" class="form-control"></div> -->
                                                    <div class="form-group">
                                                    		<input id="default_file" type="file" name="csvFile" class="form-control">
                                                    </div>
                                                    <div>
-                                                       <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>Upload</strong></button>
+                                                       <button class="btn btn-sm btn-primary pull-right m-t-n-xs" id="uploadBankStatementBtn" type="submit"><strong>Upload</strong></button>
                                                    </div>
                                                </form>
                                            </div>
