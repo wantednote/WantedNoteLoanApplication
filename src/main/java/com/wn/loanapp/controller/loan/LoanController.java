@@ -28,11 +28,11 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.wn.loanapp.common.BaseController;
 import com.wn.loanapp.constants.Constants;
+import com.wn.loanapp.dto.BankStatementDTO;
 import com.wn.loanapp.dto.DatatableJsonResponse;
 import com.wn.loanapp.dto.DistributerDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
 import com.wn.loanapp.dto.LoanDispersedDTO;
-import com.wn.loanapp.dto.RoleJson;
 import com.wn.loanapp.form.ApiResponceForm;
 import com.wn.loanapp.form.CSVForm;
 import com.wn.loanapp.form.LoanDetailsForm;
@@ -253,27 +253,37 @@ public class LoanController extends BaseController{
 	
 	@RequestMapping(value = "/uploadBankStatement", method = RequestMethod.POST)
 	public @ResponseBody ApiResponceForm uploadBankStatement(CSVForm csvForm) throws IOException {
+		String messageType = null;
+		String successOrErrorMessage;
 		ApiResponceForm apiResponceForm = new ApiResponceForm();
 		File file = convertMultiPartToFile(csvForm.getCsvFile());
-		/*List<RoleJson> mandatoryMissedList = new ArrayList<RoleJson>();
+		//List<BankStatementDTO> bankStatementDTOs = new ArrayList<BankStatementDTO>();
 		try (Reader reader = new FileReader(file);) {
 			@SuppressWarnings("unchecked")
-			CsvToBean<RoleJson> csvToBean = new CsvToBeanBuilder<RoleJson>(reader).withType(RoleJson.class)
+			CsvToBean<BankStatementDTO> csvToBean = new CsvToBeanBuilder<BankStatementDTO>(reader).withType(BankStatementDTO.class)
 					.withIgnoreLeadingWhiteSpace(true).build();
-			List<RoleJson> roleJsons = csvToBean.parse();
-			Iterator<RoleJson> studentListClone = roleJsons.iterator();
-			while (studentListClone.hasNext()) {
-				RoleJson roleJson = studentListClone.next();
-				if (roleJson.getRole() == null || roleJson.getRole().isEmpty()) {
-					mandatoryMissedList.add(roleJson);
-					studentListClone.remove();
-				}
-				mandatoryMissedList.add(roleJson);
-				studentListClone.remove();
+			List<BankStatementDTO> statementDTOs = csvToBean.parse();
+			/*Iterator<BankStatementDTO> iterator = statementDTOs.iterator();
+			while (iterator.hasNext()) {
+				BankStatementDTO roleJson = iterator.next();
+				bankStatementDTOs.add(roleJson);
+				iterator.remove();
+			}*/
+			if(Format.isCollectionNotEmtyAndNotNull(statementDTOs)){
+				commonService.updateBankStatement(statementDTOs);
+				messageType = Constants.SUCCESS;
+				successOrErrorMessage = "Bank Statement Uploaded Successfully";
+			}else{
+				messageType = Constants.FAILURE;
+				successOrErrorMessage = "Error while reading the file";
 			}
-		}*/
-		apiResponceForm.setMessageType(Constants.SUCCESS);
-		apiResponceForm.setSuccessOrErrorMessage("Bank Statement Uploaded Successfully");
+		}catch (Exception e) {
+			log.debug("Exception " + e);
+			messageType = Constants.FAILURE;
+			successOrErrorMessage = "Something went wrong";
+		}
+		apiResponceForm.setMessageType(messageType);
+		apiResponceForm.setSuccessOrErrorMessage(successOrErrorMessage);
 		return apiResponceForm;
 	}
 	

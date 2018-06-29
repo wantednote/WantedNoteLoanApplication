@@ -1,16 +1,15 @@
 package com.wn.loanapp.service.impl;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.ServletRequestDataBinder;
 
-import com.wn.loanapp.dto.DistributerDTO;
+import com.wn.loanapp.dto.BankStatementDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
 import com.wn.loanapp.dto.LoanDispersedDTO;
 import com.wn.loanapp.form.LoanDetailsForm;
@@ -86,6 +85,17 @@ public class CommonServiceImpl implements CommonService{
 	@Override
 	public Long getDispersedLoanDetailsCount(LoanDispersedForm loanDispersedForm) {
 		return commonRepository.getDispersedLoanDetailsCount(loanDispersedForm);
+	}
+
+	@Override
+	public void updateBankStatement(List<BankStatementDTO> bankStatementDTOs) {
+		bankStatementDTOs.forEach(bankStatementDTO -> {
+			try {
+				commonRepository.updateBankStatement(bankStatementDTO);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 }

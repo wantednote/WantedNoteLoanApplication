@@ -1,6 +1,7 @@
 package com.wn.loanapp.repository.impl;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,6 +13,7 @@ import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
+import com.wn.loanapp.dto.BankStatementDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
 import com.wn.loanapp.dto.LoanDispersedDTO;
 import com.wn.loanapp.form.LoanDetailsForm;
@@ -222,5 +224,28 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
             e.printStackTrace();
         }
 		return loanCount;
+	}
+
+
+	@Override
+	public void updateBankStatement(BankStatementDTO bankStatementDTO) throws SQLException{
+		Session hibernateSession = (Session) getPrimaryEntityManager().unwrap(Session.class);
+		Connection con = ((SessionImpl) hibernateSession).connection();
+		PreparedStatement preparedStatement = null;
+		StringBuilder sql = new StringBuilder("UPDATE wn_purchase_tbl set "
+				+ " settle_dte = ?, "
+				+ " settle_amt = ?, "
+				+ " b_settle_stat = ? "
+				+ " where online_payment_id = ?");
+		preparedStatement = con.prepareStatement(sql.toString());
+		try{
+			preparedStatement.setTimestamp(1, Format.convertStringDateToSqlTimestamp(bankStatementDTO.getSettleDate()));
+			preparedStatement.setDouble(2, Double.parseDouble(bankStatementDTO.getSettleAmount()));
+			preparedStatement.setString(3, "true");
+			preparedStatement.setString(4, bankStatementDTO.getOnlinePaymentId());
+			preparedStatement.executeUpdate();
+		}catch (SQLException e) {
+			throw new SQLException();
+		}
 	}
 }
