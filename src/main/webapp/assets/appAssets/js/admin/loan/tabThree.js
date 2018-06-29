@@ -40,93 +40,46 @@ function tabThreeData(){
 function getTabThreeCSVData(){
 	
 }
-var formdata = new FormData();;
-$('#default_file').change(function(){    
-    //on change event  
-    
-    if($(this).prop('files').length > 0)
-    {
-        file =$(this).prop('files')[0];
-        formdata.append("csvFile", file);
-    }
-});
+$("#uploadBankStatementBtn").click(function (event) {
 
-function uploadTabThreeCSVData(){
-	// Initialize the jQuery File Upload plugin
-    $('#upload').fileupload({
+    //stop submit the form, we will post it manually.
+    event.preventDefault();
 
-        // This element will accept file drag/drop uploading
-        dropZone: $('#drop'),
+    // Get form
+    var form = $('#bankStatementForm')[0];
 
-        // This function is called when a file is added to the queue;
-        // either via the browse button, or via drag/drop:
-        add: function (e, data) {
+	// Create an FormData object 
+    var data = new FormData(form);
 
-            var tpl = $('<li class="working"><input type="text" value="0" data-width="48" data-height="48"'+
-                ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /><p></p><span></span></li>');
+	// If you want to add an extra field for the FormData
+    //data.append("CustomField", "This is some extra data, testing");
 
-            // Append the file name and file size
-            tpl.find('p').text(data.files[0].name)
-                         .append('<i>' + formatFileSize(data.files[0].size) + '</i>');
+	// disabled the submit button
+    $("#uploadBankStatementBtn").prop("disabled", true);
 
-            // Add the HTML to the UL element
-            data.context = tpl.appendTo(ul);
+    $.ajax({
+        type: "POST",
+        enctype: 'multipart/form-data',
+        url: $("#appLink").val() +"uploadBankStatement",
+        data: data,
+        processData: false,
+        contentType: false,
+        cache: false,
+        timeout: 600000,
+        success: function (data) {
 
-            // Initialize the knob plugin
-            tpl.find('input').knob();
+            $("#result").text(data);
+            console.log("SUCCESS : ", data);
+            $("#btnSubmit").prop("disabled", false);
 
-            // Listen for clicks on the cancel icon
-            tpl.find('span').click(function(){
-
-                if(tpl.hasClass('working')){
-                    jqXHR.abort();
-                }
-
-                tpl.fadeOut(function(){
-                    tpl.remove();
-                });
-
-            });
-
-            // Automatically upload the file once it is added to the queue
-            var jqXHR = data.submit();
         },
+        error: function (e) {
 
-        progress: function(e, data){
+            $("#result").text(e.responseText);
+            console.log("ERROR : ", e);
+            $("#btnSubmit").prop("disabled", false);
 
-            // Calculate the completion percentage of the upload
-            var progress = parseInt(data.loaded / data.total * 100, 10);
-
-            // Update the hidden input field and trigger a change
-            // so that the jQuery knob plugin knows to update the dial
-            data.context.find('input').val(progress).change();
-
-            if(progress == 100){
-                data.context.removeClass('working');
-            }
-        },
-
-        fail:function(e, data){
-            // Something has gone wrong!
-            data.context.addClass('error');
         }
-
     });
-}
 
-//Helper function that formats the file sizes
-function formatFileSize(bytes) {
-    if (typeof bytes !== 'number') {
-        return '';
-    }
-
-    if (bytes >= 1000000000) {
-        return (bytes / 1000000000).toFixed(2) + ' GB';
-    }
-
-    if (bytes >= 1000000) {
-        return (bytes / 1000000).toFixed(2) + ' MB';
-    }
-
-    return (bytes / 1000).toFixed(2) + ' KB';
-}
+});

@@ -124,6 +124,10 @@ public class Constants {
 	 */
 	public static final String SELECTED_BASE_LINK_ADMIN_VIEW_LOAN= "loan";
 	
+	/**
+	 * Selected base link for admin profile
+	 */
+	public static final String SELECTED_BASE_LINK_ADMIN_PROFILE= "profile";
 	
 	/**
 	 * Selected base link for partner dashboard
@@ -137,6 +141,8 @@ public class Constants {
 	public static final String ADMIN_VIEW_ACTOR_HEADER_TITLE = "View Actors";
 	
 	public static final String ADMIN_VIEW_LOAN_HEADER_TITLE = "Loan Dashboard";
+	
+	public static final String ADMIN_VIEW_PROFILE_HEADER_TITLE = "My Profile";
 	
 	public static final int GET_FIRST_INDEX_OBJECT = 1;
 	

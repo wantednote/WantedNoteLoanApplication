@@ -87,11 +87,17 @@
 	</definition>
     <!-- End of Admin Actor Details Pages -->
     
-     <!-- Start of Admin Loan Dashboard Pages -->
+    <!-- Start of Admin Loan Dashboard Pages -->
 	<definition name="loanDashboard" extends="base.adminDefinitio">
 		<put-attribute name="adminBody" value="/WEB-INF/view/admin/loanDashboard/loanDashboard.jsp" />
 	</definition>
     <!-- End of Admin Loan Dashboard Pages -->
+    
+    <!-- Start of Admin Profile Pages -->
+	<definition name="profile" extends="base.adminDefinitio">
+		<put-attribute name="adminBody" value="/WEB-INF/view/admin/profile/profile.jsp" />
+	</definition>
+    <!-- End of Admin Profile Pages -->
     
     <!-- Start of Base Partner Dashboard definition -->
 	<definition name="base.partnerDefinitio" template="/layout/partnerLayout/partnerLayout.jsp">
