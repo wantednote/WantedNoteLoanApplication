@@ -116,7 +116,7 @@ public class ActorController extends BaseController{
 		} else {
 			modelAndView = redirectToLoginPage("/");
 		}
-		log.debug("End of method addRole");
+		log.debug("End of method addActors");
 		return modelAndView;
 	}
 	

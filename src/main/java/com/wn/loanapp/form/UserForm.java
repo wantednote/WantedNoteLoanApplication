@@ -10,6 +10,8 @@ public class UserForm {
 	
 	private String password;
 	
+	private String newPassword;
+	
 	private String name;
 	
 	private AccountStatusEnum accountStatus;
@@ -74,6 +76,20 @@ public class UserForm {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	/**
+	 * @return the newPassword
+	 */
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	/**
+	 * @param newPassword the newPassword to set
+	 */
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
 	}
 
 	/**

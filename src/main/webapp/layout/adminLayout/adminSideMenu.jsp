@@ -15,9 +15,11 @@
 	                    <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">${userDetailsSessionForm.name}</strong>
 	                    </span> <span class="text-muted text-xs block">${userDetailsSessionForm.userRoleName} <b class="caret"></b></span> </span> </a>
 	                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
-	                        <li><a href="#">Profile</a></li>
+	                        <!-- <li><a href="#">Profile</a></li>
 	                        <li><a href="#">Contacts</a></li>
-	                        <li><a href="#">Mailbox</a></li>
+	                        <li><a href="#">Mailbox</a></li> -->
+	                        <li><a href="<c:url value="/profile" />">Profile</a></li>
+	                        <li><a href="<c:url value="/profile" />">Setting</a></li>
 	                        <li class="divider"></li>
 	                        <%-- <li><a href="<%=request.getContextPath()%>/logout.note">Logout</a></li> --%>
 	                        <li><a href="<c:url value="/logout" />">Logout</a></li>

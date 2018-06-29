@@ -215,7 +215,7 @@ public class UserLoginServiceImpl implements UserLoginService {
 	 * @author mithun Mondal
 	 * @param sessionId
 	  */
-	private void  expireSession(String sessionId){
+	private void expireSession(String sessionId){
 		if(sessionId!=null){
 			SessionInformation sessionInformation=sessionRegistry.getSessionInformation(sessionId);
 			if(sessionInformation!=null) {
@@ -236,7 +236,7 @@ public class UserLoginServiceImpl implements UserLoginService {
 
 	@Override
 	public Boolean isValidUser(UserForm userForm) {
-		if(Format.isStringNotEmptyAndNotNull(userForm.getEmailAddress())  && Format.isStringNotEmptyAndNotNull(userForm.getPassword())) {
+		if(Format.isStringNotEmptyAndNotNull(userForm.getEmailAddress()) && Format.isStringNotEmptyAndNotNull(userForm.getPassword())) {
 			User user = userRepository.getUser(userForm);
 			if(Format.isObjectNotEmptyAndNotNull(user)) {
 				if (bCryptPasswordEncoder.matches(userForm.getPassword(), user.getPassword())) {
@@ -249,6 +249,41 @@ public class UserLoginServiceImpl implements UserLoginService {
 			}
 		}else {
 			return false;
+		}
+	}
+
+	@Override
+	public void updateProfile(UserForm userForm) throws UserOrPartnerNotFoundException{
+		if(userForm.getRoleName().equals(Constants.USER_TYPE_ADMIN)) {
+			User user = userRepository.getUser(userForm);
+			if(Format.isObjectNotEmptyAndNotNull(user)) {
+				if(Format.isStringNotEmptyAndNotNull(user.getName())) {
+					user.setName(userForm.getName());
+					user.setModifiedBy(userForm.getEmailAddress());
+					user.setModifiedOn(Format.getCurrentSqlDateTimeStamp());
+				}
+				userRepository.update(user);
+			}else {
+				throw new UserOrPartnerNotFoundException();
+			}
+		}
+	}
+
+	@Override
+	public void changePassword(UserForm userForm) throws UserOrPartnerNotFoundException{
+		if(userForm.getRoleName().equals(Constants.USER_TYPE_ADMIN)) {
+			User user = userRepository.getUser(userForm);
+			if(Format.isObjectNotEmptyAndNotNull(user)) {
+				if(Format.isStringNotEmptyAndNotNull(user.getPassword())) {
+					user.setPassword(bCryptPasswordEncoder.encode(userForm.getNewPassword()));
+					user.setModifiedBy(userForm.getEmailAddress());
+					user.setModifiedOn(Format.getCurrentSqlDateTimeStamp());
+				}
+				userRepository.update(user);
+				expireSession(user.getSessionID());
+			}else {
+				throw new UserOrPartnerNotFoundException();
+			}
 		}
 	}
 }

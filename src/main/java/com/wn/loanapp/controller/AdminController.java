@@ -7,11 +7,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.wn.loanapp.common.BaseController;
 import com.wn.loanapp.constants.Constants;
+import com.wn.loanapp.exception.EmailAddressAlreadyExitsException;
+import com.wn.loanapp.exception.UserOrPartnerNotFoundException;
 import com.wn.loanapp.form.UserDetailsSessionForm;
+import com.wn.loanapp.form.UserForm;
 import com.wn.loanapp.service.UserLoginService;
+import com.wn.loanapp.util.ActorRoleFormater;
 import com.wn.loanapp.util.Format;
 
 /**
@@ -78,6 +84,58 @@ public class AdminController extends BaseController{
 		return modelAndView;
 	}
     
+    @RequestMapping(value="profile", method=RequestMethod.POST)
+	public ModelAndView updateProfile(UserDetailsSessionForm userDetailsSessionForm, UserForm userForm, RedirectAttributes redirectAttributes) {
+		log.debug("Start of method updateProfile");
+		ModelAndView modelAndView = null;
+		String msg = null;
+		if (Format.isStringNotEmptyAndNotNull(userDetailsSessionForm.getEmailAddress())) {
+			modelAndView = new ModelAndView(new RedirectView("profile"));
+			userForm.setEmailAddress(userDetailsSessionForm.getEmailAddress());	
+			try {
+				userLoginService.updateProfile(userForm);
+				userDetailsSessionForm.setName(userForm.getName());
+				saveSuccessMessage("You have successfully update your profile");
+			} catch (UserOrPartnerNotFoundException e) {
+				saveErrorMessage("We are unable to find your account");
+			}
+		}else {
+			modelAndView = redirectToLoginPage("/");
+		}
+		userForm = null;
+		addSuccessOrErrorMessageToModel(modelAndView, redirectAttributes);
+		log.debug("End of method updateProfile");
+		return modelAndView;
+	}
+    
+    @RequestMapping(value="password", method=RequestMethod.POST)
+	public ModelAndView changePassword(UserDetailsSessionForm userDetailsSessionForm, UserForm userForm, RedirectAttributes redirectAttributes) {
+		log.debug("Start of method changePassword");
+		ModelAndView modelAndView = null;
+		String msg = null;
+		if (Format.isStringNotEmptyAndNotNull(userDetailsSessionForm.getEmailAddress())) {
+			modelAndView = new ModelAndView(new RedirectView("profile"));
+			userForm.setEmailAddress(userDetailsSessionForm.getEmailAddress());	
+			Boolean isValidUser = userLoginService.isValidUser(userForm);
+			if(isValidUser) {
+				try {
+					userLoginService.changePassword(userForm);
+					saveSuccessMessage("You have successfully changed your password");
+				} catch (UserOrPartnerNotFoundException e) {
+					saveErrorMessage("We are unable to find your account");
+				}
+			}else {
+				saveErrorMessage("The existing password you have entered is currently not matcing with us");
+			}
+		}else {
+			modelAndView = redirectToLoginPage("/");
+		}
+		userForm = null;
+		addSuccessOrErrorMessageToModel(modelAndView, redirectAttributes);
+		log.debug("End of method changePassword");
+		return modelAndView;
+	}
+   
     /*@RequestMapping(value={"/admin/dashboard","/sadmin/dashboard","/productmgr/dashboard","/dsa/dashboard"})
 	public ModelAndView dashboad(HttpServletRequest request , UserDetailsSessionForm userDetailsSessionForm) {
 		log.debug("start of method dashboad");
