@@ -23,4 +23,8 @@ public interface UserLoginService {
 	public void updateAccountStatus(UserForm userForm) throws UserOrPartnerNotFoundException;
 	
 	public Boolean isValidUser(UserForm userForm);
+	
+	public void updateProfile(UserForm userForm) throws UserOrPartnerNotFoundException;
+	
+	public void changePassword(UserForm userForm) throws UserOrPartnerNotFoundException;
 }
