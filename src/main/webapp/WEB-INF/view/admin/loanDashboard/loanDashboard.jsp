@@ -35,10 +35,13 @@
     margin: 0px 0;
     border-radius: 4px;
 }
+.folder-list li {
+    border-bottom: 1px solid #29384629;
+    display: block;
+}
 .folder-list-selected {
-    /* border-bottom: 1px solid #f8ac59;
-    border-top: 1px solid #f8ac59; */
-    background: #e7eaec;
+    /* background: #e7eaec; */
+    background: #f3f3f4;
 }
 .btn-group>.btn:first-child {
     margin-left: 0;
