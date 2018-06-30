@@ -7,6 +7,10 @@ $(document).ready(function() {
 		  buttonWidth:'248px'
 		 });
 		
+		 /*$(function(){
+			 ("#selected").css("background-color", "red");
+		 }*/
+		 
 		$(function() {
 		    var start = moment().subtract(29, 'days');
 		    var end = moment();

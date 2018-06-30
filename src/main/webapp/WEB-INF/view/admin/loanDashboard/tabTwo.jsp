@@ -25,6 +25,35 @@
 									    </select>
 	                               </div>
                                </c:if>
+                               <!-- <div class="btn-group dropup">
+								  <button type="button" class="btn btn-secondary">
+								    Verify
+								  </button>
+								  <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    <span class="sr-only">Toggle Dropdown</span>
+								  </button>
+								  <div class="dropdown-menu">
+								    Dropdown menu links
+								    <a class="dropdown-item" href="#">T</a>
+								    <a class="dropdown-item" href="#">F</a>
+								  </div>
+								</div> -->
+                               <!-- <div class="btn-group">
+								  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    Action
+								  </button>
+								  <div class="dropdown-menu">
+								    <a class="dropdown-item" href="#">T</a>
+								    <a class="dropdown-item" href="#">F</a>
+								  </div>
+							  </div> -->
+                               <!-- <div>
+										<select>
+										verify
+										  <option>T</option>
+										  <option selected="selected">F</option>
+										</select>
+                               </div> -->
                                <div class="form-group pull-right">
                                	<button style="border-radius: 0px;" type="button" class="btn btn-primary" onclick="getTabTwoRerereshData();"><i class="fa fa-refresh"></i> Search</button>
                                </div>

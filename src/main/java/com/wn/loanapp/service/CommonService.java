@@ -22,4 +22,5 @@ public interface CommonService {
 	public Long getDispersedLoanDetailsCount(LoanDispersedForm loanDispersedForm);
 	
 	public void updateBankStatement(List<BankStatementDTO> bankStatementDTOs);
+	
 }

@@ -23,4 +23,5 @@ public interface CommonRepository extends PrimaryGenericRepository<CommonEntity,
 	public Long getDispersedLoanDetailsCount(LoanDispersedForm loanDispersedForm);
 	
 	public void updateBankStatement(BankStatementDTO bankStatementDTO) throws SQLException;
+	
 }
