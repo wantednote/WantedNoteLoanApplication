@@ -1,6 +1,7 @@
 package com.wn.loanapp.repository.impl;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,6 +13,7 @@ import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
+import com.wn.loanapp.dto.BankStatementDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
 import com.wn.loanapp.dto.LoanDispersedDTO;
 import com.wn.loanapp.form.LoanDetailsForm;
@@ -69,8 +71,6 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
         return dtos;
 	}
 	
-	
-       
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public List<Object> getDistributers() {
@@ -151,7 +151,7 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
 				+" c.amount as amount, c.tn_date AS tnDate," 
 				+" c.repay_txn_id as repayTxnId, c.settle_amt as settleAmt, c.c_verify as verify" 
 				+" FROM api_request AS a INNER JOIN wn_purchase_tbl c ON a.order_no = c.txn_id "
-				+" WHERE c.block_status = '1' AND c.tranche_status = '1' AND c.b_settle_stat = 'f'"
+				+" WHERE c.block_status = '1' AND c.tranche_status = '1' "
 				+" AND pay_mode = 'CFS_LOAN'");
 		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getDistributer())) {
 			sql.append(" and a.distributor_id in " + loanDispersedForm.getDistributer());
@@ -161,6 +161,9 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
 		}
 		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getTnEndDate())){
 			sql.append(" AND Date(c.tn_date) <= '"+loanDispersedForm.getTnEndDate()+"'");
+		}
+		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getSettleState())){
+			sql.append(" AND c.b_settle_stat = '"+loanDispersedForm.getSettleState()+"'");
 		}
 		sql.append(" ORDER BY c.tn_date DESC, c.online_payment_id DESC");
 		if(Format.isIntegerNotEmtyAndNotZero(loanDispersedForm.getLength())) {
@@ -189,7 +192,7 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
 	public Long getDispersedLoanDetailsCount(LoanDispersedForm loanDispersedForm) {
 		StringBuilder sql = new StringBuilder("SELECT count (DISTINCT c.txn_id) FROM api_request AS a INNER JOIN "
 				+" wn_purchase_tbl c ON a.order_no = c.txn_id  WHERE c.block_status = '1' AND c.tranche_status = '1'"
-				+" AND c.b_settle_stat = 'f' AND pay_mode = 'CFS_LOAN'");
+				+" AND pay_mode = 'CFS_LOAN'");
 		
 		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getDistributer())) {
 			sql.append(" and a.distributor_id in " + loanDispersedForm.getDistributer());
@@ -199,6 +202,9 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
 		}
 		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getTnEndDate())){
 			sql.append(" AND Date(c.tn_date) <= '"+loanDispersedForm.getTnEndDate()+"'");
+		}
+		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getSettleState())){
+			sql.append(" AND c.b_settle_stat = '"+loanDispersedForm.getSettleState()+"'");
 		}
 		Session hibernateSession = (Session) getPrimaryEntityManager().unwrap(Session.class);
 		Connection con = ((SessionImpl) hibernateSession).connection();
@@ -222,5 +228,28 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
             e.printStackTrace();
         }
 		return loanCount;
+	}
+
+
+	@Override
+	public void updateBankStatement(BankStatementDTO bankStatementDTO) throws SQLException{
+		Session hibernateSession = (Session) getPrimaryEntityManager().unwrap(Session.class);
+		Connection con = ((SessionImpl) hibernateSession).connection();
+		PreparedStatement preparedStatement = null;
+		String sql = "UPDATE wn_purchase_tbl set settle_dte = ?, settle_amt = ?, b_settle_stat = ? where online_payment_id = ? ";
+		preparedStatement = con.prepareStatement(sql);
+		
+		preparedStatement.setTimestamp(1, Format.convertStringDateToSqlTimestamp(bankStatementDTO.getSettleDate()));
+		if(Format.isNotNull(bankStatementDTO.getSettleAmount())){
+			Double amount = Double.parseDouble(bankStatementDTO.getSettleAmount());
+			preparedStatement.setInt(2, amount.intValue());
+		}else{
+			preparedStatement.setInt(2, 0);
+		}
+		preparedStatement.setBoolean(3, true);
+		if(Format.isStringNotEmptyAndNotNull(bankStatementDTO.getOnlinePaymentId())){
+			preparedStatement.setString(4, bankStatementDTO.getOnlinePaymentId());
+			preparedStatement.executeUpdate();
+		}
 	}
 }

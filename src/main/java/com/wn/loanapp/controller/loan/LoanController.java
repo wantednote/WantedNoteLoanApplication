@@ -28,11 +28,11 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.wn.loanapp.common.BaseController;
 import com.wn.loanapp.constants.Constants;
+import com.wn.loanapp.dto.BankStatementDTO;
 import com.wn.loanapp.dto.DatatableJsonResponse;
 import com.wn.loanapp.dto.DistributerDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
 import com.wn.loanapp.dto.LoanDispersedDTO;
-import com.wn.loanapp.dto.RoleJson;
 import com.wn.loanapp.form.ApiResponceForm;
 import com.wn.loanapp.form.CSVForm;
 import com.wn.loanapp.form.LoanDetailsForm;
@@ -171,6 +171,7 @@ public class LoanController extends BaseController{
 		Integer count = 0;
 		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
 		try {
+			loanDispersedForm.setSettleState("f");
 			loanDispersedDTOs = commonService.getDispersedLoanDetails(loanDispersedForm);
 			if(Format.isCollectionEmtyOrNull(loanDispersedDTOs)){
 				loanDispersedDTOs = new ArrayList<>();
@@ -202,6 +203,7 @@ public class LoanController extends BaseController{
 		if(Format.isStringNotEmptyAndNotNull(distributers)) {
 			loanDispersedForm.setDistributer(distributers);
 		}
+		loanDispersedForm.setSettleState("f");
 		response.addHeader("Content-Type", "application/csv");
 		response.addHeader("Content-Disposition", "attachment; filename=loan_disperesed_details.csv");
 		response.setCharacterEncoding("UTF-8");
@@ -252,29 +254,128 @@ public class LoanController extends BaseController{
 	}
 	
 	@RequestMapping(value = "/uploadBankStatement", method = RequestMethod.POST)
-	public ApiResponceForm uploadBankStatement(CSVForm csvForm) throws IOException {
+	public @ResponseBody ApiResponceForm uploadBankStatement(CSVForm csvForm) throws IOException {
+		String messageType = null;
+		String successOrErrorMessage;
 		ApiResponceForm apiResponceForm = new ApiResponceForm();
 		File file = convertMultiPartToFile(csvForm.getCsvFile());
-		/*List<RoleJson> mandatoryMissedList = new ArrayList<RoleJson>();
+		//List<BankStatementDTO> bankStatementDTOs = new ArrayList<BankStatementDTO>();
 		try (Reader reader = new FileReader(file);) {
 			@SuppressWarnings("unchecked")
-			CsvToBean<RoleJson> csvToBean = new CsvToBeanBuilder<RoleJson>(reader).withType(RoleJson.class)
+			CsvToBean<BankStatementDTO> csvToBean = new CsvToBeanBuilder<BankStatementDTO>(reader).withType(BankStatementDTO.class)
 					.withIgnoreLeadingWhiteSpace(true).build();
-			List<RoleJson> roleJsons = csvToBean.parse();
-			Iterator<RoleJson> studentListClone = roleJsons.iterator();
-			while (studentListClone.hasNext()) {
-				RoleJson roleJson = studentListClone.next();
-				if (roleJson.getRole() == null || roleJson.getRole().isEmpty()) {
-					mandatoryMissedList.add(roleJson);
-					studentListClone.remove();
-				}
-				mandatoryMissedList.add(roleJson);
-				studentListClone.remove();
+			List<BankStatementDTO> statementDTOs = csvToBean.parse();
+			/*Iterator<BankStatementDTO> iterator = statementDTOs.iterator();
+			while (iterator.hasNext()) {
+				BankStatementDTO roleJson = iterator.next();
+				bankStatementDTOs.add(roleJson);
+				iterator.remove();
+			}*/
+			if(Format.isCollectionNotEmtyAndNotNull(statementDTOs)){
+				commonService.updateBankStatement(statementDTOs);
+				messageType = Constants.SUCCESS;
+				successOrErrorMessage = "Bank Statement Uploaded Successfully";
+			}else{
+				messageType = Constants.FAILURE;
+				successOrErrorMessage = "Error while reading the file";
 			}
-		}*/
-		apiResponceForm.setMessageType(Constants.SUCCESS);
-		apiResponceForm.setSuccessOrErrorMessage("Bank Statement Uploaded Successfully");
+		}catch (Exception e) {
+			log.debug("Exception " + e);
+			messageType = Constants.FAILURE;
+			successOrErrorMessage = "Something went wrong";
+		}
+		apiResponceForm.setMessageType(messageType);
+		apiResponceForm.setSuccessOrErrorMessage(successOrErrorMessage);
 		return apiResponceForm;
+	}
+	
+	@RequestMapping(value="receivedPaymentList", method=RequestMethod.POST)
+	public @ResponseBody DatatableJsonResponse receivedPaymentList(LoanDispersedForm loanDispersedForm) {
+		List<LoanDispersedDTO> loanDispersedDTOs = null;
+		Integer count = 0;
+		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
+		try {
+			loanDispersedForm.setSettleState("t");
+			loanDispersedDTOs = commonService.getDispersedLoanDetails(loanDispersedForm);
+			if(Format.isCollectionEmtyOrNull(loanDispersedDTOs)){
+				loanDispersedDTOs = new ArrayList<>();
+			}else{
+				count = commonService.getDispersedLoanDetailsCount(loanDispersedForm).intValue();
+			}
+		}catch (ParseException e) {
+			loanDispersedDTOs = new ArrayList<>();
+		}
+		datatableJsonResponse.setData(loanDispersedDTOs);
+		datatableJsonResponse.setRecordsTotal(count);
+		datatableJsonResponse.setRecordsFiltered(count);
+		return datatableJsonResponse;
+	}
+	
+	@RequestMapping(value = "/downloadrecievedpaymentlist", method = RequestMethod.GET)
+	@Transactional(readOnly = true)
+	public void downloadrecievedpaymentlist(HttpServletResponse response, 
+		@RequestParam(required=false) String startDate,
+		@RequestParam(required=false) String endDate,
+		@RequestParam(required=false) String distributers) {
+		
+		LoanDispersedForm loanDispersedForm = new LoanDispersedForm();
+		if(Format.isStringNotEmptyAndNotNull(startDate)) {
+			loanDispersedForm.setTnStartDate(startDate);
+		}
+		if(Format.isStringNotEmptyAndNotNull(endDate)) {
+			loanDispersedForm.setTnEndDate(endDate);
+		}
+		if(Format.isStringNotEmptyAndNotNull(distributers)) {
+			loanDispersedForm.setDistributer(distributers);
+		}
+		loanDispersedForm.setSettleState("t");
+		response.addHeader("Content-Type", "application/csv");
+		response.addHeader("Content-Disposition", "attachment; filename=recieved_payment_list.csv");
+		response.setCharacterEncoding("UTF-8");
+		
+		List<LoanDispersedDTO> loanDispersedDTOs = null;
+        try {
+        	PrintWriter out = response.getWriter();
+        	
+        	StringBuilder sb = new StringBuilder();
+        	sb.append("Txn Id");
+            sb.append(',');
+            sb.append("Online Payment Id");
+            sb.append(',');
+            sb.append("Retailer Name");
+            sb.append(',');
+            sb.append("Amount");
+            sb.append(',');
+            sb.append("Date");
+            sb.append(',');
+            sb.append("Is Verify");
+            sb.append('\n');
+            out.write(sb.toString());
+            loanDispersedDTOs = commonService.getDispersedLoanDetails(loanDispersedForm);
+        	if(Format.isCollectionNotEmtyAndNotNull(loanDispersedDTOs)) {
+        		loanDispersedDTOs.forEach(loanDispersedDTO -> {
+        			StringBuilder sb1 = new StringBuilder();
+                	sb1.append(loanDispersedDTO.getTxnId());
+                    sb1.append(',');
+                    sb1.append(loanDispersedDTO.getOnlinePaymentId());
+                    sb1.append(',');
+                    sb1.append(loanDispersedDTO.getRetailerName());
+                    sb1.append(',');
+                    sb1.append(loanDispersedDTO.getAmount());
+                    sb1.append(',');
+                    sb1.append(loanDispersedDTO.getTnDate());
+                    sb1.append(',');
+                    sb1.append(loanDispersedDTO.getVerify());
+                    sb1.append('\n');
+                    out.write(sb1.toString());
+        		});
+        	}
+            out.close();
+        }catch (IOException e) {
+        	throw new RuntimeException("There is an error while downloading csv", e);
+        } catch (ParseException e) {
+        	throw new RuntimeException("Parse exception while creating csv", e);
+		}
 	}
 	
 	private File convertMultiPartToFile(MultipartFile file) throws IOException {

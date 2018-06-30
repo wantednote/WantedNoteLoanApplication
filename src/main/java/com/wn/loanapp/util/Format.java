@@ -487,4 +487,17 @@ public class Format {
 	    Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
 	    return timestamp;
 	}
+	
+	public static Timestamp convertStringDateToSqlTimestamp(String date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date parsedTimeStamp = null;
+		try {
+			parsedTimeStamp = dateFormat.parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
+        return timestamp;
+    }
 }

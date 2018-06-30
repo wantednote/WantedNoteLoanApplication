@@ -1,7 +1,9 @@
 package com.wn.loanapp.repository;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import com.wn.loanapp.dto.BankStatementDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
 import com.wn.loanapp.dto.LoanDispersedDTO;
 import com.wn.loanapp.form.LoanDetailsForm;
@@ -19,4 +21,6 @@ public interface CommonRepository extends PrimaryGenericRepository<CommonEntity,
 	public List<LoanDispersedDTO> getDispersedLoanDetails(LoanDispersedForm loanDispersedForm);
 	
 	public Long getDispersedLoanDetailsCount(LoanDispersedForm loanDispersedForm);
+	
+	public void updateBankStatement(BankStatementDTO bankStatementDTO) throws SQLException;
 }

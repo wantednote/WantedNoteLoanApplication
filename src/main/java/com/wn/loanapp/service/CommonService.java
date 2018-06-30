@@ -3,6 +3,7 @@ package com.wn.loanapp.service;
 import java.text.ParseException;
 import java.util.List;
 
+import com.wn.loanapp.dto.BankStatementDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
 import com.wn.loanapp.dto.LoanDispersedDTO;
 import com.wn.loanapp.form.LoanDetailsForm;
@@ -19,4 +20,6 @@ public interface CommonService {
 	public List<LoanDispersedDTO> getDispersedLoanDetails(LoanDispersedForm loanDispersedForm)throws ParseException;
 	
 	public Long getDispersedLoanDetailsCount(LoanDispersedForm loanDispersedForm);
+	
+	public void updateBankStatement(List<BankStatementDTO> bankStatementDTOs);
 }
