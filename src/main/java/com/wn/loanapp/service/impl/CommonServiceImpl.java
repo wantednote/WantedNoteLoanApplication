@@ -89,13 +89,13 @@ public class CommonServiceImpl implements CommonService{
 
 	@Override
 	public void updateBankStatement(List<BankStatementDTO> bankStatementDTOs) {
-		bankStatementDTOs.forEach(bankStatementDTO -> {
+		for(BankStatementDTO bankStatementDTO:bankStatementDTOs){
 			try {
 				commonRepository.updateBankStatement(bankStatementDTO);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		});
+		}
 	}
 
 }

@@ -42,7 +42,7 @@
                            </form>
                        </div>
                        <div class="mail-box">
-			               <!-- <table class="table table-hover table-mail" id="loanDetails3">
+			                <table class="table table-hover table-mail" id="loanDetails3">
 				                <thead style="background: #f3f3f4;">
 					                <tr class="unread">
 					                	<th>TXN Id</th>
@@ -53,7 +53,7 @@
 					                	<th>Is Verify</th> 
 					                </tr>
 				                </thead>
-		                   </table> -->
+		                   </table> 
 	                   </div>
 	                   <div id="upload_tab_three_model" class="modal fade" aria-hidden="true">
                            <div class="modal-dialog">
@@ -64,7 +64,7 @@
 
                                                <p>Select .CSV file to upload.</p>
 
-                                               <form role="form" enctype="multipart/form-data" id="bankStatementForm" method="post">
+                                               <form enctype="multipart/form-data" id="bankStatementForm" method="post">
                                                    <!-- <div class="form-group"><label>Email</label> <input type="email" placeholder="Enter email" class="form-control"></div> -->
                                                    <div class="form-group">
                                                    		<input id="default_file" type="file" name="csvFile" class="form-control">

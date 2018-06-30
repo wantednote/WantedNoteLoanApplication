@@ -22,6 +22,8 @@ public class LoanDispersedForm {
 	
 	private String distributer;
 	
+	private String settleState;
+	
 	private int length;
 	
 	private int start;
@@ -164,6 +166,20 @@ public class LoanDispersedForm {
 	 */
 	public void setDistributer(String distributer) {
 		this.distributer = distributer;
+	}
+	
+	/**
+	 * @return the settleState
+	 */
+	public String getSettleState() {
+		return settleState;
+	}
+
+	/**
+	 * @param settleState the settleState to set
+	 */
+	public void setSettleState(String settleState) {
+		this.settleState = settleState;
 	}
 
 	/**

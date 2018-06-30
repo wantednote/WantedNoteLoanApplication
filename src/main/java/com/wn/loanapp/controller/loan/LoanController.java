@@ -171,6 +171,7 @@ public class LoanController extends BaseController{
 		Integer count = 0;
 		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
 		try {
+			loanDispersedForm.setSettleState("f");
 			loanDispersedDTOs = commonService.getDispersedLoanDetails(loanDispersedForm);
 			if(Format.isCollectionEmtyOrNull(loanDispersedDTOs)){
 				loanDispersedDTOs = new ArrayList<>();
@@ -202,6 +203,7 @@ public class LoanController extends BaseController{
 		if(Format.isStringNotEmptyAndNotNull(distributers)) {
 			loanDispersedForm.setDistributer(distributers);
 		}
+		loanDispersedForm.setSettleState("f");
 		response.addHeader("Content-Type", "application/csv");
 		response.addHeader("Content-Disposition", "attachment; filename=loan_disperesed_details.csv");
 		response.setCharacterEncoding("UTF-8");
@@ -285,6 +287,95 @@ public class LoanController extends BaseController{
 		apiResponceForm.setMessageType(messageType);
 		apiResponceForm.setSuccessOrErrorMessage(successOrErrorMessage);
 		return apiResponceForm;
+	}
+	
+	@RequestMapping(value="receivedPaymentList", method=RequestMethod.POST)
+	public @ResponseBody DatatableJsonResponse receivedPaymentList(LoanDispersedForm loanDispersedForm) {
+		List<LoanDispersedDTO> loanDispersedDTOs = null;
+		Integer count = 0;
+		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
+		try {
+			loanDispersedForm.setSettleState("t");
+			loanDispersedDTOs = commonService.getDispersedLoanDetails(loanDispersedForm);
+			if(Format.isCollectionEmtyOrNull(loanDispersedDTOs)){
+				loanDispersedDTOs = new ArrayList<>();
+			}else{
+				count = commonService.getDispersedLoanDetailsCount(loanDispersedForm).intValue();
+			}
+		}catch (ParseException e) {
+			loanDispersedDTOs = new ArrayList<>();
+		}
+		datatableJsonResponse.setData(loanDispersedDTOs);
+		datatableJsonResponse.setRecordsTotal(count);
+		datatableJsonResponse.setRecordsFiltered(count);
+		return datatableJsonResponse;
+	}
+	
+	@RequestMapping(value = "/downloadrecievedpaymentlist", method = RequestMethod.GET)
+	@Transactional(readOnly = true)
+	public void downloadrecievedpaymentlist(HttpServletResponse response, 
+		@RequestParam(required=false) String startDate,
+		@RequestParam(required=false) String endDate,
+		@RequestParam(required=false) String distributers) {
+		
+		LoanDispersedForm loanDispersedForm = new LoanDispersedForm();
+		if(Format.isStringNotEmptyAndNotNull(startDate)) {
+			loanDispersedForm.setTnStartDate(startDate);
+		}
+		if(Format.isStringNotEmptyAndNotNull(endDate)) {
+			loanDispersedForm.setTnEndDate(endDate);
+		}
+		if(Format.isStringNotEmptyAndNotNull(distributers)) {
+			loanDispersedForm.setDistributer(distributers);
+		}
+		loanDispersedForm.setSettleState("t");
+		response.addHeader("Content-Type", "application/csv");
+		response.addHeader("Content-Disposition", "attachment; filename=recieved_payment_list.csv");
+		response.setCharacterEncoding("UTF-8");
+		
+		List<LoanDispersedDTO> loanDispersedDTOs = null;
+        try {
+        	PrintWriter out = response.getWriter();
+        	
+        	StringBuilder sb = new StringBuilder();
+        	sb.append("Txn Id");
+            sb.append(',');
+            sb.append("Online Payment Id");
+            sb.append(',');
+            sb.append("Retailer Name");
+            sb.append(',');
+            sb.append("Amount");
+            sb.append(',');
+            sb.append("Date");
+            sb.append(',');
+            sb.append("Is Verify");
+            sb.append('\n');
+            out.write(sb.toString());
+            loanDispersedDTOs = commonService.getDispersedLoanDetails(loanDispersedForm);
+        	if(Format.isCollectionNotEmtyAndNotNull(loanDispersedDTOs)) {
+        		loanDispersedDTOs.forEach(loanDispersedDTO -> {
+        			StringBuilder sb1 = new StringBuilder();
+                	sb1.append(loanDispersedDTO.getTxnId());
+                    sb1.append(',');
+                    sb1.append(loanDispersedDTO.getOnlinePaymentId());
+                    sb1.append(',');
+                    sb1.append(loanDispersedDTO.getRetailerName());
+                    sb1.append(',');
+                    sb1.append(loanDispersedDTO.getAmount());
+                    sb1.append(',');
+                    sb1.append(loanDispersedDTO.getTnDate());
+                    sb1.append(',');
+                    sb1.append(loanDispersedDTO.getVerify());
+                    sb1.append('\n');
+                    out.write(sb1.toString());
+        		});
+        	}
+            out.close();
+        }catch (IOException e) {
+        	throw new RuntimeException("There is an error while downloading csv", e);
+        } catch (ParseException e) {
+        	throw new RuntimeException("Parse exception while creating csv", e);
+		}
 	}
 	
 	private File convertMultiPartToFile(MultipartFile file) throws IOException {
