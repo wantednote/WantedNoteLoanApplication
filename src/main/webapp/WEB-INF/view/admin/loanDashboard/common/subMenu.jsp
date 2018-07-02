@@ -1,5 +1,5 @@
 <%@ include file="/common/taglibs.jsp"%>
-<div class="col-lg-2">
+<div class="col-lg-2" style="background: #ebebed; min-height: 332%;">
 	<!-- <div class="mail-box-header"> -->
     <div class="ibox float-e-margins">
         <div class="ibox-content mailbox-content">

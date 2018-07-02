@@ -35,10 +35,13 @@
     margin: 0px 0;
     border-radius: 4px;
 }
+.folder-list li {
+    border-bottom: 1px solid #29384629;
+    display: block;
+}
 .folder-list-selected {
-    /* border-bottom: 1px solid #f8ac59;
-    border-top: 1px solid #f8ac59; */
-    background: #e7eaec;
+    /* background: #e7eaec; */
+    background: #29384629;
 }
 .btn-group>.btn:first-child {
     margin-left: 0;
@@ -50,6 +53,13 @@
 	max-height: 400px;
 	overflow-y: auto;
 	overflow-x: hidden;
+}
+.pagination {
+   display: inline-block;
+   padding-left: 30%;
+   margin: 0px 0;
+   border-radius: 4px;
+   margin-left: -32%;
 }
 </style>
 <div class="wrapper wrapper-content" id="container">		    
