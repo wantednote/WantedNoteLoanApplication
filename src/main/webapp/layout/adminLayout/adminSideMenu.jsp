@@ -33,26 +33,7 @@
 	            </li>
             </c:if>
             
-            <%-- <c:if test="${empty adminDetailsSessionForm.emailAddress}">
-	            <li class="nav-header">
-	                <div class="dropdown profile-element"> 
-	                	<span>
-	                    	<img alt="image" src="assets/img/logo/WantedNote1.png" style="height: 50px; width: 50px;"/>
-	                    	<!-- <img alt="image" class="img-circle" src="assets/img/logo/WantedNote1.png" style="height: 16%; width: 40%;border-radius: 0%;"/> -->
-	                    </span>
-	                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-	                    <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">WANTEDNOTE</strong>
-	                    </span> <span class="text-muted text-xs block">We Wanted. We Noted.</span> </span> </a>
-	                </div>
-	                <div class="logo-element">
-	                    <!-- WN -->
-	                    <!-- <img alt="image" class="img-circle" src="assets/img/logo/WantedNote1.png" style="height: 40px; width: 40px;"/> -->
-	                    <img alt="image" src="assets/img/logo/WantedNote1.png" style="height: 40px; width: 40px;"/>
-	                </div>
-	            </li>
-            </c:if> --%>
-            
-            <li id="leftMenu_admin">
+            <%-- <li id="leftMenu_admin">
                 <a href="<c:url value="/admin" />"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
             </li>
             <li id="leftMenu_actors">
@@ -60,7 +41,30 @@
             </li>
             <li id="leftMenu_loan">
                 <a href="<c:url value="/loan" />"><i class="fa fa-th-large"></i> <span class="nav-label">Loan</span></a>
-            </li>
+            </li> --%>
+            
+            <c:if test="${userDetailsSessionForm.selectedBaseLink == 'loan'}">
+            	<li id="1" onclick="changeSelection(1);" >
+	                <a href="#tab1"><i class="fa fa-th-large"></i> <span class="nav-label">Applied</span></a>
+	            </li>
+	            <li id="2" onclick="changeSelection(2);">
+	                <a href="#tab2"><i class="fa fa-th-large"></i> <span class="nav-label">Dispersed</span></a>
+	            </li>
+	            <li id="3" onclick="changeSelection(3);">
+	                <a href="#tab3"><i class="fa fa-th-large"></i> <span class="nav-label">Recieved</span></a>
+	            </li>
+	            <li id="4" onclick="changeSelection(4);">
+	                <a href="#tab4"><i class="fa fa-th-large"></i> <span class="nav-label">Settled</span></a>
+	            </li>
+	            <li id=5" onclick="changeSelection(5);">
+	                <a href="#tab5"><i class="fa fa-th-large"></i> <span class="nav-label">New</span></a>
+	            </li>
+	            <!-- <li id="leftMenu_admin">
+	                <a id="2" onclick="changeSelection(2);"href="#tab2"><i class="fa fa-th-large"></i> <span class="nav-label">Dispersed</span></a>
+	            </li> -->
+            </c:if>
+            
+            
             <!-- <li id="leftMenu_items">
                 <a href="items.note"><i class="fa fa-diamond"></i> <span class="nav-label">Items</span></a>
             </li>
@@ -80,6 +84,7 @@
 </nav>
 <script>
 $(document).ready(function() {
+	//$("#loanSubMenuDiv").hide();
 	var linkSelected = '${userDetailsSessionForm.selectedBaseLink}';
 	var linkSubSelected = '${userDetailsSessionForm.selectedSubLink}';
 	$("li").removeClass("active");

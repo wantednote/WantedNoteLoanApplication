@@ -1,5 +1,6 @@
 <%@ include file="/common/taglibs.jsp"%>
 <script src="<c:url value="/assets/appAssets/js/admin/loan/tabOne.js" />"></script>
+
 <div class="ibox float-e-margins">
                        <div class="ibox-title">
                            <h5>Loan Applied</h5>
@@ -47,4 +48,4 @@
 			                </thead>
 	                	</table>
 	                </div>
-                   </div>
+               </div> 

@@ -30,18 +30,17 @@
 
 <title>Wantednote | Loan</title>
 <style>
+.table{
+	min-width: 100%;
+	max-width: 100%;
+    margin-bottom: 20px;
+}
 .dataTables_info{
 	padding-left: 12px;
 }
-.pagination {
-    display: inline-block;
-    padding-left: 30%;
-    margin: 0px 0;
-    border-radius: 4px;
-}
 .folder-list li {
     border-bottom: 1px solid #29384629;
-    display: block;
+ 	display: block;
 }
 .folder-list-selected {
     /* background: #e7eaec; */
@@ -59,29 +58,33 @@
 	overflow-x: hidden;
 }
 .pagination {
-   display: inline-block;
+   display: inline-block; 
    padding-left: 30%;
    margin: 0px 0;
    border-radius: 4px;
    margin-left: -32%;
 }
+.nav.navbar-right > li > a {
+    color: #999c9e;
+    margin-top: 2px;
+}
 </style>
 <div class="wrapper wrapper-content" id="container">		    
 	<div class="row">
-	    <jsp:include page="/WEB-INF/view/admin/loanDashboard/common/subMenu.jsp" flush="true" />
-	    <div class="col-lg-10" id="tab1">
+	    <%-- <jsp:include page="/WEB-INF/view/admin/loanDashboard/common/subMenu.jsp" flush="true" /> --%>
+	    <div class="col-lg-12" id="tab1">
 	    	<jsp:include page="/WEB-INF/view/admin/loanDashboard/tabOne.jsp" flush="true" /> 
 	    </div>
-	    <div class="col-lg-10" id="tab2">
+	    <div class="col-lg-12" id="tab2">
 	    	<jsp:include page="/WEB-INF/view/admin/loanDashboard/tabTwo.jsp" flush="true" />
 	    </div>
-	    <div class="col-lg-10" id="tab3">
+	    <div class="col-lg-12" id="tab3">
 	    	<jsp:include page="/WEB-INF/view/admin/loanDashboard/tabThree.jsp" flush="true" />
 	    </div>
-	    <div class="col-lg-10" id="tab4">
+	    <div class="col-lg-12" id="tab4">
 	    	<jsp:include page="/WEB-INF/view/admin/loanDashboard/tabFour.jsp" flush="true" />
 	    </div>
-	    <div class="col-lg-10" id="tab5">
+	    <div class="col-lg-12" id="tab5">
 	    	<jsp:include page="/WEB-INF/view/admin/loanDashboard/tabFive.jsp" flush="true" />
 	    </div>
 	</div>
