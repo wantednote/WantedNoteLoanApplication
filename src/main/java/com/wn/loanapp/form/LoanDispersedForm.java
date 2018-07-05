@@ -18,7 +18,7 @@ public class LoanDispersedForm {
 	
 	private String settleAmt;
 	
-	private String verify;
+	private String isVerify;
 	
 	private String distributer;
 	
@@ -139,21 +139,21 @@ public class LoanDispersedForm {
 	public void setSettleAmt(String settleAmt) {
 		this.settleAmt = settleAmt;
 	}
-
-	/**
-	 * @return the verify
-	 */
-	public String getVerify() {
-		return verify;
-	}
-
-	/**
-	 * @param verify the verify to set
-	 */
-	public void setVerify(String verify) {
-		this.verify = verify;
-	}
 	
+	/**
+	 * @return the isVerify
+	 */
+	public String getIsVerify() {
+		return isVerify;
+	}
+
+	/**
+	 * @param isVerify the isVerify to set
+	 */
+	public void setIsVerify(String isVerify) {
+		this.isVerify = isVerify;
+	}
+
 	/**
 	 * @return the distributer
 	 */

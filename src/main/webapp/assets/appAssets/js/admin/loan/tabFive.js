@@ -1,5 +1,5 @@
 $(document).ready(function() {
-		$('#distributerList4').multiselect({
+		$('#distributerList5').multiselect({
 		  nonSelectedText: 'Select Distributer',
 		  enableFiltering: true,
 		  enableCaseInsensitiveFiltering: true,
@@ -11,9 +11,9 @@ $(document).ready(function() {
 		    var start = moment().subtract(29, 'days');
 		    var end = moment();
 		    function cb(start, end) {
-		        $('#reportrange4 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+		        $('#reportrange5 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
 		    }
-		    $('#reportrange4').daterangepicker({
+		    $('#reportrange5').daterangepicker({
 		        startDate: start,
 		        endDate: end,
 		        ranges: {

@@ -1,10 +1,5 @@
 <%@ include file="/common/taglibs.jsp"%>
 <script src="<c:url value="/assets/appAssets/js/admin/loan/tabThree.js" />"></script>
-
-<script src="<c:url value="/assets/fileUpload/js/jquery.knob.js" />"></script>
-<script src="<c:url value="/assets/fileUpload/js/jquery.ui.widget.js" />"></script>
-<script src="<c:url value="/assets/fileUpload/js/jquery.iframe-transport.js" />"></script>
-<script src="<c:url value="/assets/fileUpload/js/jquery.fileupload.js" />"></script>
 <style>
 /* The container */
 .container {
@@ -73,6 +68,10 @@
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
+/* style the upload button space */
+.btn-space {
+    margin-right: 5px;
+}
 </style>
 <div class="ibox float-e-margins">
                        <div class="ibox-title">
@@ -110,12 +109,12 @@
 	                               	<a style="border-radius: 0px;" class="btn btn-white" data-toggle="modal" href="#upload_tab_three_model"><i class="fa fa-upload"></i> Upload Bank Statement CSV</a>
 	                               </div> -->
 	                               <div class="input-group-btn">
-                                       <button data-toggle="dropdown" style="border-color: #c2c2c2;border-radius: 0px;" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false">Settle <span class="caret"></span></button>
+                                       <button data-toggle="dropdown" style="border-color: #c2c2c2;border-radius: 0px;" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false">Settle state <span class="caret"></span></button>
                                        <ul class="dropdown-menu pull-right">
                                            <li>
 	                                           <a href="#">
 	                                           		<label class="container">Settled
-													  <input type="checkbox" checked="checked">
+													  <input type="radio" value="t" checked="checked" name="isSettle">
 													  <span class="checkmark"></span>
 													</label>
 	                                           </a>
@@ -123,7 +122,7 @@
                                            <li>
                                            		<a href="#">
 	                                           		<label class="container">Not Settled
-													  <input type="checkbox">
+													  <input type="radio" value="f" name="isSettle">
 													  <span class="checkmark"></span>
 													</label>
 	                                           </a>
@@ -133,7 +132,7 @@
                                            <li>
 	                                           <a href="#">
 	                                           		<label class="container">All
-													  <input type="checkbox">
+													  <input type="radio" value="" name="isSettle" >
 													  <span class="checkmark"></span>
 													</label>
 	                                           </a>
@@ -152,12 +151,15 @@
 	                               </div>
                                </div>
                                <div class="form-group pull-right">
-                               	<button style="border-radius: 0px;" type="button" class="btn btn-primary" onclick="getTabThreeRerereshData();"><i class="fa fa-refresh"></i> Search</button>
+                               	<button style="border-radius: 0px;" type="button" class="btn btn-primary btn-space" onclick="getTabThreeRerereshData();"><i class="fa fa-refresh"></i> Search</button>
+                               </div>
+                               <div class="form-group pull-right">
+                               	<button style="border-radius: 0px;" type="button" class="btn btn-primary btn-space" onclick="updateRecievedData();"><i class=""></i> Update</button>
                                </div>
                            </form>
                        </div>
                        <div class="mail-box">
-			                <table class="table table-hover table-mail" id="loanDetails3">
+			                <table class="table table-hover table-mail display" id="loanDetails3">
 				                <thead style="background: #f3f3f4;">
 					                <tr class="unread">
 					                	<th>TXN Id</th>
@@ -165,7 +167,8 @@
 					                	<th>Name</th>
 					                	<th>Amount</th>
 					                	<th>Date</th>
-					                	<th>Is Verify</th> 
+					                	<th>Is Verify</th>
+					                	<th><input type="checkbox" id="checkAll" name="select_all" value="1"></th> 
 					                </tr>
 				                </thead>
 		                   </table> 
@@ -185,7 +188,10 @@
                                                    		<input id="default_file" type="file" name="csvFile" class="form-control">
                                                    </div>
                                                    <div>
-                                                       <button class="btn btn-sm btn-primary pull-right m-t-n-xs" id="uploadBankStatementBtn" type="submit"><strong>Upload</strong></button>
+                                                       <button class="btn btn-sm btn-primary pull-right m-t-n-xs btn-space" onclick="cancelBankStatementBtn();" type="button"><strong>Cancel</strong></button>
+                                                   </div>
+                                                   <div> 
+                                                       <button class="btn btn-sm btn-primary pull-right m-t-n-xs btn-space" id="uploadBankStatementBtn" type="submit"><strong>Upload</strong></button>
                                                    </div>
                                                </form>
                                            </div>

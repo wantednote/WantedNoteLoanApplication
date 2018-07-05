@@ -14,6 +14,7 @@
 			           <li id="2" onclick="changeSelection(2);"><a href="#tab2">&nbsp;&nbsp;&nbsp;&nbsp;Dispersed </a></li>
 			           <li id="3" onclick="changeSelection(3);"><a href="#tab3">&nbsp;&nbsp;&nbsp;&nbsp;Recieved </a></li>
 			           <li id="4" onclick="changeSelection(4);"><a href="#tab4">&nbsp;&nbsp;&nbsp;&nbsp;Settled </a></li>
+			           <li id="5" onclick="changeSelection(5);"><a href="#tab5">&nbsp;&nbsp;&nbsp;&nbsp;Name </a></li>
                 </ul>
                 <div class="clearfix"></div>
             </div>

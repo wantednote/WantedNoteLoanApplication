@@ -487,9 +487,40 @@ public class Format {
 	    Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
 	    return timestamp;
 	}
-	
+
 	public static Timestamp convertStringDateToSqlTimestamp(String date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat dateFormat1=new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		Date paresedTimeStamp = null;
+		
+		if(date.startsWith("/", 2)){
+			try{
+			paresedTimeStamp = dateFormat1.parse(date);
+			}catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}else if(date.startsWith("-", 4)){
+			try{
+				paresedTimeStamp = dateFormat2.parse(date);
+				}catch (ParseException e) {
+					e.printStackTrace();
+				}
+		}
+		Timestamp timestamp = new Timestamp(paresedTimeStamp.getTime());
+		return timestamp;
+        /*SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date parsedTimeStamp = null;
+		try {
+			parsedTimeStamp = dateFormat.parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
+        return timestamp;*/
+    }
+	public static Timestamp convertStringDateToDate(String date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date parsedTimeStamp = null;
 		try {
 			parsedTimeStamp = dateFormat.parse(date);

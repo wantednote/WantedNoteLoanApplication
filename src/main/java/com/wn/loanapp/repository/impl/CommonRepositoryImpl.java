@@ -123,19 +123,6 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
         catch (Exception e){
             e.printStackTrace();
         }
-		/*StringBuilder hql =  new StringBuilder("select count(*) from wn_purchase_tbl a "
-			    + " join wn_order b on b.odr_no=a.txn_id "
-			    + " join api_request c on c.order_no=b.odr_no "
-			    + " and c.distributor_id=b.distr_id where b.loan_flag='t' "
-			    + " and b.loan_accept_flg='f' and b.loan_decline_flg='f' " );
-		if(Format.isStringNotEmptyAndNotNull(loanDetailsForm.getTnDateStart())) {
-			hql.append(" and a.tn_date>='" + loanDetailsForm.getTnDateStart() + "'");
-		}
-		if(Format.isStringNotEmptyAndNotNull(loanDetailsForm.getTnDateEnd())) {
-			hql.append(" and a.tn_date<='" + loanDetailsForm.getTnDateEnd()+ "'");
-		}
-		Query query = getPrimaryEntityManager().createQuery(hql.toString());
-		long  loanCount = (Long)query.getSingleResult();*/
 		return loanCount;
 	}
 	
@@ -164,6 +151,12 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
 		}
 		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getSettleState())){
 			sql.append(" AND c.b_settle_stat = '"+loanDispersedForm.getSettleState()+"'");
+		}
+		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getIsVerify())){
+			sql.append(" AND c.c_verify = '"+loanDispersedForm.getIsVerify()+"'");
+		}
+		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getOnlinePaymentId())){
+			sql.append(" AND c.online_payment_id in "+loanDispersedForm.getOnlinePaymentId());
 		}
 		sql.append(" ORDER BY c.tn_date DESC, c.online_payment_id DESC");
 		if(Format.isIntegerNotEmtyAndNotZero(loanDispersedForm.getLength())) {
@@ -205,6 +198,12 @@ public class CommonRepositoryImpl extends PrimaryGenericRepositoryImpl<CommonEnt
 		}
 		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getSettleState())){
 			sql.append(" AND c.b_settle_stat = '"+loanDispersedForm.getSettleState()+"'");
+		}
+		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getIsVerify())){
+			sql.append(" AND c.c_verify = '"+loanDispersedForm.getIsVerify()+"'");
+		}
+		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getOnlinePaymentId())){
+			sql.append(" AND c.online_payment_id in "+loanDispersedForm.getOnlinePaymentId());
 		}
 		Session hibernateSession = (Session) getPrimaryEntityManager().unwrap(Session.class);
 		Connection con = ((SessionImpl) hibernateSession).connection();

@@ -1,21 +1,22 @@
 <%@ include file="/common/taglibs.jsp"%>
-<script src="<c:url value="/assets/appAssets/js/admin/loan/tabFour.js" />"></script>
+<script src="<c:url value="/assets/appAssets/js/admin/loan/tabFive.js" />"></script>
 
 <div class="ibox float-e-margins">
                        <div class="ibox-title">
-                           <h5>Loan Settled</h5>
+                           <h5>Loan ______</h5>
                        </div>
                        <div class="ibox-content" style="display: block;background-color: #e7eaec; padding: 15px 20px 4px 20px;">
                            <form role="form" class="form-inline">
                                <div class="form-group">
-                                   <div id="reportrange4" style="background: #fff; cursor: pointer; padding: 7px 10px;margin-top: -5px; border: 1px solid #ccc; width: 100%">
+                                   <div id="reportrange5" style="background: #fff; cursor: pointer; padding: 7px 10px;margin-top: -5px; border: 1px solid #ccc; width: 100%">
 									   <i class="fa fa-calendar"></i>&nbsp;
 									   <span></span> <i class="fa fa-caret-down"></i>
 								   </div>
                                </div>
                                <c:if test="${not empty distributers}">
 	                               <div class="form-group">
-	                                    <select id="distributerList4" name="distributer[]" multiple class="form-control" >
+	                                    <select id="distributerList5" name="distributer[]" multiple class="form-control" >
+	                                    	<!-- <option value="">Select Distributer</option> -->
 		                                    <c:forEach var="distributer" items="${distributers}">
 		                                    	<c:if test="${not empty distributer.distName}">
 													<option value="${distributer.distId}"> ${distributer.distName}</option>

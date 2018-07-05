@@ -98,5 +98,24 @@ public class CommonServiceImpl implements CommonService{
 		}
 	}
 
+	@Override
+	public void updatePaymentRecieved(LoanDispersedForm loanDispersedForm) {
+		List<LoanDispersedDTO> loanDispersedDTOs = commonRepository.getDispersedLoanDetails(loanDispersedForm);
+		if(Format.isCollectionNotEmtyAndNotNull(loanDispersedDTOs)){
+			for(LoanDispersedDTO loanDispersedDTO:loanDispersedDTOs){
+				
+				BankStatementDTO bankStatementDTO = new BankStatementDTO();
+				bankStatementDTO.setOnlinePaymentId(loanDispersedDTO.getOnlinePaymentId());
+				bankStatementDTO.setSettleAmount(loanDispersedDTO.getSettleAmt());
+				bankStatementDTO.setSettleDate(loanDispersedDTO.getTnDate());
+				try {
+					commonRepository.updateBankStatement(bankStatementDTO);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 
 }

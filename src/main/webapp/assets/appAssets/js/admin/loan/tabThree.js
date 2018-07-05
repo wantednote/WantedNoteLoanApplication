@@ -63,7 +63,7 @@ $(document).ready(function() {
 		    	
 		    	// disabled the submit button
 			    $("#uploadBankStatementBtn").prop("disabled", true);
-
+			    
 			    $.ajax({
 			        type: "POST",
 			        enctype: 'multipart/form-data',
@@ -124,10 +124,69 @@ $(document).ready(function() {
 			
 		});
 });
+function cancelBankStatementBtn(){
+	$("#upload_tab_three_model").hide();
+}
+function updateRecievedData(){
+	var list = "";
+	var count = 0;
+	$('input[name="onlinePaymentIds[]"]:checked').each(function() {
+	   var data = this.value;
+	   if(count > 0){
+		   list = list + ",";
+       }
+	   list = list + "'" + data + "'";
+	   count = count + 1;
+	});
+	list = "(" + list + ")";
+	
+//	alert(list);
+	
+	var data = {
+        "onlinePaymentId": list
+      }
+	  $.ajax({
+	      type : "POST",
+	      contentType : "application/json",
+	      url : $("#appLink").val() +"updatePaymentRecieved",
+	      data : JSON.stringify(data),
+	      dataType : 'json',
+	      timeout : 100000,
+	      success : function(data) {
+	          console.log("SUCCESS: ", data);
+	          if(data.messageType == "Success"){
+	        		toastr.options = {
+      	            closeButton: true,
+      	            progressBar: true,
+      	            showMethod: 'slideDown',
+      	            timeOut: 4000
+      	        };
+      	        toastr.success(data.successOrErrorMessage, 'Record Update');
+	        	}else{
+	        		toastr.options = {
+	        	            closeButton: true,
+	        	            progressBar: true,
+	        	            showMethod: 'slideDown',
+	        	            timeOut: 4000
+	        	        };
+	        		toastr.error(data.successOrErrorMessage, 'Record Update');
+	        	}
+	      },
+	      error : function(e) {
+	          console.log("ERROR: ", e);
+	      },
+	      done : function(e) {
+	          console.log("DONE");
+	      }
+	  });
+}
 function getTabThreeRerereshData(){
 	tabThreeData();
 }
+
 function tabThreeData(){
+	var isSettle = $('input[name=isSettle]:checked').val();
+	
 	var date1 = $('#reportrange3 span').html();
 	var dates1 = date1.split("-");
 	var startDate1 = dates1[0];
@@ -135,6 +194,7 @@ function tabThreeData(){
 	
 	var selectedDistributers1 = "";
 	var count1 = 0;
+	
     $('select#distributerList3').children('option:selected').each( function() {
          var $this = $(this);
          //selectedDistributers.push("'" + $this.val() + "'");
@@ -168,7 +228,7 @@ function tabThreeData(){
 		"iDisplayLength" : 25,
 		"bFilter" : true,
 		"aaSorting": [[4,"desc"]],
-		"ajax" : {
+		"ajax" : { 
 			"url" : $("#appLink").val() + "receivedPaymentList",
 			"type" : 'POST',
 			"data" : function(d) {
@@ -176,22 +236,12 @@ function tabThreeData(){
 				d.sortDirection = d.order[0].dir;
 				d.tnStartDate = startDate1;
 				d.tnEndDate = endDate1;
+				d.settleState = isSettle;
 				d.distributer = selectedDistributers1;
 				d.fieldForSorting = columns[d.order[0].column]
 			}
 		},
-		"columnDefs" : [
-		/*{
-			"class":          "details-control",
-		    "orderable":      false,
-		    "targets" : 0,
-		    "data":           "id",
-		    "width" : "10%",
-		    "defaultContent": "More",
-		    "render" : function (data, type, full) {
-		    	return '<span class="badge badge-primary">More</span>';
-			}
-		},*/{
+		"columnDefs" : [{
 			"targets" :0,
 			"searchable" : false,
 			'bSortable' : true,
@@ -235,7 +285,7 @@ function tabThreeData(){
 			"searchable" : false,
 			'bSortable' : true,
 			"data" : "amount",
-			"width" : "15%",
+			"width" : "10%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'
@@ -269,9 +319,27 @@ function tabThreeData(){
 					return data;
 				}
 			}
+		},{
+			"targets" :6,
+			"searchable" : false,
+			"orderable" : false,
+			'bSortable' : true,
+			"width" : "5%",
+			"render" : function (data, type, full, meta) {
+				if (data == null || data == "") {
+					return '<input type="checkbox" name="onlinePaymentIds[]" value='+full.onlinePaymentId+'>'
+				}
+			}
 		}]
 	});
+	 $('#checkAll').on('click', function(){
+	      // Get all rows with search applied
+	      var rows = dt.rows({ 'search': 'applied' }).nodes();
+	      // Check/uncheck checkboxes for all rows in the table
+	      $('input[type="checkbox"]', rows).prop('checked', this.checked);
+	   });
 }
+
 function getTabThreeCSVData(){
 	var date = $('#reportrange3 span').html();
 	var dates = date.split("-");

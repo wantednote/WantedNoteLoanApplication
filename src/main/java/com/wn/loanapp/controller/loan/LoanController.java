@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -171,7 +172,6 @@ public class LoanController extends BaseController{
 		Integer count = 0;
 		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
 		try {
-			loanDispersedForm.setSettleState("f");
 			loanDispersedDTOs = commonService.getDispersedLoanDetails(loanDispersedForm);
 			if(Format.isCollectionEmtyOrNull(loanDispersedDTOs)){
 				loanDispersedDTOs = new ArrayList<>();
@@ -295,7 +295,6 @@ public class LoanController extends BaseController{
 		Integer count = 0;
 		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
 		try {
-			loanDispersedForm.setSettleState("t");
 			loanDispersedDTOs = commonService.getDispersedLoanDetails(loanDispersedForm);
 			if(Format.isCollectionEmtyOrNull(loanDispersedDTOs)){
 				loanDispersedDTOs = new ArrayList<>();
@@ -309,6 +308,24 @@ public class LoanController extends BaseController{
 		datatableJsonResponse.setRecordsTotal(count);
 		datatableJsonResponse.setRecordsFiltered(count);
 		return datatableJsonResponse;
+	}
+	
+	@RequestMapping(value="updatePaymentRecieved", method=RequestMethod.POST)
+	public @ResponseBody ApiResponceForm updatePaymentRecieved(@RequestBody LoanDispersedForm loanDispersedForm){
+		ApiResponceForm apiResponceForm = new ApiResponceForm();
+		String messageType = null;
+		String successOrErrorMessage = null;
+		try{
+			commonService.updatePaymentRecieved(loanDispersedForm);
+			messageType = Constants.SUCCESS;
+			successOrErrorMessage = "Records updated successfully";
+		}catch (Exception e) {
+			messageType = Constants.FAILURE;
+			successOrErrorMessage = "Something went wrong";
+		}
+		apiResponceForm.setMessageType(messageType);
+		apiResponceForm.setSuccessOrErrorMessage(successOrErrorMessage);
+		return apiResponceForm;
 	}
 	
 	@RequestMapping(value = "/downloadrecievedpaymentlist", method = RequestMethod.GET)

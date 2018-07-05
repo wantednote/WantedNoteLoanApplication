@@ -23,4 +23,5 @@ public interface CommonService {
 	
 	public void updateBankStatement(List<BankStatementDTO> bankStatementDTOs);
 	
+	public void updatePaymentRecieved(LoanDispersedForm loanDispersedForm);
 }

@@ -20,7 +20,11 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
-  
+
+<!--
+
+//-->
+</script>  
   
 <script src="<c:url value="/assets/appAssets/js/admin/loan/loan.js" />"></script>
 
@@ -76,6 +80,12 @@
 	    </div>
 	    <div class="col-lg-10" id="tab4">
 	    	<jsp:include page="/WEB-INF/view/admin/loanDashboard/tabFour.jsp" flush="true" />
+	    </div>
+	    <div class="col-lg-10" id="tab5">
+	    	<jsp:include page="/WEB-INF/view/admin/loanDashboard/tabFive.jsp" flush="true" />
+	    </div>
+	    <div class="col-lg-10" id="tab5">
+	    	<jsp:include page="/WEB-INF/view/admin/loanDashboard/tabSix.jsp" flush="true" />
 	    </div>
 	</div>
 </div>

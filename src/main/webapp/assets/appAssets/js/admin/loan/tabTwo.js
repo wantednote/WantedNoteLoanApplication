@@ -7,6 +7,16 @@ $(document).ready(function() {
 		  buttonWidth:'150px'
 		 });
 		
+		/*$('#submit').click(function(){
+			var verify1 = $('#verifyList1');
+			if(verify1.val===''){
+				alert("please select any item from verify list and then proceed!");
+				$('#verifyList1').focus();
+				return false;
+			}
+			else return;
+		});*/
+		
 		 /*$(function(){
 			 ("#selected").css("background-color", "red");
 		 }*/
@@ -37,13 +47,16 @@ function getTabTwoRerereshData(){
 	tabTwoData();
 }
 function tabTwoData(){
+	var isVerified = $('input[name=isverify]:checked').val();
+	
 	var date1 = $('#reportrange2 span').html();
 	var dates1 = date1.split("-");
 	var startDate1 = dates1[0];
 	var endDate1 = dates1[1];
-	
+
 	var selectedDistributers1 = "";
 	var count1 = 0;
+	
     $('select#distributerList2').children('option:selected').each( function() {
          var $this = $(this);
          //selectedDistributers.push("'" + $this.val() + "'");
@@ -54,6 +67,8 @@ function tabTwoData(){
          selectedDistributers1 = selectedDistributers1 + "'" + $this.val() + "'";
          count1 = count1 + 1;
     });
+    
+      
     if(selectedDistributers1 !=""){
     	selectedDistributers1 = "(" + selectedDistributers1 + ")";
     }
@@ -62,7 +77,9 @@ function tabTwoData(){
 	var rowCount = 0;
 	var columns = ["txnId", "onlinePaymentId", "retailerName", "amount", "tnDate" ,"verify"];
 	var dt = $('#loanDetails2').DataTable({
-        responsive: true,
+        
+		
+		responsive: true,
         //"dom": 'T<"clear">lfrtip',
         /* "tableTools": {
             "sSwfPath": "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
@@ -85,6 +102,8 @@ function tabTwoData(){
 				d.sortDirection = d.order[0].dir;
 				d.tnStartDate = startDate1;
 				d.tnEndDate = endDate1;
+				d.isVerify = isVerified;
+				d.settleState = "f";
 				d.distributer = selectedDistributers1;
 				d.fieldForSorting = columns[d.order[0].column]
 			}
