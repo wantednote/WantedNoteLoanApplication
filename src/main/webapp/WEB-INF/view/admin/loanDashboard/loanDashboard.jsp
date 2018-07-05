@@ -84,9 +84,6 @@
 	    <div class="col-lg-10" id="tab5">
 	    	<jsp:include page="/WEB-INF/view/admin/loanDashboard/tabFive.jsp" flush="true" />
 	    </div>
-	    <div class="col-lg-10" id="tab5">
-	    	<jsp:include page="/WEB-INF/view/admin/loanDashboard/tabSix.jsp" flush="true" />
-	    </div>
 	</div>
 </div>
 <script type="text/javascript">
