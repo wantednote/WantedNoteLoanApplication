@@ -16,11 +16,17 @@ public class LoanDispersedForm {
 	
 	private String repayTxnId;
 	
+	private String repayStartDate;
+	
+	private String repayEndDate;
+	
 	private String settleAmt;
 	
 	private String isVerify;
 	
 	private String distributer;
+	
+	private String retailer;
 	
 	private String settleState;
 	
@@ -126,6 +132,35 @@ public class LoanDispersedForm {
 		this.repayTxnId = repayTxnId;
 	}
 
+	
+	/**
+	 * @return the repayStartDate
+	 */
+	public String getRepayStartDate() {
+		return repayStartDate;
+	}
+
+	/**
+	 * @param repayStartDate the repayStartDate to set
+	 */
+	public void setRepayStartDate(String repayStartDate) {
+		this.repayStartDate = repayStartDate;
+	}
+
+	/**
+	 * @return the repayEndDate
+	 */
+	public String getRepayEndDate() {
+		return repayEndDate;
+	}
+
+	/**
+	 * @param repayEndDate the repayEndDate to set
+	 */
+	public void setRepayEndDate(String repayEndDate) {
+		this.repayEndDate = repayEndDate;
+	}
+
 	/**
 	 * @return the settleAmt
 	 */
@@ -168,6 +203,21 @@ public class LoanDispersedForm {
 		this.distributer = distributer;
 	}
 	
+	
+	/**
+	 * @return the retailer
+	 */
+	public String getRetailer() {
+		return retailer;
+	}
+
+	/**
+	 * @param retailer the retailer to set
+	 */
+	public void setRetailer(String retailer) {
+		this.retailer = retailer;
+	}
+
 	/**
 	 * @return the settleState
 	 */

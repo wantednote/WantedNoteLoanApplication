@@ -117,5 +117,93 @@ public class CommonServiceImpl implements CommonService{
 		}
 	}
 
+	@Override
+	public List<LoanDispersedDTO> getInvoicesLoanDetails(LoanDispersedForm loanDispersedForm) throws ParseException {
+		/*if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getTnStartDate())){
+			SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+			String str = loanDispersedForm.getTnStartDate().trim();
+			Date d = dateFormat.parse(str);
+			dateFormat.applyPattern("yyyy-MM-dd");
+			String output = dateFormat.format(d);
+			loanDispersedForm.setTnEndDate(output);
+		}
+		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getTnEndDate())) {
+			SimpleDateFormat sdf1 = new SimpleDateFormat("MMMM dd, yyyy");
+			String str1 = loanDispersedForm.getTnEndDate().trim();
+			Date d1 = sdf1.parse(str1);
+			sdf1.applyPattern("yyyy-MM-dd");
+			String output1 = sdf1.format(d1);
+			loanDispersedForm.setTnEndDate(output1);
+		}*/
+		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getTnStartDate())) {
+			SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");
+			String str = loanDispersedForm.getTnStartDate().trim();
+			Date d = sdf.parse(str);
+			sdf.applyPattern("yyyy-MM-dd");
+			String output = sdf.format(d);
+			loanDispersedForm.setTnStartDate(output);
+			
+		}
+		if(Format.isStringNotEmptyAndNotNull(loanDispersedForm.getTnEndDate())) {
+			SimpleDateFormat sdf1 = new SimpleDateFormat("MMMM dd, yyyy");
+			String str1 = loanDispersedForm.getTnEndDate().trim();
+			Date d1 = sdf1.parse(str1);
+			sdf1.applyPattern("yyyy-MM-dd");
+			String output1 = sdf1.format(d1);
+			loanDispersedForm.setTnEndDate(output1);
+		}
+		return commonRepository.getInvoicesLoanDetails(loanDispersedForm);
+	}
+
+	@Override
+	public Long getInvoicesLoanDetailsCount(LoanDispersedForm loanDispersedForm) {
+		return commonRepository.getInvoicesLoanDetailsCount(loanDispersedForm);
+	}
+
+	@Override
+	public void updatePendingLoans(List<BankStatementDTO> bankStatementDTOs) {
+		for(BankStatementDTO bankStatementDTO:bankStatementDTOs){
+			try {
+				commonRepository.updatePendingLoans(bankStatementDTO);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public List<Object> getRetailsers() {
+		return commonRepository.getRetailers();
+	}
+
+	@Override
+	public void updateDistributorInvoiceLoans(List<BankStatementDTO> bankStatementDTOs) {
+		for(BankStatementDTO bankStatementDTO:bankStatementDTOs){
+			try {
+				commonRepository.updateDistributorInvoice(bankStatementDTO);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public void updateDistributorInvoiceRecieved(LoanDispersedForm loanDispersedForm) {
+		List<LoanDispersedDTO> loanDispersedDTOs = commonRepository.getInvoicesLoanDetails(loanDispersedForm);
+		if(Format.isCollectionNotEmtyAndNotNull(loanDispersedDTOs)){
+			for(LoanDispersedDTO loanDispersedDTO:loanDispersedDTOs){
+				
+				BankStatementDTO bankStatementDTO = new BankStatementDTO();
+				bankStatementDTO.setOnlinePaymentId(loanDispersedDTO.getOnlinePaymentId());
+				bankStatementDTO.setSettleAmount(loanDispersedDTO.getSettleAmt());
+				bankStatementDTO.setSettleDate(loanDispersedDTO.getTnDate());
+				try {
+					commonRepository.updateBankStatement(bankStatementDTO);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
 }

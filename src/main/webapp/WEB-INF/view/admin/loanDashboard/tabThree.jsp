@@ -99,15 +99,6 @@
 										    </select>
 		                               </div>&nbsp;&nbsp;
 	                               </c:if>
-	                               <!-- <div class="form-group pull-right">
-	                               	<button style="border-radius: 0px;" type="button" class="btn btn-primary" onclick="getTabThreeRerereshData();"><i class="fa fa-refresh"></i> Search</button>
-	                               </div>
-	                               <div class="form-group pull-right">
-	                               	<button style="border-radius: 0px;" type="button" class="btn btn-white" onclick="getTabThreeCSVData();"><i class="fa fa-download"></i> Download CSV</button>
-	                               </div>
-	                               <div class="form-group pull-right">
-	                               	<a style="border-radius: 0px;" class="btn btn-white" data-toggle="modal" href="#upload_tab_three_model"><i class="fa fa-upload"></i> Upload Bank Statement CSV</a>
-	                               </div> -->
 	                               <div class="input-group-btn">
                                        <button data-toggle="dropdown" style="border-color: #c2c2c2;border-radius: 0px;" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false">Settle state <span class="caret"></span></button>
                                        <ul class="dropdown-menu pull-right">
@@ -143,8 +134,8 @@
 	                                   <button data-toggle="dropdown" style="border-color: #c2c2c2;border-radius: 0px;" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false">Action <span class="caret"></span></button>
 	                                   <ul class="dropdown-menu pull-right">
 	                                       <li><a href="#upload_tab_three_model" data-toggle="modal"> <i class="fa fa-upload"></i> Upload Bank Statement CSV</a></li>
+	                                       <li><a href="#upload_tab_three_pl_model" data-toggle="modal"> <i class="fa fa-upload"></i> Upload PendingLoans CSV</a></li>
 	                                       <li onclick="getTabThreeCSVData();"><a href="#"> <i class="fa fa-download"></i> Download CSV</a></li>
-	                                       <!-- <li><a href="#">Something else here</a></li> -->
 	                                       <li class="divider"></li>
 	                                       <li onclick="getTabThreeRerereshData();"><a href="#"> <i class="fa fa-refresh"></i> Search</a></li>
 	                                   </ul>
@@ -183,7 +174,6 @@
                                                <p>Select .CSV file to upload.</p>
 
                                                <form enctype="multipart/form-data" id="bankStatementForm" method="post">
-                                                   <!-- <div class="form-group"><label>Email</label> <input type="email" placeholder="Enter email" class="form-control"></div> -->
                                                    <div class="form-group">
                                                    		<input id="default_file" type="file" name="csvFile" class="form-control">
                                                    </div>
@@ -195,12 +185,33 @@
                                                    </div>
                                                </form>
                                            </div>
-                                           <!-- <div class="col-sm-6"><h4>Not a member?</h4>
-                                               <p>You can create an account:</p>
-                                               <p class="text-center">
-                                                   <a href=""><i class="fa fa-sign-in big-icon"></i></a>
-                                               </p>
-                                       	   </div> -->
+                                   </div>
+                               </div>
+                               </div>
+                           </div>
+                       </div>
+	                   <div id="upload_tab_three_pl_model" class="modal fade" aria-hidden="true">
+                           <div class="modal-dialog">
+                               <div class="modal-content">
+                                   <div class="modal-body">
+                                       <div class="row">
+                                           <div class="col-sm-6 b-r"><h3 class="m-t-none m-b">Upload Statement</h3>
+
+                                               <p>Select .CSV file to upload.</p>
+
+                                               <form enctype="multipart/form-data" id="pendingLoansForm" method="post">
+                                                   <!-- <div class="form-group"><label>Email</label> <input type="email" placeholder="Enter email" class="form-control"></div> -->
+                                                   <div class="form-group">
+                                                   		<input id="default_file" type="file" name="csvFile" class="form-control">
+                                                   </div>
+                                                   <div>
+                                                       <button class="btn btn-sm btn-primary pull-right m-t-n-xs btn-space" onclick="cancelPendingLoansBtn();" type="button"><strong>Cancel</strong></button>
+                                                   </div>
+                                                   <div> 
+                                                       <button class="btn btn-sm btn-primary pull-right m-t-n-xs btn-space" id="uploadPendingLoansBtn" type="submit"><strong>Upload</strong></button>
+                                                   </div>
+                                               </form>
+                                           </div>
                                    </div>
                                </div>
                                </div>

@@ -33,6 +33,21 @@ function getTabOneRerereshData(){
 	tabOneData();
 }
 function tabOneData(){
+	var loanAppliedFlag = "f";
+    var loanPendingFlag = "f";
+    
+	var loanStatus = $('input[name=loanStatus]:checked').val();
+	if(loanStatus == "t"){
+		loanAppliedFlag = "t";
+	    loanPendingFlag = "f";
+	}else if(loanStatus == "f"){
+		loanAppliedFlag = "f";
+	    loanPendingFlag = "t";
+	}else {
+		loanAppliedFlag = "f";
+	    loanPendingFlag = "f";
+	}
+	
 	var date = $('#reportrange1 span').html();
 	var dates = date.split("-");
 	var startDate = dates[0];
@@ -40,6 +55,7 @@ function tabOneData(){
 	
 	var selectedDistributers = "";
 	var count = 0;
+	
     $('select#distributerList1').children('option:selected').each( function() {
          var $this = $(this);
          //selectedDistributers.push("'" + $this.val() + "'");
@@ -58,11 +74,7 @@ function tabOneData(){
 	var rowCount = 0;
 	var columns = ["orderNo", "distributorName", "firstName", "tnDate", "amount" ];
 	var dt = $('#loanDetails1').DataTable({
-        responsive: true,
-        //"dom": 'T<"clear">lfrtip',
-        /* "tableTools": {
-            "sSwfPath": "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
-        } */
+        "responsive": true,
         "processing" : true,
 		"serverSide" : true,
 		"sort" : "position",
@@ -72,7 +84,7 @@ function tabOneData(){
 		"lengthChange" : false,
 		"iDisplayLength" : 25,
 		"bFilter" : true,
-		"aaSorting": [[3,"desc"]],
+		"aaSorting": [[ 3, 'desc' ]],
 		"ajax" : {
 			"url" : $("#appLink").val() + "loanList",
 			"type" : 'POST',
@@ -81,22 +93,14 @@ function tabOneData(){
 				d.sortDirection = d.order[0].dir;
 				d.tnDateStart = startDate;
 				d.tnDateEnd = endDate;
+				d.loanApplied = loanAppliedFlag;
+				d.loanPending = loanPendingFlag;
 				d.distributer = selectedDistributers;
-				d.fieldForSorting = columns[d.order[0].column]
+				d.fieldForSorting = columns[d.order[0].column];
 			}
 		},
 		"columnDefs" : [
-		/*{
-			"class":          "details-control",
-		    "orderable":      false,
-		    "targets" : 0,
-		    "data":           "id",
-		    "width" : "10%",
-		    "defaultContent": "More",
-		    "render" : function (data, type, full) {
-		    	return '<span class="badge badge-primary">More</span>';
-			}
-		},*/{
+		{
 			"targets" :0,
 			"searchable" : false,
 			'bSortable' : true,
@@ -127,7 +131,7 @@ function tabOneData(){
 			"searchable" : false,
 			'bSortable' : true,
 			"data" : "firstName",
-			"width" : "30%",
+			"width" : "25%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'
@@ -153,7 +157,7 @@ function tabOneData(){
 			"searchable" : false,
 			'bSortable' : false,
 			"data" : "amount",
-			"width" : "10%",
+			"width" : "15%",
 			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<span>-<span>'

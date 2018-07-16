@@ -7,6 +7,10 @@ public class BankStatementDTO {
 	private String settleAmount;
 	
 	private String onlinePaymentId;
+	
+	private String repayDate;
+	
+	private String repayAmount;
 
 	/**
 	 * @return the settleDate
@@ -48,6 +52,34 @@ public class BankStatementDTO {
 	 */
 	public void setOnlinePaymentId(String onlinePaymentId) {
 		this.onlinePaymentId = onlinePaymentId;
+	}
+
+	/**
+	 * @return the repayDate
+	 */
+	public String getRepayDate() {
+		return repayDate;
+	}
+
+	/**
+	 * @param repayDate the repayDate to set
+	 */
+	public void setRepayDate(String repayDate) {
+		this.repayDate = repayDate;
+	}
+
+	/**
+	 * @return the repayAmount
+	 */
+	public String getRepayAmount() {
+		return repayAmount;
+	}
+
+	/**
+	 * @param repayAmount the repayAmount to set
+	 */
+	public void setRepayAmount(String repayAmount) {
+		this.repayAmount = repayAmount;
 	}
 	
 }

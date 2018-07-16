@@ -1,4 +1,4 @@
-package com.wn.loanapp.controller.loan;
+package com.wn.loanapp.controller.api;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,23 +8,20 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -32,73 +29,23 @@ import com.wn.loanapp.common.BaseController;
 import com.wn.loanapp.constants.Constants;
 import com.wn.loanapp.dto.BankStatementDTO;
 import com.wn.loanapp.dto.DatatableJsonResponse;
-import com.wn.loanapp.dto.DistributerDTO;
 import com.wn.loanapp.dto.LoanDetailsDTO;
 import com.wn.loanapp.dto.LoanDispersedDTO;
-import com.wn.loanapp.dto.RetailerDTO;
 import com.wn.loanapp.form.ApiResponceForm;
 import com.wn.loanapp.form.CSVForm;
 import com.wn.loanapp.form.LoanDetailsForm;
 import com.wn.loanapp.form.LoanDispersedForm;
-import com.wn.loanapp.form.UserDetailsSessionForm;
 import com.wn.loanapp.service.CommonService;
 import com.wn.loanapp.util.Format;
 
-@Controller
-public class LoanController extends BaseController{
-	
+@RestController
+public class APIController extends BaseController{
+
 	@Autowired
 	private CommonService commonService;
-	
-	@RequestMapping(value="/loan" , method = RequestMethod.GET)
-	public ModelAndView getActors(HttpServletRequest request, UserDetailsSessionForm userDetailsSessionForm) {
-		ModelAndView modelAndView = null;
-		if(Format.isStringNotEmptyAndNotNull(userDetailsSessionForm.getEmailAddress())) {
-			modelAndView = new ModelAndView("loanDashboard");
-			userDetailsSessionForm.setPageHeaderTitle(Constants.ADMIN_VIEW_LOAN_HEADER_TITLE);
-			userDetailsSessionForm.setSelectedBaseLink(Constants.SELECTED_BASE_LINK_ADMIN_VIEW_LOAN);
-			userDetailsSessionForm.setSelectedSubLink(Constants.SELECTED_BASE_LINK_ADMIN_VIEW_LOAN);
-			
-			List<DistributerDTO> distributers = new ArrayList<>();
-			List<Object> distributerDTOs = commonService.getDistributers();
-			if(Format.isCollectionNotEmtyAndNotNull(distributerDTOs)) {
-				Iterator<Object> itr = distributerDTOs.iterator();
-		    	while(itr.hasNext()){
-		    	   Object[] obj = (Object[]) itr.next();
-		    	   String distributerId = String.valueOf(obj[0]).trim();
-		    	   String distributerName = String.valueOf(obj[1]);
-		    	   DistributerDTO distributerDTO = new DistributerDTO();
-		    	   distributerDTO.setDistId(distributerId);
-		    	   distributerDTO.setDistName(distributerName);
-		    	   distributers.add(distributerDTO);
-		    	}
-			}
-			modelAndView.addObject("distributers", distributers);
-			
-			List<RetailerDTO> retailers = new ArrayList<>();
-			  List<Object> retailerDTOs = commonService.getRetailsers();
-			  if(Format.isCollectionNotEmtyAndNotNull(retailerDTOs)){
-				Iterator<Object> itr = retailerDTOs.iterator();
-				while(itr.hasNext()){
-					Object[] obj = (Object[]) itr.next();
-					String retailerId = String.valueOf(obj[0]).trim();
-					String retailerName = String.valueOf(obj[1]);
-					RetailerDTO retailerDTO = new RetailerDTO();
-					retailerDTO.setRetId(retailerId);
-					retailerDTO.setRetName(retailerName);
-					retailers.add(retailerDTO);
-				}
-			 }
-			  modelAndView.addObject("retailers", retailers);
-		}else {
-			modelAndView = redirectToLoginPage("/");
-		}
-		log.debug("End of method addRole");
-		return modelAndView;
-	}
-	
-	@RequestMapping(value="loanList", method=RequestMethod.POST)
-	public @ResponseBody DatatableJsonResponse getActorList(LoanDetailsForm loanDetailsForm) {
+
+	@RequestMapping(value="/appliedLoanList", method=RequestMethod.POST)
+	public @ResponseBody DatatableJsonResponse getActorList(@RequestBody LoanDetailsForm loanDetailsForm) {
 		List<LoanDetailsDTO> detailsDTOs = null;
 		Integer count = 0;
 		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
@@ -118,9 +65,72 @@ public class LoanController extends BaseController{
 		return datatableJsonResponse;
 	}
 	
-	@RequestMapping(value = "/downloadloancsv", method = RequestMethod.GET)
+	@RequestMapping(value="/dispersedLoanList", method=RequestMethod.POST)
+	public @ResponseBody DatatableJsonResponse getDispersedList(@RequestBody LoanDispersedForm loanDispersedForm) {
+		List<LoanDispersedDTO> loanDispersedDTOs = null;
+		Integer count = 0;
+		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
+		try {
+			loanDispersedDTOs = commonService.getDispersedLoanDetails(loanDispersedForm);
+			if(Format.isCollectionEmtyOrNull(loanDispersedDTOs)){
+				loanDispersedDTOs = new ArrayList<>();
+			}else{
+				count = commonService.getDispersedLoanDetailsCount(loanDispersedForm).intValue();
+			}
+		}catch (ParseException e) {
+			loanDispersedDTOs = new ArrayList<>();
+		}
+		datatableJsonResponse.setData(loanDispersedDTOs);
+		datatableJsonResponse.setRecordsTotal(count);
+		datatableJsonResponse.setRecordsFiltered(count);
+		return datatableJsonResponse;
+	}
+	
+	@RequestMapping(value="/receivedLoanList", method=RequestMethod.POST)
+	public @ResponseBody DatatableJsonResponse receivedPaymentList(@RequestBody LoanDispersedForm loanDispersedForm) {
+		List<LoanDispersedDTO> loanDispersedDTOs = null;
+		Integer count = 0;
+		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
+		try {
+			loanDispersedDTOs = commonService.getDispersedLoanDetails(loanDispersedForm);
+			if(Format.isCollectionEmtyOrNull(loanDispersedDTOs)){
+				loanDispersedDTOs = new ArrayList<>();
+			}else{
+				count = commonService.getDispersedLoanDetailsCount(loanDispersedForm).intValue();
+			}
+		}catch (ParseException e) {
+			loanDispersedDTOs = new ArrayList<>();
+		}
+		datatableJsonResponse.setData(loanDispersedDTOs);
+		datatableJsonResponse.setRecordsTotal(count);
+		datatableJsonResponse.setRecordsFiltered(count);
+		return datatableJsonResponse;
+	}
+	
+	@RequestMapping(value="/invoiceLoanList", method = RequestMethod.POST)
+	public @ResponseBody DatatableJsonResponse invoiceList(@RequestBody LoanDispersedForm loanDispersedForm){
+		List<LoanDispersedDTO> loanDispersedDTOs = null;
+		Integer count = 0;
+		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
+		try {
+			loanDispersedDTOs = commonService.getInvoicesLoanDetails(loanDispersedForm);
+			if(Format.isCollectionEmtyOrNull(loanDispersedDTOs)){
+				loanDispersedDTOs = new ArrayList<>();
+			}else{
+				count = commonService.getInvoicesLoanDetailsCount(loanDispersedForm).intValue();
+			}
+		}catch (ParseException e) {
+			loanDispersedDTOs = new ArrayList<>();
+		}
+		datatableJsonResponse.setData(loanDispersedDTOs);
+		datatableJsonResponse.setRecordsTotal(count);
+		datatableJsonResponse.setRecordsFiltered(count);
+		return datatableJsonResponse;
+	}
+	
+	@RequestMapping(value = "/appliedLoanCsv", method = RequestMethod.GET)
 	@Transactional(readOnly = true)
-	public void downloadFile(HttpServletResponse response, 
+	public void downloadAppliedLoanFile(HttpServletResponse response, 
 		@RequestParam(required=false) String startDate,
 		@RequestParam(required=false) String endDate,
 		@RequestParam(required=false) String distributers) {
@@ -184,29 +194,10 @@ public class LoanController extends BaseController{
         	throw new RuntimeException("Parse exception while creating csv", e);
 		}
 	}
-	@RequestMapping(value="dispersedList", method=RequestMethod.POST)
-	public @ResponseBody DatatableJsonResponse getDispersedList(LoanDispersedForm loanDispersedForm) {
-		List<LoanDispersedDTO> loanDispersedDTOs = null;
-		Integer count = 0;
-		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
-		try {
-			loanDispersedDTOs = commonService.getDispersedLoanDetails(loanDispersedForm);
-			if(Format.isCollectionEmtyOrNull(loanDispersedDTOs)){
-				loanDispersedDTOs = new ArrayList<>();
-			}else{
-				count = commonService.getDispersedLoanDetailsCount(loanDispersedForm).intValue();
-			}
-		}catch (ParseException e) {
-			loanDispersedDTOs = new ArrayList<>();
-		}
-		datatableJsonResponse.setData(loanDispersedDTOs);
-		datatableJsonResponse.setRecordsTotal(count);
-		datatableJsonResponse.setRecordsFiltered(count);
-		return datatableJsonResponse;
-	}
-	@RequestMapping(value = "/downloadloandispersedcsv", method = RequestMethod.GET)
+	
+	@RequestMapping(value = "/dispersedLoanCsv", method = RequestMethod.GET)
 	@Transactional(readOnly = true)
-	public void downloadDispersedFile(HttpServletResponse response, 
+	public void downloadDispersedLoanFile(HttpServletResponse response, 
 		@RequestParam(required=false) String startDate,
 		@RequestParam(required=false) String endDate,
 		@RequestParam(required=false) String distributers) {
@@ -271,84 +262,9 @@ public class LoanController extends BaseController{
 		}
 	}
 	
-	@RequestMapping(value = "/uploadBankStatement", method = RequestMethod.POST)
-	public @ResponseBody ApiResponceForm uploadBankStatement(CSVForm csvForm) throws IOException {
-		String messageType = null;
-		String successOrErrorMessage;
-		ApiResponceForm apiResponceForm = new ApiResponceForm();
-		File file = convertMultiPartToFile(csvForm.getCsvFile());
-		//List<BankStatementDTO> bankStatementDTOs = new ArrayList<BankStatementDTO>();
-		try (Reader reader = new FileReader(file);) {
-			@SuppressWarnings("unchecked")
-			CsvToBean<BankStatementDTO> csvToBean = new CsvToBeanBuilder<BankStatementDTO>(reader).withType(BankStatementDTO.class)
-					.withIgnoreLeadingWhiteSpace(true).build();
-			List<BankStatementDTO> statementDTOs = csvToBean.parse();
-			/*Iterator<BankStatementDTO> iterator = statementDTOs.iterator();
-			while (iterator.hasNext()) {
-				BankStatementDTO roleJson = iterator.next();
-				bankStatementDTOs.add(roleJson);
-				iterator.remove();
-			}*/
-			if(Format.isCollectionNotEmtyAndNotNull(statementDTOs)){
-				commonService.updateBankStatement(statementDTOs);
-				messageType = Constants.SUCCESS;
-				successOrErrorMessage = "Bank Statement Uploaded Successfully";
-			}else{
-				messageType = Constants.FAILURE;
-				successOrErrorMessage = "Error while reading the file";
-			}
-		}catch (Exception e) {
-			log.debug("Exception " + e);
-			messageType = Constants.FAILURE;
-			successOrErrorMessage = "Something went wrong";
-		}
-		apiResponceForm.setMessageType(messageType);
-		apiResponceForm.setSuccessOrErrorMessage(successOrErrorMessage);
-		return apiResponceForm;
-	}
-	
-	@RequestMapping(value="receivedPaymentList", method=RequestMethod.POST)
-	public @ResponseBody DatatableJsonResponse receivedPaymentList(LoanDispersedForm loanDispersedForm) {
-		List<LoanDispersedDTO> loanDispersedDTOs = null;
-		Integer count = 0;
-		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
-		try {
-			loanDispersedDTOs = commonService.getDispersedLoanDetails(loanDispersedForm);
-			if(Format.isCollectionEmtyOrNull(loanDispersedDTOs)){
-				loanDispersedDTOs = new ArrayList<>();
-			}else{
-				count = commonService.getDispersedLoanDetailsCount(loanDispersedForm).intValue();
-			}
-		}catch (ParseException e) {
-			loanDispersedDTOs = new ArrayList<>();
-		}
-		datatableJsonResponse.setData(loanDispersedDTOs);
-		datatableJsonResponse.setRecordsTotal(count);
-		datatableJsonResponse.setRecordsFiltered(count);
-		return datatableJsonResponse;
-	}
-	
-	@RequestMapping(value="updatePaymentRecieved", method=RequestMethod.POST)
-	public @ResponseBody ApiResponceForm updatePaymentRecieved(@RequestBody LoanDispersedForm loanDispersedForm){
-		ApiResponceForm apiResponceForm = new ApiResponceForm();
-		String messageType = null;
-		String successOrErrorMessage = null;
-		try{
-			commonService.updatePaymentRecieved(loanDispersedForm);
-			messageType = Constants.SUCCESS;
-			successOrErrorMessage = "Records updated successfully";
-		}catch (Exception e) {
-			messageType = Constants.FAILURE;
-			successOrErrorMessage = "Something went wrong";
-		}
-		apiResponceForm.setMessageType(messageType);
-		apiResponceForm.setSuccessOrErrorMessage(successOrErrorMessage);
-		return apiResponceForm;
-	}
-	
-	@RequestMapping(value = "/downloadrecievedpaymentlist", method = RequestMethod.GET)
+	@RequestMapping(value = "/recievedLoansCsv", method = RequestMethod.GET)
 	@Transactional(readOnly = true)
-	public void downloadrecievedpaymentlist(HttpServletResponse response, 
+	public void downloadRecievedLoanFile(HttpServletResponse response, 
 		@RequestParam(required=false) String startDate,
 		@RequestParam(required=false) String endDate,
 		@RequestParam(required=false) String distributers) {
@@ -413,38 +329,9 @@ public class LoanController extends BaseController{
 		}
 	}
 	
-	private File convertMultiPartToFile(MultipartFile file) throws IOException {
-		File convFile = new File(file.getOriginalFilename());
-		FileOutputStream fos = new FileOutputStream(convFile);
-		fos.write(file.getBytes());
-		fos.close();
-		return convFile;
-	}
-	
-	@RequestMapping(value="invoiceList", method = RequestMethod.POST)
-	public @ResponseBody DatatableJsonResponse invoiceList(LoanDispersedForm loanDispersedForm){
-		List<LoanDispersedDTO> loanDispersedDTOs = null;
-		Integer count = 0;
-		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
-		try {
-			loanDispersedDTOs = commonService.getInvoicesLoanDetails(loanDispersedForm);
-			if(Format.isCollectionEmtyOrNull(loanDispersedDTOs)){
-				loanDispersedDTOs = new ArrayList<>();
-			}else{
-				count = commonService.getInvoicesLoanDetailsCount(loanDispersedForm).intValue();
-			}
-		}catch (ParseException e) {
-			loanDispersedDTOs = new ArrayList<>();
-		}
-		datatableJsonResponse.setData(loanDispersedDTOs);
-		datatableJsonResponse.setRecordsTotal(count);
-		datatableJsonResponse.setRecordsFiltered(count);
-		return datatableJsonResponse;
-	}
-	
-	@RequestMapping(value = "/downloadloaninvoicecsv", method = RequestMethod.GET)
+	@RequestMapping(value = "/invoiceLoanCsv", method = RequestMethod.GET)
 	@Transactional(readOnly = true)
-	public void downloadInvoiceFile(HttpServletResponse response, 
+	public void downloadInvoiceLoanFile(HttpServletResponse response, 
 		@RequestParam(required=false) String startDate,
 		@RequestParam(required=false) String endDate,
 		@RequestParam(required=false) String distributers) {
@@ -509,7 +396,52 @@ public class LoanController extends BaseController{
 		}
 	}
 	
-	@RequestMapping(value = "/uploadPendingLoans", method = RequestMethod.POST)
+	@RequestMapping(value = "/uploadBankCsv", method = RequestMethod.POST)
+	public @ResponseBody ApiResponceForm uploadBankCsv(CSVForm csvForm) throws IOException {
+		String messageType = null;
+		String successOrErrorMessage;
+		ApiResponceForm apiResponceForm = new ApiResponceForm();
+		File file = convertMultiPartToFile(csvForm.getCsvFile());
+		//List<BankStatementDTO> bankStatementDTOs = new ArrayList<BankStatementDTO>();
+		try (Reader reader = new FileReader(file);) {
+			@SuppressWarnings("unchecked")
+			CsvToBean<BankStatementDTO> csvToBean = new CsvToBeanBuilder<BankStatementDTO>(reader).withType(BankStatementDTO.class)
+					.withIgnoreLeadingWhiteSpace(true).build();
+			List<BankStatementDTO> statementDTOs = csvToBean.parse();
+			/*Iterator<BankStatementDTO> iterator = statementDTOs.iterator();
+			while (iterator.hasNext()) {
+				BankStatementDTO roleJson = iterator.next();
+				bankStatementDTOs.add(roleJson);
+				iterator.remove();
+			}*/
+			if(Format.isCollectionNotEmtyAndNotNull(statementDTOs)){
+				commonService.updateBankStatement(statementDTOs);
+				messageType = Constants.SUCCESS;
+				successOrErrorMessage = "Bank Statement Uploaded Successfully";
+			}else{
+				messageType = Constants.FAILURE;
+				successOrErrorMessage = "Error while reading the file";
+			}
+		}catch (Exception e) {
+			log.debug("Exception " + e);
+			messageType = Constants.FAILURE;
+			successOrErrorMessage = "Something went wrong";
+		}
+		apiResponceForm.setMessageType(messageType);
+		apiResponceForm.setSuccessOrErrorMessage(successOrErrorMessage);
+		return apiResponceForm;
+	}
+	
+	
+	private File convertMultiPartToFile(MultipartFile file) throws IOException {
+		File convFile = new File(file.getOriginalFilename());
+		FileOutputStream fos = new FileOutputStream(convFile);
+		fos.write(file.getBytes());
+		fos.close();
+		return convFile;
+	}
+	
+	@RequestMapping(value = "/uploadPendingLoanStatement", method = RequestMethod.POST)
 	public @ResponseBody ApiResponceForm uploadPendingLoans(CSVForm csvForm) throws IOException {
 		String messageType = null;
 		String successOrErrorMessage;
@@ -544,81 +476,4 @@ public class LoanController extends BaseController{
 		apiResponceForm.setSuccessOrErrorMessage(successOrErrorMessage);
 		return apiResponceForm;
 	}
-	
-	@RequestMapping(value="retailerLoansList", method = RequestMethod.POST)
-	public @ResponseBody DatatableJsonResponse retailerLoansList(LoanDispersedForm loanDispersedForm){
-		List<LoanDispersedDTO> loanDispersedDTOs = null;
-		Integer count = 0;
-		DatatableJsonResponse datatableJsonResponse = new DatatableJsonResponse();
-		try {
-			loanDispersedDTOs = commonService.getInvoicesLoanDetails(loanDispersedForm);
-			if(Format.isCollectionEmtyOrNull(loanDispersedDTOs)){
-				loanDispersedDTOs = new ArrayList<>();
-			}else{
-				count = commonService.getInvoicesLoanDetailsCount(loanDispersedForm).intValue();
-			}
-		}catch (ParseException e) {
-			loanDispersedDTOs = new ArrayList<>();
-		}
-		datatableJsonResponse.setData(loanDispersedDTOs);
-		datatableJsonResponse.setRecordsTotal(count);
-		datatableJsonResponse.setRecordsFiltered(count);
-		 
-		return datatableJsonResponse;
-	}
-	
-	@RequestMapping(value = "/uploadDistributorInvoice", method = RequestMethod.POST)
-	public @ResponseBody ApiResponceForm uploadDistributorInvoice(CSVForm csvForm) throws IOException {
-		String messageType = null;
-		String successOrErrorMessage;
-		ApiResponceForm apiResponceForm = new ApiResponceForm();
-		File file = convertMultiPartToFile(csvForm.getCsvFile());
-		//List<BankStatementDTO> bankStatementDTOs = new ArrayList<BankStatementDTO>();
-		try (Reader reader = new FileReader(file);) {
-			@SuppressWarnings("unchecked")
-			CsvToBean<BankStatementDTO> csvToBean = new CsvToBeanBuilder<BankStatementDTO>(reader).withType(BankStatementDTO.class)
-					.withIgnoreLeadingWhiteSpace(true).build();
-			List<BankStatementDTO> statementDTOs = csvToBean.parse();
-			/*Iterator<BankStatementDTO> iterator = statementDTOs.iterator();
-			while (iterator.hasNext()) {
-				BankStatementDTO roleJson = iterator.next();
-				bankStatementDTOs.add(roleJson);
-				iterator.remove();
-			}*/
-			if(Format.isCollectionNotEmtyAndNotNull(statementDTOs)){
-				commonService.updateDistributorInvoiceLoans(statementDTOs);;
-				messageType = Constants.SUCCESS;
-				successOrErrorMessage = "Bank Statement Uploaded Successfully";
-			}else{
-				messageType = Constants.FAILURE;
-				successOrErrorMessage = "Error while reading the file";
-			}
-		}catch (Exception e) {
-			log.debug("Exception " + e);
-			messageType = Constants.FAILURE;
-			successOrErrorMessage = "Something went wrong";
-		}
-		apiResponceForm.setMessageType(messageType);
-		apiResponceForm.setSuccessOrErrorMessage(successOrErrorMessage);
-		return apiResponceForm;
-	}
-	
-	@RequestMapping(value="updateDistributorInvoiceRecieved", method=RequestMethod.POST)
-	public @ResponseBody ApiResponceForm updateDistributorInvoiceRecieved(@RequestBody LoanDispersedForm loanDispersedForm){
-		ApiResponceForm apiResponceForm = new ApiResponceForm();
-		String messageType = null;
-		String successOrErrorMessage = null;
-		try{
-			commonService.updateDistributorInvoiceRecieved(loanDispersedForm);
-			messageType = Constants.SUCCESS;
-			successOrErrorMessage = "Records updated successfully";
-		}catch (Exception e) {
-			messageType = Constants.FAILURE;
-			successOrErrorMessage = "Something went wrong";
-		}
-		apiResponceForm.setMessageType(messageType);
-		apiResponceForm.setSuccessOrErrorMessage(successOrErrorMessage);
-		return apiResponceForm;
-	}
-	
 }

@@ -12,6 +12,8 @@ public class LoanDispersedDTO {
 	
 	private String tnDate;
 	
+	private String repayDte;
+	
 	private String repayTxnId;
 	
 	private String settleAmt;
@@ -86,6 +88,21 @@ public class LoanDispersedDTO {
 	 */
 	public void setTnDate(String tnDate) {
 		this.tnDate = tnDate;
+	}
+
+	
+	/**
+	 * @return the repayDte
+	 */
+	public String getRepayDte() {
+		return repayDte;
+	}
+
+	/**
+	 * @param repayDte the repayDte to set
+	 */
+	public void setRepayDte(String repayDte) {
+		this.repayDte = repayDte;
 	}
 
 	/**

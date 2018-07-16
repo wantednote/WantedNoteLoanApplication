@@ -35,6 +35,7 @@ $(document).ready(function() {
             fileName = e.target.files[0].name;
         });
 		
+		
 		$("#uploadBankStatementBtn").click(function (event) {
 		    //stop submit the form, we will post it manually.
 		    event.preventDefault();
@@ -121,12 +122,106 @@ $(document).ready(function() {
     	        };
 	            toastr.warning("Please select a file to upload", '.csv format');
 		    }
+		});
+		
+		$("#uploadPendingLoansBtn").click(function (event) {
+		    //stop submit the form, we will post it manually.
+		    event.preventDefault();
+
+		    // Get form
+		    var form = $('#pendingLoansForm')[0];
+
+			// Create an FormData object 
+		    var data = new FormData(form);
+
+			// If you want to add an extra field for the FormData
+		    //data.append("CustomField", "This is some extra data, testing");
+		    var extensions = ["csv"];
+		    var ext = null;
+		    if(fileName !=null){
+		    	ext = fileName.split(".")[1];
+		    }
+            if(extensions.indexOf(ext) >= 0){
+		    	$('#container').waitMe({
+	        		effect : 'win8',
+	        		text : 'Please Wait',
+	        		sizeW : '',
+	        		sizeH : '',
+	        		source : ''
+	        	});
+		    	
+		    	// disabled the submit button
+			    $("#uploadPendingLoansBtn").prop("disabled", true);
+			    
+			    $.ajax({
+			        type: "POST",
+			        enctype: 'multipart/form-data',
+			        url: $("#appLink").val() +"uploadPendingLoans",
+			        data: data,
+			        processData: false,
+			        contentType: false,
+			        cache: false,
+			        timeout: 600000,
+			        success: function (data) {
+			        	/*$("#result").text(data);
+			            console.log("SUCCESS : ", data);*/
+			        	if(data.messageType == "Success"){
+			        		toastr.options = {
+		        	            closeButton: true,
+		        	            progressBar: true,
+		        	            showMethod: 'slideDown',
+		        	            timeOut: 4000
+		        	        };
+		        	        toastr.success(data.successOrErrorMessage, 'File Upload');
+			        	}else{
+			        		toastr.options = {
+			        	            closeButton: true,
+			        	            progressBar: true,
+			        	            showMethod: 'slideDown',
+			        	            timeOut: 4000
+			        	        };
+			        		toastr.error(data.successOrErrorMessage, 'File Upload');
+			        	}
+			            $("#uploadPendingLoansBtn").prop("disabled", false);
+			            $("#upload_tab_three_pl_model").hide();
+			            $('#container').waitMe('hide');
+			        },
+			        error: function (e) {
+			            /*$("#result").text(e.responseText);
+			            console.log("ERROR : ", e);*/
+			            $("#uploadPendingLoansBtn").prop("disabled", false);
+			            toastr.options = {
+	        	            closeButton: true,
+	        	            progressBar: true,
+	        	            showMethod: 'slideDown',
+	        	            timeOut: 4000
+	        	        };
+			            toastr.error(data.successOrErrorMessage, 'File Upload');
+			            $("#upload_tab_three_pl_model").hide();
+			            $('#container').waitMe('hide');
+			        }
+			    });
+		    }else{
+		    	toastr.options = {
+    	            closeButton: true,
+    	            progressBar: true,
+    	            showMethod: 'slideDown',
+    	            timeOut: 4000
+    	        };
+	            toastr.warning("Please select a file to upload", '.csv format');
+		    }
 			
 		});
 });
+
 function cancelBankStatementBtn(){
 	$("#upload_tab_three_model").hide();
 }
+
+function cancelPendingLoansBtn(){
+	$("#upload_tab_three_pl_model").hide();
+}
+
 function updateRecievedData(){
 	var list = "";
 	var count = 0;
@@ -325,7 +420,7 @@ function tabThreeData(){
 			"orderable" : false,
 			'bSortable' : true,
 			"width" : "5%",
-			"render" : function (data, type, full, meta) {
+			"render" : function (data, type, full) {
 				if (data == null || data == "") {
 					return '<input type="checkbox" name="onlinePaymentIds[]" value='+full.onlinePaymentId+'>'
 				}

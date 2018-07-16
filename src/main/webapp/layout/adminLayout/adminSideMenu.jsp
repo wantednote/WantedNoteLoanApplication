@@ -1,5 +1,4 @@
 <%@ include file="/common/taglibs.jsp"%>
-<!-- <script src="assets/js/jquery-2.1.1.js"></script> -->
 <script src="<c:url value="/assets/js/jquery-2.1.1.js" />"></script>
 
 <nav class="navbar-default navbar-static-side" role="navigation">
@@ -28,7 +27,7 @@
 	                <div class="logo-element">
 	                    <!-- WN -->
 	                    <!-- <img alt="image" class="img-circle" src="assets/img/logo/WantedNote1.png" style="height: 40px; width: 40px;"/> -->
-	                    <img alt="image" src="<c:url value= "/assets/img/logo/WantedNote1.png"/>" style="height: 40px; width: 40px;"/>
+	                    <img alt="image" src="<c:url value= "/assets/img/logo/WantedNote1.png"/>" style="height: 50px; width: 50px;"/>
 	                </div>
 	            </li>
             </c:if>
@@ -54,11 +53,17 @@
 	                <a href="#tab3"><i class="fa fa-th-large"></i> <span class="nav-label">Recieved</span></a>
 	            </li>
 	            <li id="4" onclick="changeSelection(4);">
-	                <a href="#tab4"><i class="fa fa-th-large"></i> <span class="nav-label">Settled</span></a>
+	                <a href="#tab4"><i class="fa fa-th-large"></i> <span class="nav-label">Invoice</span></a>
 	            </li>
-	            <li id=5" onclick="changeSelection(5);">
-	                <a href="#tab5"><i class="fa fa-th-large"></i> <span class="nav-label">New</span></a>
+	            <li id="5" onclick="changeSelection(5);">
+	                <a href="#tab5"><i class="fa fa-th-large"></i> <span class="nav-label">Retailer Loans</span></a>
 	            </li>
+	            <li id="6" onclick="changeSelection(6);">
+	                <a href="#tab6"><i class="fa fa-th-large"></i> <span class="nav-label">New1</span></a>
+	            </li>
+	            <li id="7" onclick="changeSelection(7);">
+	            	<a href="#tab7"><i class="fa fa-th-large"></i> <span class="nav-label">New2</span></a>
+	            </li>	
 	            <!-- <li id="leftMenu_admin">
 	                <a id="2" onclick="changeSelection(2);"href="#tab2"><i class="fa fa-th-large"></i> <span class="nav-label">Dispersed</span></a>
 	            </li> -->

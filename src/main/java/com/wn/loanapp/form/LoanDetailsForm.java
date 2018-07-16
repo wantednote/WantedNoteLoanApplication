@@ -16,6 +16,10 @@ public class LoanDetailsForm {
 	
 	private String distributer;
 	
+	private String loanApplied;
+	
+	private String loanPending;
+	
 	private int start;
 	
 	private int length;
@@ -116,6 +120,34 @@ public class LoanDetailsForm {
 	 */
 	public void setDistributer(String distributer) {
 		this.distributer = distributer;
+	}
+	
+	/**
+	 * @return the loanApplied
+	 */
+	public String getLoanApplied() {
+		return loanApplied;
+	}
+
+	/**
+	 * @param loanApplied the loanApplied to set
+	 */
+	public void setLoanApplied(String loanApplied) {
+		this.loanApplied = loanApplied;
+	}
+
+	/**
+	 * @return the loanPending
+	 */
+	public String getLoanPending() {
+		return loanPending;
+	}
+
+	/**
+	 * @param loanPending the loanPending to set
+	 */
+	public void setLoanPending(String loanPending) {
+		this.loanPending = loanPending;
 	}
 
 	/**
